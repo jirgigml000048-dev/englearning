@@ -1,6 +1,6 @@
 [build]
   base    = "wordmon"
-  publish = "wordmon/dist"
+  publish = "dist"
   command = "npm run build"
 
 [build.environment]
