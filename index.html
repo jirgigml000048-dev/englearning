@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#3b82f6" />
+  <title>英语训练师 · English Trainer</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="assets/icon.svg" />
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Header: Trainer Card -->
+    <header class="trainer-card" id="trainerCard">
+      <div class="trainer-avatar" id="trainerAvatar">🧒</div>
+      <div class="trainer-info">
+        <div class="trainer-name" id="trainerName">小训练师</div>
+        <div class="trainer-stats">
+          <span class="stat">Lv.<b id="statLevel">1</b></span>
+          <span class="stat">🔥 <b id="statStreak">0</b> 天</span>
+          <span class="stat">⭐ <b id="statXp">0</b> XP</span>
+        </div>
+        <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+      </div>
+      <button class="icon-btn" id="settingsBtn" aria-label="设置">⚙️</button>
+    </header>
+
+    <!-- Main views -->
+    <main id="main">
+      <!-- Home view -->
+      <section class="view view-home" id="viewHome">
+        <div class="hero">
+          <div class="hero-mon" id="heroMon">🐢</div>
+          <div class="hero-text">
+            <h1 id="greeting">准备好今天的训练了吗？</h1>
+            <p id="missionSummary">今日任务：4 个关卡 · 约 45 分钟</p>
+          </div>
+        </div>
+
+        <div class="missions" id="missions">
+          <button class="mission" data-stage="warmup">
+            <div class="mission-icon">🔁</div>
+            <div class="mission-body">
+              <div class="mission-title">热身复习</div>
+              <div class="mission-desc">5 分钟 · 复习昨天的单词</div>
+            </div>
+            <div class="mission-status" data-status="warmup">▶</div>
+          </button>
+          <button class="mission" data-stage="words">
+            <div class="mission-icon">📚</div>
+            <div class="mission-body">
+              <div class="mission-title">新词学习</div>
+              <div class="mission-desc">10 分钟 · 今日新单词</div>
+            </div>
+            <div class="mission-status" data-status="words">▶</div>
+          </button>
+          <button class="mission" data-stage="reading">
+            <div class="mission-icon">📖</div>
+            <div class="mission-body">
+              <div class="mission-title">阅读冒险</div>
+              <div class="mission-desc">20 分钟 · 宝可梦/我的世界故事</div>
+            </div>
+            <div class="mission-status" data-status="reading">▶</div>
+          </button>
+          <button class="mission" data-stage="fun">
+            <div class="mission-icon">🎮</div>
+            <div class="mission-body">
+              <div class="mission-title">趣味挑战</div>
+              <div class="mission-desc">10 分钟 · 拼写打怪</div>
+            </div>
+            <div class="mission-status" data-status="fun">▶</div>
+          </button>
+        </div>
+
+        <div class="badges-row">
+          <div class="badges-title">徽章图鉴</div>
+          <div class="badges" id="badges"></div>
+        </div>
+      </section>
+
+      <!-- Stage view (dynamic content for each module) -->
+      <section class="view view-stage hidden" id="viewStage">
+        <div class="stage-header">
+          <button class="icon-btn" id="stageBack" aria-label="返回">←</button>
+          <div class="stage-title" id="stageTitle">关卡</div>
+          <div class="stage-progress" id="stageProgress">1 / 5</div>
+        </div>
+        <div class="stage-body" id="stageBody"></div>
+        <div class="stage-footer" id="stageFooter"></div>
+      </section>
+
+      <!-- Day complete view -->
+      <section class="view view-done hidden" id="viewDone">
+        <div class="done-card">
+          <div class="done-mon" id="doneMon">🎉</div>
+          <h1>今日训练完成！</h1>
+          <div class="done-stats">
+            <div class="done-stat"><b id="doneNewWords">0</b><span>个新词</span></div>
+            <div class="done-stat"><b id="doneAccuracy">0%</b><span>阅读准确率</span></div>
+            <div class="done-stat"><b id="doneXp">+0</b><span>经验值</span></div>
+          </div>
+          <p class="done-message" id="doneMessage">你今天比昨天更厉害了！</p>
+          <button class="btn-primary" id="doneBackBtn">回到主页</button>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section class="view view-settings hidden" id="viewSettings">
+        <div class="stage-header">
+          <button class="icon-btn" id="settingsBack" aria-label="返回">←</button>
+          <div class="stage-title">设置</div>
+          <div></div>
+        </div>
+        <div class="settings-body">
+          <div class="setting-row">
+            <label>训练师名字</label>
+            <input type="text" id="setName" placeholder="输入名字" />
+          </div>
+          <div class="setting-row">
+            <label>头像</label>
+            <div class="avatar-picker" id="avatarPicker"></div>
+          </div>
+          <div class="setting-row">
+            <label>当前学习单元</label>
+            <select id="setUnit"></select>
+          </div>
+          <div class="setting-row">
+            <label>每日目标（分钟）</label>
+            <input type="number" id="setMinutes" min="15" max="90" step="5" />
+          </div>
+          <div class="setting-row">
+            <label>朗读语速</label>
+            <input type="range" id="setRate" min="0.6" max="1.2" step="0.1" />
+            <span id="setRateVal">0.9</span>
+          </div>
+          <div class="setting-row">
+            <label>家长报告</label>
+            <button class="btn-secondary" id="reportBtn">查看本周学习报告</button>
+          </div>
+          <div class="setting-row danger">
+            <label>清空进度（重新开始）</label>
+            <button class="btn-danger" id="resetBtn">清空</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/tts.js"></script>
+  <script src="js/modules/warmup.js"></script>
+  <script src="js/modules/words.js"></script>
+  <script src="js/modules/reading.js"></script>
+  <script src="js/modules/fun.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
