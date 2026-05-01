@@ -1,14 +1,20 @@
 /* ============================================================
- * 趣味关：拼写打怪兽
- * 屏幕中央出现一只"怪兽"（emoji），上面显示中文意思
- * 玩家点击字母按钮拼出英文，每拼对一个字母怪兽掉血，
- * 拼完整个词 -> 怪兽倒下 -> 下一只
+ * 拼写打怪关：方块世界皮肤
+ * 像素史莱姆怪兽（CSS-only）+ HP 条 + 字母方块键盘
+ * 拼对一个字母 -> HP 掉一点；拼完整个词 -> 击败 -> 下一只
  * ============================================================ */
 window.FunModule = (() => {
   let pool, idx, body, footer, onDone;
-  let target, typed, hp, total, correctCount;
+  let target, typed, total, correctCount;
 
-  const MOBS = ['👾','🧟','🐉','👹','🦖','🤖','👻','🐙'];
+  // mob 类型：每只用不同的颜色 (mob-pixel + mob-{type})
+  const MOB_NAMES = [
+    { name: 'SLIME · 史莱姆',  cls: '' },
+    { name: 'CREEPER · 苦力怕', cls: '' },
+    { name: 'ZOMBIE · 僵尸',   cls: '' },
+    { name: 'SKELETON · 骷髅', cls: '' },
+    { name: 'ENDER · 末影怪',  cls: '' },
+  ];
 
   function start({ unit, body: b, footer: f, onDone: cb }) {
     body = b; footer = f; onDone = cb;
@@ -23,74 +29,72 @@ window.FunModule = (() => {
     if (idx >= pool.length) return finish();
     target = pool[idx];
     typed = '';
-    hp = target.en.length;
     render();
   }
 
   function render() {
-    const mob = MOBS[idx % MOBS.length];
+    const mob = MOB_NAMES[idx % MOB_NAMES.length];
     const slots = target.en.split('').map((ch, i) => {
       const filled = i < typed.length;
       return `<div class="spell-slot ${filled ? 'filled' : ''}">${filled ? typed[i] : ''}</div>`;
     }).join('');
 
-    // 字母池：目标词字母 + 随机干扰，洗牌
+    // 字母池：目标词字母 + 随机干扰
     const targetLetters = target.en.toLowerCase().split('');
     const extras = randomLetters(Math.max(2, 8 - targetLetters.length));
     const allLetters = [...targetLetters, ...extras].sort(() => Math.random() - 0.5);
 
-    const hpPct = (hp / target.en.length) * 100;
+    const hp = Math.round(((target.en.length - typed.length) / target.en.length) * 100);
 
     body.innerHTML = `
-      <div>
-        <div class="spell-mob">
-          <div class="spell-mob-emoji">${mob}</div>
-          <div class="spell-mob-hp"><div class="spell-mob-hp-fill" style="width:${hpPct}%"></div></div>
+      <div class="mob-arena">
+        <div class="mob-creature">
+          <div class="mob-pixel ${mob.cls}"></div>
+          <div class="mob-shadow"></div>
         </div>
-        <div class="spell-prompt">拼出这个单词，打败怪兽！🔊</div>
-        <div class="spell-cn">${target.cn} ${target.emoji}</div>
-        <div class="spell-input">${slots}</div>
-        <div class="spell-letters" id="letters">
-          ${allLetters.map((l, i) => `<button class="letter-btn" data-l="${l}" data-idx="${i}">${l}</button>`).join('')}
-        </div>
-        <div style="text-align:center;margin-top:14px;">
-          <button class="btn-ghost" id="hearBtn">🔊 听发音</button>
-          <button class="btn-ghost" id="undoBtn">⌫ 撤销</button>
+        <div class="mob-name">${mob.name}</div>
+        <div class="mob-hp">
+          <div class="mob-hp-bar"><div class="mob-hp-fill" style="width:${hp}%"></div></div>
+          <span>HP ${hp}</span>
         </div>
       </div>
+      <div class="spell-prompt">拼出："${target.cn}" → ${target.emoji}</div>
+      <div class="spell-slots">${slots}</div>
+      <div class="spell-keys" id="letters">
+        ${allLetters.map((l, i) => `<button class="key-block block-btn" data-l="${l}" data-idx="${i}">${l}</button>`).join('')}
+        <button class="key-block block-btn key-back" id="keyBack">⌫</button>
+      </div>
     `;
-    footer.innerHTML = '';
+    footer.innerHTML = `
+      <button class="block-btn ghost" id="hearBtn">🔊 听发音</button>
+    `;
     document.getElementById('hearBtn').onclick = () => TTS.speak(target.en);
-    document.getElementById('undoBtn').onclick = () => {
+    document.getElementById('keyBack').onclick = () => {
       if (typed.length > 0) {
         typed = typed.slice(0, -1);
-        hp = target.en.length - typed.length;
         render();
       }
     };
 
-    document.querySelectorAll('#letters .letter-btn').forEach(btn => {
+    document.querySelectorAll('#letters .key-block:not(.key-back)').forEach(btn => {
       btn.onclick = () => {
         const letter = btn.dataset.l;
         const expected = target.en[typed.length].toLowerCase();
         if (letter === expected) {
-          typed += target.en[typed.length]; // 保持原大小写
-          btn.classList.add('used');
-          hp -= 1;
+          typed += target.en[typed.length];
           if (typed.length === target.en.length) {
-            // 打败！
             correctCount++;
             Progress.recordWord(target.en, true);
             TTS.speak(target.en);
-            App.toast('🎉 打败了一只怪兽！', 'success', 1100);
+            App.toast('🎉 击败一只怪物！', 'success', 1100);
             setTimeout(() => { idx++; nextMob(); }, 1100);
           } else {
             render();
           }
         } else {
-          // 错的字母：抖动 + 不消耗，但记一笔
-          btn.classList.add('wrong');
-          setTimeout(() => btn.classList.remove('wrong'), 400);
+          // 错的字母：用 retry 类抖一下，不消耗
+          btn.classList.add('retry');
+          setTimeout(() => btn.classList.remove('retry'), 400);
         }
       };
     });

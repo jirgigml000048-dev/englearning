@@ -1,6 +1,6 @@
 /* ============================================================
- * 热身关：复习昨天/最近学过的单词（如果没有则用本单元前几个词）
- * 形式：英文 -> 选中文 (快闪)
+ * 热身关：复习昨天/最近学过的单词
+ * 看图选词（emoji + 中文 -> 选英文）— 方块世界皮肤
  * ============================================================ */
 window.WarmupModule = (() => {
   let pool, idx, body, footer, onDone, correct = 0, total = 0;
@@ -15,12 +15,7 @@ window.WarmupModule = (() => {
       .map(en => allWords.find(w => w.en === en))
       .filter(Boolean);
 
-    if (wordObjs.length < 4) {
-      // 第一次使用，用当前单元前 5 个词
-      pool = unit.words.slice(0, 5);
-    } else {
-      pool = wordObjs;
-    }
+    pool = wordObjs.length < 4 ? unit.words.slice(0, 5) : wordObjs;
     renderQuestion();
   }
 
@@ -37,36 +32,38 @@ window.WarmupModule = (() => {
     const correctIdx = opts.indexOf(w);
 
     body.innerHTML = `
-      <div class="word-card">
-        <div class="word-image">${w.emoji}</div>
-        <div class="word-en">${w.en}</div>
-        <button class="speak-btn" id="speakBtn">🔊 再听一遍</button>
-        <div style="color:var(--text-dim);margin-top:12px;">这个词是什么意思？</div>
-        <div class="options" id="warmOpts">
-          ${opts.map((o, i) => `<button class="option" data-i="${i}">${o.cn}</button>`).join('')}
-        </div>
+      <div class="stage-prompt">看图选词 · 复习昨日</div>
+      <div class="big-emoji">${w.emoji}</div>
+      <div class="stage-cn">${w.cn}</div>
+      <div class="vox-options" id="warmOpts">
+        ${opts.map((o, i) => `<button class="vox-option block-btn" data-i="${i}">${o.en}</button>`).join('')}
       </div>
+      <div id="warmFeedback"></div>
     `;
-    footer.innerHTML = '';
+    footer.innerHTML = `
+      <button class="block-btn ghost" id="speakBtn">🔊 再听一遍</button>
+    `;
     document.getElementById('speakBtn').onclick = () => TTS.speak(w.en);
     TTS.speak(w.en);
 
-    const opBtns = document.querySelectorAll('#warmOpts .option');
+    const opBtns = document.querySelectorAll('#warmOpts .vox-option');
     opBtns.forEach(b => {
       b.onclick = () => {
         const chosen = parseInt(b.dataset.i, 10);
         opBtns.forEach(x => x.classList.add('disabled'));
+        const fb = document.getElementById('warmFeedback');
         if (chosen === correctIdx) {
           b.classList.add('correct');
           correct++;
           Progress.recordWord(w.en, true);
-          App.toast('✓ 很棒！', 'success', 800);
-          setTimeout(() => { idx++; renderQuestion(); }, 700);
+          fb.innerHTML = `<div class="encourage">${App.randEncourage()}</div>`;
+          setTimeout(() => { idx++; renderQuestion(); }, 800);
         } else {
-          b.classList.add('wrong');
+          b.classList.add('retry');
           opBtns[correctIdx].classList.add('correct');
           Progress.recordWord(w.en, false);
-          setTimeout(() => { idx++; renderQuestion(); }, 1300);
+          fb.innerHTML = `<div class="retry-tip">${window.CURRICULUM.retryTips[0]}</div>`;
+          setTimeout(() => { idx++; renderQuestion(); }, 1400);
         }
       };
     });

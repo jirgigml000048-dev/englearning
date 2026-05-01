@@ -1,77 +1,119 @@
 /* ============================================================
  * 主控制器：视图切换 / 设置 / 主页 / Stage 调度
+ * 方块世界主题（Voxel skin）
  * ============================================================ */
 window.App = (() => {
   const $ = (id) => document.getElementById(id);
 
   let currentUnit;
 
+  const QUESTS = [
+    { id: 'warmup',  icon: '🔁', label: '热身复习', desc: '5 min · 复习昨日词',     block: 'dirt'  },
+    { id: 'words',   icon: '📚', label: '新词学习', desc: '10 min · 解锁新单词',    block: 'wood'  },
+    { id: 'reading', icon: '📖', label: '阅读冒险', desc: '20 min · 故事 + 选择题', block: 'paper' },
+    { id: 'fun',     icon: '⚔',  label: '拼写打怪', desc: '10 min · 拼字击败怪物',  block: 'stone' },
+  ];
+
+  const STAGE_BLOCK = { warmup: 'dirt', words: 'wood', reading: 'paper', fun: 'stone' };
+  const STAGE_TITLE = {
+    warmup: '🔁 热身复习',
+    words:  '📚 新词学习',
+    reading:'📖 阅读冒险',
+    fun:    '⚔ 拼写打怪',
+  };
+
   function init() {
     Progress.tick();
     currentUnit = window.CURRICULUM.units[Progress.get().currentUnitIdx] || window.CURRICULUM.units[0];
 
-    renderTrainerCard();
+    renderHud();
     renderHome();
+    renderHotbar('home');
     bindGlobalEvents();
-
-    // 初始化设置面板
     bindSettings();
 
-    // PWA: 注册 service worker（可选，本地能用）
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js').catch(() => {});
     }
   }
 
-  function renderTrainerCard() {
+  /* ---------------- HUD (top bar) ---------------- */
+  function renderHud() {
     const s = Progress.get();
-    $('trainerName').textContent = s.name;
-    $('trainerAvatar').textContent = s.avatar;
+    $('avatarFace').textContent = s.avatar;
     $('statLevel').textContent = s.level;
     $('statStreak').textContent = s.streak;
-    $('statXp').textContent = s.xp;
+
+    // XP bar (level needs level*100 xp)
     const need = s.level * 100;
-    $('xpFill').style.width = Math.min(100, (s.xp / need) * 100) + '%';
+    const pct = Math.max(0, Math.min(100, (s.xp / need) * 100));
+    $('xpFill').style.width = pct + '%';
+    $('xpText').textContent = `${s.xp} / ${need} XP`;
+
+    // HP = 信心值（今日完成关卡数 × 5，满 20）
+    const hp = Progress.todayCompletedCount() * 5;
+    renderUnitsRow('hearts', hp, '❤');
+    // Food = 坚持值（streak × 2，最多 20）
+    const food = Math.min(s.streak * 2, 20);
+    renderUnitsRow('foods', food, '🍗');
   }
 
+  function renderUnitsRow(elId, value, glyph) {
+    const html = [];
+    for (let i = 0; i < 10; i++) {
+      const v = value - i * 2;
+      const cls = v >= 2 ? 'full' : v === 1 ? 'half' : 'empty';
+      const kind = glyph === '❤' ? 'heart' : 'food';
+      html.push(`<span class="${kind} ${cls}">${glyph}</span>`);
+    }
+    if (elId === 'hearts') html.push('<span class="hud-label">HP · 信心值</span>');
+    else html.push('<span class="hud-label">坚持值</span>');
+    $(elId).innerHTML = html.join('');
+  }
+
+  /* ---------------- Home ---------------- */
   function renderHome() {
     const s = Progress.get();
     showView('viewHome');
 
-    const stages = ['warmup','words','reading','fun'];
-    stages.forEach(stage => {
-      const btn = document.querySelector(`.mission[data-stage="${stage}"]`);
-      const status = btn.querySelector('.mission-status');
-      if (Progress.isStageCompleteToday(stage)) {
-        btn.classList.add('completed');
-        status.textContent = '✓';
-      } else {
-        btn.classList.remove('completed');
-        status.textContent = '▶';
-      }
-      btn.onclick = () => startStage(stage);
-    });
-
-    // 问候 & 当前宝可梦伙伴（按等级换）
-    const greetings = [
-      '准备好今天的训练了吗？',
-      '今天也要变强一点点哦！',
-      '冒险的一天开始啦！',
-      `已经连续 ${s.streak} 天啦，继续！`
-    ];
-    $('greeting').textContent = s.streak >= 1
-      ? `你好，${s.name}！${greetings[Math.min(s.streak, 3)]}`
-      : `你好，${s.name}！${greetings[0]}`;
-
-    const partners = ['🐢','🐭','🦊','🐉','🌟'];
-    $('heroMon').textContent = partners[Math.min(s.level - 1, partners.length - 1)];
-
+    // hero text
+    $('trainerName').textContent = s.name;
     const done = Progress.todayCompletedCount();
     $('missionSummary').textContent = done === 4
-      ? `🎉 今日 4 关全部完成！明天继续训练。`
-      : `今日任务：${done}/4 关 · 当前单元 ${currentUnit.name}`;
+      ? `🎉 今日 4 关全部完成！打开宝箱领取奖励。`
+      : `完成 4 关 · 约 45 分钟 · 今日已 ${done}/4`;
+    const today = new Date();
+    $('metaDate').textContent = `⛏ ${currentUnit.name}`;
+    $('metaStreak').textContent = `⏱ 累计 ${s.streak} 天 · ${today.getMonth()+1} 月 ${today.getDate()} 日`;
+
+    // Quests grid
+    $('questsGrid').innerHTML = QUESTS.map((q, i) => {
+      const completed = Progress.isStageCompleteToday(q.id);
+      const status = completed
+        ? `<div class="quest-status"><span class="check">✓ 完成</span></div>`
+        : `<div class="quest-status"><span class="play">▶ 开始</span></div>`;
+      return `
+        <button class="quest-block block-btn block-${q.block} ${completed ? 'done' : ''}" data-stage="${q.id}">
+          <div class="quest-num">关 ${String(i+1).padStart(2,'0')}</div>
+          <div class="quest-icon">${q.icon}</div>
+          <div class="quest-info">
+            <div class="quest-label">${q.label}</div>
+            <div class="quest-desc">${q.desc}</div>
+          </div>
+          ${status}
+        </button>`;
+    }).join('');
+    document.querySelectorAll('.quest-block').forEach(btn => {
+      btn.onclick = () => startStage(btn.dataset.stage);
+    });
+
+    // Finish button (visible when all 4 done)
+    const allDone = ['warmup','words','reading','fun'].every(s => Progress.isStageCompleteToday(s));
+    $('finishBtn').classList.toggle('hidden', !allDone);
+    $('finishBtn').onclick = () => showDone();
 
     renderBadges();
+    renderHotbar('home');
   }
 
   function renderBadges() {
@@ -79,20 +121,50 @@ window.App = (() => {
     const all = window.CURRICULUM.badges;
     $('badges').innerHTML = all.map(b => {
       const owned = s.badges.includes(b.id);
-      return `<div class="badge ${owned ? '' : 'locked'}" title="${b.name}">${b.icon}</div>`;
+      return `
+        <div class="ach-slot ${owned ? 'got' : 'locked'}" title="${b.name}">
+          <div class="ach-icon">${owned ? b.icon : '?'}</div>
+          <div class="ach-name">${b.name}</div>
+        </div>`;
     }).join('');
   }
 
+  /* ---------------- Hotbar ---------------- */
+  function renderHotbar(activeId) {
+    const slots = [
+      { id: 'home',     icon: '🏠', name: '主页' },
+      { id: 'warmup',   icon: '🔁', name: '热身',  done: Progress.isStageCompleteToday('warmup') },
+      { id: 'words',    icon: '📚', name: '新词',  done: Progress.isStageCompleteToday('words') },
+      { id: 'reading',  icon: '📖', name: '阅读',  done: Progress.isStageCompleteToday('reading') },
+      { id: 'fun',      icon: '⚔',  name: '打怪',  done: Progress.isStageCompleteToday('fun') },
+      { id: 'settings', icon: '⚙',  name: '设置' },
+    ];
+    $('hotbar').innerHTML = slots.map((s, i) => `
+      <button class="hotbar-slot ${activeId===s.id?'active':''} ${s.done?'done':''}" data-id="${s.id}">
+        <span class="slot-num">${i+1}</span>
+        <span class="slot-icon">${s.icon}</span>
+        <span class="slot-name">${s.name}</span>
+      </button>
+    `).join('');
+    document.querySelectorAll('.hotbar-slot').forEach(btn => {
+      btn.onclick = () => {
+        const id = btn.dataset.id;
+        if (id === 'home') renderHome();
+        else if (id === 'settings') showSettings();
+        else startStage(id);
+      };
+    });
+  }
+
+  /* ---------------- Stage ---------------- */
   function startStage(stage) {
-    const stageTitles = {
-      warmup: '🔁 热身复习',
-      words:  '📚 新词学习',
-      reading:'📖 阅读冒险',
-      fun:    '🎮 拼写打怪'
-    };
     showView('viewStage');
-    $('stageTitle').textContent = stageTitles[stage];
+    $('stageTitle').textContent = STAGE_TITLE[stage];
     $('stageProgress').textContent = '';
+    // 切换 stage-panel 的方块色
+    const panel = $('stagePanel');
+    panel.className = 'stage-panel block-' + (STAGE_BLOCK[stage] || 'stone');
+
     const body = $('stageBody');
     const footer = $('stageFooter');
     body.innerHTML = '';
@@ -105,26 +177,27 @@ window.App = (() => {
     else if (stage === 'words') WordsModule.start(ctx);
     else if (stage === 'reading') ReadingModule.start(ctx);
     else if (stage === 'fun') FunModule.start(ctx);
+
+    renderHotbar(stage);
   }
 
   function onStageDone(stage, result) {
     TTS.stop();
-    renderTrainerCard();
+    renderHud();
     const newBadges = Progress.checkBadges();
     if (newBadges && newBadges.length) {
-      newBadges.forEach(b => toast(`🏅 解锁徽章：${b.name}`, 'success', 2200));
+      newBadges.forEach(b => toast(`🏅 解锁成就：${b.name}`, 'success', 2200));
     }
 
-    // 4 关全完成 -> 显示完成页
     const allDone = ['warmup','words','reading','fun'].every(s => Progress.isStageCompleteToday(s));
     if (allDone) {
       showDone();
       return;
     }
-    // 否则回主页
     setTimeout(() => renderHome(), 600);
   }
 
+  /* ---------------- Done ---------------- */
   function showDone() {
     const s = Progress.get();
     const today = new Date().toISOString().slice(0, 10);
@@ -133,60 +206,60 @@ window.App = (() => {
     $('doneNewWords').textContent = log.newWords;
     $('doneAccuracy').textContent = (log.accuracy || 0) + '%';
     $('doneXp').textContent = '+' + log.xp;
-    const partners = ['🥳','🎉','🏆','⭐','🌟'];
-    $('doneMon').textContent = partners[Math.floor(Math.random() * partners.length)];
+    $('doneStar').textContent = (log.accuracy === 100) ? '⭐' : '★';
+    $('doneSub').textContent = `+${log.xp} 经验值 · 连续 ${s.streak} 天`;
 
     const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
     const yLog = s.dailyLog[yesterday];
     let msg;
     if (yLog && log.newWords > yLog.newWords) {
-      msg = `今天比昨天多学了 ${log.newWords - yLog.newWords} 个新词，太棒了！`;
+      msg = `"今天比昨天又多记了 ${log.newWords - yLog.newWords} 个新词。继续！"`;
     } else if (s.streak >= 7) {
-      msg = `连续 ${s.streak} 天坚持，你是真正的训练师！`;
+      msg = `"连续 ${s.streak} 天坚持，你是真正的训练师！"`;
     } else if (s.streak >= 3) {
-      msg = `连续 ${s.streak} 天打卡，继续保持！`;
+      msg = `"连续 ${s.streak} 天打卡，干得漂亮！"`;
     } else {
-      msg = '完成今天的训练，你又强了一点点！';
+      msg = '"完成今天的训练，你又强了一点点！"';
     }
     $('doneMessage').textContent = msg;
 
     $('doneBackBtn').onclick = () => renderHome();
+    renderHotbar('home');
   }
 
   /* ---------------- Settings ---------------- */
   function bindSettings() {
     $('settingsBtn').onclick = () => showSettings();
+    $('avatarBtn').onclick = () => renderHome();
     $('settingsBack').onclick = () => renderHome();
     $('stageBack').onclick = () => {
       TTS.stop();
       if (confirm('当前关卡未完成，确认返回主页？')) renderHome();
     };
 
-    // 单元选择
     const sel = $('setUnit');
     sel.innerHTML = window.CURRICULUM.units.map((u, i) =>
       `<option value="${i}">${u.name} · ${u.cn}</option>`
     ).join('');
 
-    // 头像
     const av = $('avatarPicker');
     av.innerHTML = window.CURRICULUM.avatars.map(a =>
-      `<div class="avatar-opt" data-a="${a}">${a}</div>`
+      `<span class="avatar-chip" data-a="${a}">${a}</span>`
     ).join('');
     av.onclick = (e) => {
-      const opt = e.target.closest('.avatar-opt');
+      const opt = e.target.closest('.avatar-chip');
       if (!opt) return;
       const s = Progress.get();
       s.avatar = opt.dataset.a;
       Progress.save();
-      av.querySelectorAll('.avatar-opt').forEach(x => x.classList.toggle('active', x.dataset.a === s.avatar));
-      renderTrainerCard();
+      av.querySelectorAll('.avatar-chip').forEach(x => x.classList.toggle('on', x.dataset.a === s.avatar));
+      renderHud();
     };
 
     $('setName').oninput = (e) => {
       Progress.get().name = e.target.value || '小训练师';
       Progress.save();
-      renderTrainerCard();
+      const tn = $('trainerName'); if (tn) tn.textContent = Progress.get().name;
     };
     $('setUnit').onchange = (e) => {
       Progress.get().currentUnitIdx = parseInt(e.target.value, 10);
@@ -209,8 +282,6 @@ window.App = (() => {
         location.reload();
       }
     };
-
-    $('doneBackBtn') && ( $('doneBackBtn').onclick = () => renderHome() );
   }
 
   function showSettings() {
@@ -221,8 +292,9 @@ window.App = (() => {
     $('setMinutes').value = s.minutesGoal;
     $('setRate').value = s.ttsRate;
     $('setRateVal').textContent = s.ttsRate;
-    document.querySelectorAll('.avatar-opt').forEach(x =>
-      x.classList.toggle('active', x.dataset.a === s.avatar));
+    document.querySelectorAll('.avatar-chip').forEach(x =>
+      x.classList.toggle('on', x.dataset.a === s.avatar));
+    renderHotbar('settings');
   }
 
   function showReport() {
@@ -247,16 +319,16 @@ window.App = (() => {
           <div class="row"><span>已掌握(对≥3次)</span><span>${Progress.masteredWords()} 个</span></div>
           <div class="row"><span>本周平均准确率</span><span>${avgAcc}%</span></div>
           <div class="row"><span>已读完故事</span><span>${s.readsCompleted.length} 篇</span></div>
-          <div class="row"><span>徽章</span><span>${s.badges.length} 枚</span></div>
-          <h3 style="margin:18px 0 10px;font-size:16px;color:var(--text-dim);">每日明细</h3>
+          <div class="row"><span>成就</span><span>${s.badges.length} 枚</span></div>
+          <h2 style="margin-top:18px;">每日明细</h2>
           ${week.map(d => `
             <div class="row">
               <span>${d.date.slice(5)}</span>
               <span>${d.completed === 0 ? '— 未学习 —'
-                : `${d.completed}关 · 新词${d.newWords} · 准确率${d.accuracy}% · ${d.xp}XP`}</span>
+                : `${d.completed}关 · 新词${d.newWords} · ${d.accuracy}% · ${d.xp}XP`}</span>
             </div>`).join('')}
           <div style="text-align:right;margin-top:18px;">
-            <button class="btn-primary" id="closeReport">关闭</button>
+            <button class="block-btn primary" id="closeReport">关闭</button>
           </div>
         </div>
       </div>
@@ -269,7 +341,9 @@ window.App = (() => {
   function showView(id) {
     document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
     $(id).classList.remove('hidden');
-    if (id === 'viewHome' || id === 'viewSettings') renderTrainerCard();
+    if (id === 'viewHome' || id === 'viewSettings' || id === 'viewStage' || id === 'viewDone') {
+      renderHud();
+    }
   }
 
   function bindGlobalEvents() {

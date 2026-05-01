@@ -1,9 +1,9 @@
 /* ============================================================
- * 新词学习关：每个单词卡片 (图 + 拼写 + 中文 + 例句 + TTS)
- * 学完后做一个简短的"看图选词"小测，巩固记忆。
+ * 新词学习关：单词卡（word-tooltip 像素工具提示风）+ 看图选词小测
+ * 方块世界皮肤
  * ============================================================ */
 window.WordsModule = (() => {
-  let unit, idx, words, body, footer, onDone, mode, quizQ, quizCorrect, quizTotal;
+  let unit, idx, words, body, footer, onDone, mode, quizCorrect, quizTotal;
 
   function start({ unit: u, body: b, footer: f, onDone: cb }) {
     unit = u;
@@ -12,7 +12,7 @@ window.WordsModule = (() => {
     body = b;
     footer = f;
     onDone = cb;
-    mode = 'study'; // study -> quiz
+    mode = 'study';
     quizCorrect = 0;
     quizTotal = 0;
     renderStudy();
@@ -21,21 +21,28 @@ window.WordsModule = (() => {
   function renderStudy() {
     const w = words[idx];
     body.innerHTML = `
-      <div class="word-card">
-        <div class="word-image">${w.emoji}</div>
+      <div class="word-tooltip">
+        <div class="tooltip-corner tl"></div>
+        <div class="tooltip-corner tr"></div>
+        <div class="tooltip-corner bl"></div>
+        <div class="tooltip-corner br"></div>
+        <div class="word-emoji">${w.emoji}</div>
         <div class="word-en">${w.en}</div>
-        <div class="word-phonetic">${w.ipa || ''}</div>
+        <div class="word-ipa">${w.ipa || ''}</div>
         <div class="word-cn">${w.cn}</div>
-        <button class="speak-btn" id="speakBtn">🔊 听一听</button>
-        <div class="word-example">${w.sentence}</div>
+        <button class="speak-block block-btn" id="speakBtn">🔊 朗读</button>
+        <div class="word-sentence">"${w.sentence}"</div>
+        <div class="word-rarity">★ COMMON ITEM</div>
       </div>
     `;
     footer.innerHTML = `
-      <button class="btn-ghost" id="prevBtn" ${idx === 0 ? 'disabled' : ''}>上一个</button>
-      <button class="btn-primary" id="nextBtn">${idx === words.length - 1 ? '进入小测 →' : '下一个 →'}</button>
+      <button class="block-btn ghost" id="prevBtn" ${idx === 0 ? 'disabled' : ''}>← 上一个</button>
+      <button class="block-btn primary" id="nextBtn">${idx === words.length - 1 ? '进入小测 →' : '记住了 →'}</button>
     `;
     document.getElementById('speakBtn').onclick = () => TTS.speak(w.en);
-    document.getElementById('prevBtn').onclick = () => { if (idx > 0) { idx--; renderStudy(); } };
+    document.getElementById('prevBtn').onclick = () => {
+      if (idx > 0) { idx--; renderStudy(); }
+    };
     document.getElementById('nextBtn').onclick = () => {
       if (idx < words.length - 1) { idx++; renderStudy(); TTS.speak(words[idx].en); }
       else { mode = 'quiz'; idx = 0; renderQuiz(); }
@@ -48,40 +55,38 @@ window.WordsModule = (() => {
     if (idx >= words.length) return finish();
     const correctWord = words[idx];
     quizTotal++;
-    // 干扰项
     const distractors = words.filter((_, i) => i !== idx).sort(() => Math.random() - 0.5).slice(0, 3);
     const opts = [...distractors, correctWord].sort(() => Math.random() - 0.5);
     const correctIdx = opts.indexOf(correctWord);
 
     body.innerHTML = `
-      <div class="word-card">
-        <div class="word-image">${correctWord.emoji}</div>
-        <div class="word-cn">${correctWord.cn}</div>
-        <div style="margin-top:12px;color:var(--text-dim);">选对应的英文单词：</div>
-        <div class="options" id="quizOptions">
-          ${opts.map((o, i) => `<button class="option" data-i="${i}">${o.en}</button>`).join('')}
-        </div>
+      <div class="stage-prompt">这是哪个单词？</div>
+      <div class="big-emoji">${correctWord.emoji}</div>
+      <div class="vox-options" id="quizOptions">
+        ${opts.map((o, i) => `<button class="vox-option block-btn" data-i="${i}">${o.en}</button>`).join('')}
       </div>
+      <div id="quizFeedback"></div>
     `;
     footer.innerHTML = '';
 
-    const optBtns = document.querySelectorAll('#quizOptions .option');
+    const optBtns = document.querySelectorAll('#quizOptions .vox-option');
     optBtns.forEach(btn => {
       btn.onclick = () => {
         const chosen = parseInt(btn.dataset.i, 10);
         optBtns.forEach(b => b.classList.add('disabled'));
+        const fb = document.getElementById('quizFeedback');
         if (chosen === correctIdx) {
           btn.classList.add('correct');
           quizCorrect++;
           Progress.recordWord(correctWord.en, true);
-          App.toast('✓ ' + App.randEncourage(), 'success', 1100);
+          fb.innerHTML = `<div class="encourage">${App.randEncourage()}</div>`;
           setTimeout(() => { idx++; renderQuiz(); }, 900);
         } else {
-          btn.classList.add('wrong');
+          btn.classList.add('retry');
           optBtns[correctIdx].classList.add('correct');
           Progress.recordWord(correctWord.en, false);
-          App.toast('差一点～再记一下', 'warn', 1500);
-          setTimeout(() => { idx++; renderQuiz(); }, 1500);
+          fb.innerHTML = `<div class="retry-tip">${window.CURRICULUM.retryTips[0]}</div>`;
+          setTimeout(() => { idx++; renderQuiz(); }, 1400);
         }
       };
     });
@@ -89,9 +94,8 @@ window.WordsModule = (() => {
   }
 
   function updateProgress() {
-    const total = mode === 'study' ? words.length : words.length;
     const cur = idx + 1;
-    document.getElementById('stageProgress').textContent = `${mode === 'study' ? '学' : '测'} ${cur} / ${total}`;
+    document.getElementById('stageProgress').textContent = `${mode === 'study' ? '学' : '测'} ${cur} / ${words.length}`;
   }
 
   function finish() {
