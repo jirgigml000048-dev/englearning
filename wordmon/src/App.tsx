@@ -1,6 +1,6 @@
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { MainMenu } from './routes/MainMenu';
-import { RoundPlaceholder } from './routes/RoundPlaceholder';
+import { Round } from './routes/Round';
 
 function DexPlaceholder() {
   return (
@@ -16,7 +16,7 @@ export default function App() {
       <div className="h-screen w-screen overflow-hidden">
         <Routes>
           <Route path="/" element={<MainMenu />} />
-          <Route path="/round/:id" element={<RoundPlaceholder />} />
+          <Route path="/round/:id" element={<Round />} />
           <Route path="/dex" element={<DexPlaceholder />} />
         </Routes>
       </div>
