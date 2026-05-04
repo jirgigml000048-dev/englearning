@@ -803,3 +803,40 @@ body {
 
 /* Disabled option (already-clicked) */
 .vox-option.disabled { pointer-events: none; }
+
+/* ============ READING: explanation + translation review ============ */
+.explanation-block {
+  margin-top: 18px; padding: 14px 16px;
+  background: #2a3a5a;
+  color: #cfe3ff;
+  border: 3px solid #4d6c9c;
+  font-family: var(--font-cn); font-size: 16px;
+  line-height: 1.55;
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,0.08), 4px 4px 0 #000;
+}
+.explanation-block::before {
+  content: '';
+}
+
+/* Translation review */
+.book-review .review-hint-text {
+  font-size: 14px; color: var(--wood-dk);
+  margin-bottom: 14px; padding: 6px 8px;
+  background: rgba(0,0,0,0.05);
+  border-left: 3px solid var(--gold);
+}
+.review-row {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--paper-dk);
+}
+.review-row:last-child { border-bottom: none; }
+.book-para-zh {
+  margin-top: 4px;
+  font-size: 16px; line-height: 1.7;
+  color: var(--wood-dk);
+  font-family: var(--font-cn);
+  opacity: 0.9;
+  padding-left: 12px;
+  border-left: 3px solid var(--gold);
+}

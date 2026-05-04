@@ -1,8 +1,9 @@
 /* ============================================================
- * 阅读关：方块世界主题课文 (book / 纸张) + 选择题
- * - 段落里每个英文词可点 → 听发音
- * - 全文朗读按钮
- * - 错题第一次给提示，第二次揭晓答案，全程无否定语气
+ * 阅读关：方块世界主题课文 (book/纸张) + 选择题 + 翻译回看
+ * 流程：
+ *   1) story  课文阅读（每个英文词可点听发音）
+ *   2) quiz   逐题答题（错→提示→再错→揭晓答案 + 讲解）
+ *   3) review 翻译回看（英文+中文对照，巩固理解）
  * ============================================================ */
 window.ReadingModule = (() => {
   let reading, qIdx, body, footer, onDone, score, attempts, total;
@@ -18,6 +19,7 @@ window.ReadingModule = (() => {
     renderStory();
   }
 
+  /* ---------------- Story ---------------- */
   function renderStory() {
     const r = reading;
     const storyHtml = r.paragraphs.map(p => `<p class="book-para">${tappable(p)}</p>`).join('');
@@ -45,8 +47,9 @@ window.ReadingModule = (() => {
     return text.replace(/([A-Za-z']+)/g, '<span class="tap-word">$1</span>');
   }
 
+  /* ---------------- Quiz ---------------- */
   function renderQuestion() {
-    if (qIdx >= total) return finish();
+    if (qIdx >= total) return renderTranslationReview();
     const q = reading.questions[qIdx];
     attempts = 0;
 
@@ -70,8 +73,13 @@ window.ReadingModule = (() => {
           opBtns.forEach(x => x.classList.add('disabled'));
           if (attempts === 0) score += 1;
           else if (attempts === 1) score += 0.5;
-          App.toast('✓ ' + App.randEncourage(), 'success', 900);
-          setTimeout(() => { qIdx++; renderQuestion(); }, 1100);
+          // 答对也展示讲解（强化记忆）
+          if (q.explanation) {
+            document.getElementById('hintBox').innerHTML =
+              `<div class="explanation-block">📘 讲解：${q.explanation}</div>`;
+          }
+          App.toast('✓ ' + App.randEncourage(), 'success', 1100);
+          setTimeout(() => { qIdx++; renderQuestion(); }, 2400);
         } else {
           b.classList.add('retry');
           b.classList.add('disabled');
@@ -83,8 +91,18 @@ window.ReadingModule = (() => {
           } else {
             opBtns[q.answer].classList.add('correct');
             opBtns.forEach(x => x.classList.add('disabled'));
+            // 揭晓答案 + 讲解
+            const explHtml = q.explanation
+              ? `<div class="explanation-block">📘 讲解：${q.explanation}</div>` : '';
+            document.getElementById('hintBox').innerHTML = explHtml + `
+              <div style="text-align:center;margin-top:14px;">
+                <button class="block-btn primary" id="continueBtn">看懂了，继续 →</button>
+              </div>`;
+            // 等用户主动点继续，不强行 setTimeout 跳走 (讲解需要时间消化)
+            document.getElementById('continueBtn').onclick = () => {
+              qIdx++; renderQuestion();
+            };
             App.toast('记住这道题，下次就会啦', 'warn', 1400);
-            setTimeout(() => { qIdx++; renderQuestion(); }, 1700);
           }
         }
       };
@@ -92,6 +110,38 @@ window.ReadingModule = (() => {
 
     document.getElementById('rereadBtn').onclick = () => renderStory();
     document.getElementById('stageProgress').textContent = `第 ${qIdx + 1} / ${total} 题`;
+  }
+
+  /* ---------------- Translation Review (英中对照) ---------------- */
+  function renderTranslationReview() {
+    const r = reading;
+    const hasZh = Array.isArray(r.paragraphsZh) && r.paragraphsZh.length === r.paragraphs.length;
+    if (!hasZh) return finish(); // 没翻译数据就直接结束
+
+    const rows = r.paragraphs.map((p, i) => `
+      <div class="review-row">
+        <p class="book-para">${tappable(p)}</p>
+        <p class="book-para-zh">${r.paragraphsZh[i]}</p>
+      </div>
+    `).join('');
+
+    body.innerHTML = `
+      <div class="book book-review" id="story">
+        <div class="book-title">${r.emoji} ${r.title} · 翻译回看</div>
+        <div class="review-hint-text">📖 答完题再读一遍，看看每段中文意思。点英文词可以听发音。</div>
+        ${rows}
+      </div>
+    `;
+    footer.innerHTML = `
+      <button class="block-btn ghost" id="readAllBtn">🔊 再朗读一遍</button>
+      <button class="block-btn primary" id="finishBtn">完成关卡 →</button>
+    `;
+    document.getElementById('readAllBtn').onclick = () => TTS.speak(r.paragraphs.join(' '));
+    document.getElementById('finishBtn').onclick = () => { TTS.stop(); finish(); };
+    document.querySelectorAll('#story .tap-word').forEach(el => {
+      el.onclick = () => TTS.speak(el.textContent);
+    });
+    document.getElementById('stageProgress').textContent = '翻译回看';
   }
 
   function finish() {

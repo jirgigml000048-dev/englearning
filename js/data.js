@@ -44,11 +44,18 @@ window.CURRICULUM = {
           "Steve says, \"Why do you join the Music Club?\" Alex says, \"Because music makes me happy.\"",
           "Steve is happy too. He builds a new house. Alex sings a song. They are best friends."
         ],
+        paragraphsZh: [
+          "Steve 住在一个 Minecraft 村庄里。他有很多爱好。他喜欢建造、挖矿和阅读。",
+          "今天村子里来了一个新俱乐部——建造俱乐部。Steve 想加入，因为他热爱建造。",
+          "Alex 加入了音乐俱乐部。她是民间音乐的超级粉丝，唱歌唱得非常好。",
+          "Steve 问：\"你为什么加入音乐俱乐部？\" Alex 说：\"因为音乐让我开心。\"",
+          "Steve 也很开心。他造了一座新房子，Alex 唱了一首歌。他们是最好的朋友。"
+        ],
         questions: [
-          { q: "What is Steve's hobby?",                 options: ['Dancing.', 'Building, mining, and reading.', 'Cooking.', 'Sleeping.'],          answer: 1, hint: '看第一段最后一句。' },
-          { q: "Which club does Steve want to join?",    options: ['Music Club.', 'Dance Club.', 'Building Club.', 'Science Club.'],                answer: 2, hint: '第二段。' },
-          { q: "Why does Alex join the Music Club?",     options: ['She is a fan of football.', 'She likes folk music.', 'Because music makes her happy.', 'She wants to travel.'], answer: 2, hint: '第四段，Alex 自己说的。' },
-          { q: "How does Steve feel at the end?",        options: ['Sad.', 'Tired.', 'Angry.', 'Happy.'],                                            answer: 3, hint: '最后一段。' }
+          { q: "What is Steve's hobby?",                 options: ['Dancing.', 'Building, mining, and reading.', 'Cooking.', 'Sleeping.'],          answer: 1, hint: '看第一段最后一句。',           explanation: '第一段说 "He likes building, mining, and reading." 这是 Steve 的三个爱好。其它选项原文里都没出现。' },
+          { q: "Which club does Steve want to join?",    options: ['Music Club.', 'Dance Club.', 'Building Club.', 'Science Club.'],                answer: 2, hint: '第二段。',                     explanation: '第二段提到 "It is the Building Club. Steve wants to join it"。注意 Music Club 是 Alex 加入的，要看清"who"。' },
+          { q: "Why does Alex join the Music Club?",     options: ['She is a fan of football.', 'She likes folk music.', 'Because music makes her happy.', 'She wants to travel.'], answer: 2, hint: '第四段，Alex 自己说的。',     explanation: '考点：because 引导原因。第四段 Alex 直接说 "Because music makes me happy."。"She likes folk music"虽然第三段提到，但这道题问 why she joins，要看 Alex 自己给的理由。' },
+          { q: "How does Steve feel at the end?",        options: ['Sad.', 'Tired.', 'Angry.', 'Happy.'],                                            answer: 3, hint: '最后一段。',                   explanation: '最后一段 "Steve is happy too." 直接告诉答案。注意 too 表示"也"，因为 Alex 也开心。' }
         ]
       }]
     },
@@ -96,11 +103,18 @@ window.CURRICULUM = {
           "Alex says, \"Thank you, Steve!\" She walks down to the village slowly.",
           "On the street, she sees a red light. She stops. The light turns green. Then she walks again. Safe and happy!"
         ],
+        paragraphsZh: [
+          "现在是三月，今天天晴。Alex 想去湖上滑冰。",
+          "但是冰很薄。Steve 在湖边看到一块告示牌，上面写着：\"危险！薄冰！\"",
+          "Steve 说：\"Alex，小心！在薄冰上滑冰很危险，你可能会掉进湖里。\"",
+          "Alex 说：\"谢谢你，Steve！\" 她慢慢走回村庄。",
+          "在街上，她看到红灯，停了下来。灯变绿了，她才再次往前走。安全又开心！"
+        ],
         questions: [
-          { q: "What month is it in the story?",          options: ['May.', 'March.', 'July.', 'October.'],                                          answer: 1, hint: '第一段第一句。' },
-          { q: "Why is the lake dangerous?",              options: ['It is too big.', 'The ice is thin.', 'It is far away.', 'It is rainy.'],         answer: 1, hint: '第二段。' },
-          { q: "Who tells Alex to be careful?",           options: ['Her mom.', 'A robot.', 'Steve.', 'A teacher.'],                                  answer: 2, hint: '第三段。' },
-          { q: "What does Alex do at the red light?",     options: ['She runs fast.', 'She stops.', 'She walks back.', 'She skates.'],                answer: 1, hint: '最后一段。' }
+          { q: "What month is it in the story?",          options: ['May.', 'March.', 'July.', 'October.'],                                          answer: 1, hint: '第一段第一句。',                  explanation: '考点：月份名称首字母大写。"It is March." 直接告诉了月份。注意 1-12 月一定要会拼。' },
+          { q: "Why is the lake dangerous?",              options: ['It is too big.', 'The ice is thin.', 'It is far away.', 'It is rainy.'],         answer: 1, hint: '第二段。',                       explanation: '考点：dangerous + thin ice 的搭配。第二段开头 "But the ice is thin"。It\'s dangerous to skate on thin ice 是固定句型，要熟记。' },
+          { q: "Who tells Alex to be careful?",           options: ['Her mom.', 'A robot.', 'Steve.', 'A teacher.'],                                  answer: 2, hint: '第三段。',                       explanation: '第三段开头 "Steve says, \"Alex, be careful!\""。看引号前面是谁说话，是阅读题最常用的小窍门。' },
+          { q: "What does Alex do at the red light?",     options: ['She runs fast.', 'She stops.', 'She walks back.', 'She skates.'],                answer: 1, hint: '最后一段。',                     explanation: '考点：交通规则 + should 用法。最后一段 "She stops" 直接说出答案。教材原句 "He should stop at the red light" 也是同一考点。' }
         ]
       }]
     },
@@ -145,11 +159,18 @@ window.CURRICULUM = {
           "After the game, Alex is tired. Her leg hurts a little, but not badly.",
           "Steve says, \"You are my hero, Alex!\" Alex smiles. \"Sports Day is so much fun!\""
         ],
+        paragraphsZh: [
+          "今天是村庄的运动日。Steve 和 Alex 玩了很多比赛。",
+          "Steve 擅长跳跃。他一分钟跳了 90 下，是跳跃之王！",
+          "Alex 踢足球，她也很擅长。她以 100 比 70 赢了比赛。",
+          "比赛结束后，Alex 累了。她的腿有点疼，但不严重。",
+          "Steve 说：\"Alex，你是我的英雄！\" Alex 笑了笑：\"运动日太有趣了！\""
+        ],
         questions: [
-          { q: "What is Steve good at?",                  options: ['Football.', 'Kung fu.', 'Jumping.', 'Chess.'],                                  answer: 2, hint: '第二段。' },
-          { q: "How many jumps does Steve make?",         options: ['Seventy.', 'Eighty.', 'Ninety.', 'A hundred.'],                                 answer: 2, hint: '第二段，"ninety jumps"。' },
-          { q: "Does Alex win the football game?",        options: ['Yes, she does.', 'No, she does not.', 'They draw.', 'The story does not say.'], answer: 0, hint: '第三段，"She wins the game"。' },
-          { q: "How does Alex feel after the game?",      options: ['Sad.', 'Tired.', 'Angry.', 'Hungry.'],                                          answer: 1, hint: '第四段第一句。' }
+          { q: "What is Steve good at?",                  options: ['Football.', 'Kung fu.', 'Jumping.', 'Chess.'],                                  answer: 2, hint: '第二段。',                          explanation: '考点：be good at + 动名词。"Steve is good at jumping." (jumping 是 jump+ing)。注意 at 后面只能跟动名词，不能跟动词原形。' },
+          { q: "How many jumps does Steve make?",         options: ['Seventy.', 'Eighty.', 'Ninety.', 'A hundred.'],                                 answer: 2, hint: '第二段，"ninety jumps"。',          explanation: '考点：70/80/90/100 数字拼读。"ninety" = 90。要会区分 nineteen (19) vs ninety (90)，词尾 -teen vs -ty 是高频考点。' },
+          { q: "Does Alex win the football game?",        options: ['Yes, she does.', 'No, she does not.', 'They draw.', 'The story does not say.'], answer: 0, hint: '第三段，"She wins the game"。',     explanation: '考点：一般疑问句的回答 Yes/No + 主语 + does/doesn\'t。"She wins" 表示赢了，所以回答 "Yes, she does."。注意第三人称单数动词加 -s。' },
+          { q: "How does Alex feel after the game?",      options: ['Sad.', 'Tired.', 'Angry.', 'Hungry.'],                                          answer: 1, hint: '第四段第一句。',                      explanation: '第四段 "Alex is tired" 直接说出。Tired 是形容词表示"累了"，也是常考词。其它三个形容词读音也要会区分。' }
         ]
       }]
     },
@@ -201,11 +222,18 @@ window.CURRICULUM = {
           "In the evening, Steve and Alex go to the zoo. They see pandas, tigers, and lions.",
           "\"National Day is the best holiday!\" Alex says. Steve smiles. \"Yes! And next month is my birthday in November!\""
         ],
+        paragraphsZh: [
+          "今天是个特别的日子。是 10 月 1 日——中国的国庆节！",
+          "Steve 早早起床，在家门前升起了一面红色的国旗。",
+          "Alex 帮父母做家务。然后他们去电影院看了一场电影。",
+          "晚上，Steve 和 Alex 去动物园。他们看到了大熊猫、老虎和狮子。",
+          "\"国庆节是最好的节日！\" Alex 说。Steve 笑着说：\"是的！下个月，11 月就是我的生日了！\""
+        ],
         questions: [
-          { q: "What day is it in the story?",            options: ["Children's Day.", "National Day.", 'Labour Day.', 'Naadam.'],                  answer: 1, hint: '第一段。' },
-          { q: "What does Steve put up?",                 options: ['A photo.', 'A board.', 'A red flag.', 'A light.'],                              answer: 2, hint: '第二段。' },
-          { q: "Where do they go in the evening?",        options: ['Cinema.', 'School.', 'The Great Wall.', 'The zoo.'],                            answer: 3, hint: '第四段。' },
-          { q: "When is Steve's birthday?",               options: ['October.', 'November.', 'May.', 'July.'],                                       answer: 1, hint: '最后一段，"next month"。' }
+          { q: "What day is it in the story?",            options: ["Children's Day.", "National Day.", 'Labour Day.', 'Naadam.'],                  answer: 1, hint: '第一段。',                          explanation: '考点：节日日期对照。"It is 1st October — China\'s National Day"。要记住四个节日的日期：Labour Day-1st May / National Day-1st October / Children\'s Day-1st June / Naadam-July or August。' },
+          { q: "What does Steve put up?",                 options: ['A photo.', 'A board.', 'A red flag.', 'A light.'],                              answer: 2, hint: '第二段。',                          explanation: '考点：put up 动词词组 = 升起/挂起。第二段 "He puts up a red flag"。注意是 puts up，第三人称单数加 s。' },
+          { q: "Where do they go in the evening?",        options: ['Cinema.', 'School.', 'The Great Wall.', 'The zoo.'],                            answer: 3, hint: '第四段。',                          explanation: '考点：地点词。第四段 "go to the zoo" 直接告诉。注意 cinema 是第三段下午做的事，evening 是晚上。要区分时间词 morning/afternoon/evening。' },
+          { q: "When is Steve's birthday?",               options: ['October.', 'November.', 'May.', 'July.'],                                       answer: 1, hint: '最后一段，"next month"。',           explanation: '考点：月份顺序 + 推理。最后一段 "next month is my birthday in November"。故事里今天是 10 月 1 日，"next month"（下个月）就是 November。要会按顺序记 May, June, July, August, September, October, November。' }
         ]
       }]
     },
@@ -254,11 +282,18 @@ window.CURRICULUM = {
           "Outside, many people are flying kites. The kites fly high in the blue sky.",
           "\"I really enjoy our weekends!\" Steve says. \"Our world is so happy.\""
         ],
+        paragraphsZh: [
+          "今天是周六，Steve 和家人在家。",
+          "爷爷在花园里浇花，奶奶在喝茶看电视。",
+          "爸爸和 Steve 在厨房做饭。妈妈在墙上画一只滑稽的兔子。",
+          "屋外有很多人在放风筝。风筝在蓝色的天空中飞得很高。",
+          "\"我真的很喜欢我们的周末！\" Steve 说。\"我们的世界真幸福。\""
+        ],
         questions: [
-          { q: "What is Grandpa doing?",                 options: ['Drinking tea.', 'Watering the plants.', 'Cooking.', 'Painting.'],                answer: 1, hint: '第二段。' },
-          { q: "Where are Dad and Steve?",               options: ['In the garden.', 'In the kitchen.', 'In the sky.', 'At school.'],                 answer: 1, hint: '第三段。' },
-          { q: "What is Mum painting?",                  options: ['A cat.', 'A flag.', 'A rabbit.', 'A plant.'],                                    answer: 2, hint: '第三段最后一句。' },
-          { q: "What are people doing outside?",         options: ['Watching TV.', 'Flying kites.', 'Sleeping.', 'Painting walls.'],                  answer: 1, hint: '第四段。' }
+          { q: "What is Grandpa doing?",                 options: ['Drinking tea.', 'Watering the plants.', 'Cooking.', 'Painting.'],                answer: 1, hint: '第二段。',                          explanation: '★Unit 6 重点考点：现在进行时 be + V-ing。"Grandpa is watering the plants"——is + watering 表示"正在浇水"。注意 water 作为动词意思是"浇水"，加 -ing 变 watering。' },
+          { q: "Where are Dad and Steve?",               options: ['In the garden.', 'In the kitchen.', 'In the sky.', 'At school.'],                 answer: 1, hint: '第三段。',                          explanation: '考点：方位介词 in。"in the kitchen"（在厨房里）。注意主语是两个人 (Dad and Steve)，所以用 are 不是 is。复数主语 → are doing，单数 → is doing。' },
+          { q: "What is Mum painting?",                  options: ['A cat.', 'A flag.', 'A rabbit.', 'A plant.'],                                    answer: 2, hint: '第三段最后一句。',                  explanation: '考点：现在进行时 + 形容词修饰。"Mum is painting a funny rabbit"。形容词 funny 在名词 rabbit 前面（英语形容词放名词前）。' },
+          { q: "What are people doing outside?",         options: ['Watching TV.', 'Flying kites.', 'Sleeping.', 'Painting walls.'],                  answer: 1, hint: '第四段。',                          explanation: '考点：are + 动名词 + 复数宾语。"many people are flying kites"。注意 fly 变 -ing 时直接加 ing 变 flying（fly 不去 y）。kites 是复数。' }
         ]
       }]
     },
@@ -314,11 +349,18 @@ window.CURRICULUM = {
           "Steve says, \"Is the library near here too?\" The robot says, \"Yes, it is beside the supermarket. The new books are on the third shelf with letter M.\"",
           "Steve is glad. \"Thank you! Our smart community is the best!\""
         ],
+        paragraphsZh: [
+          "Steve 是村子里的新人。他需要买些面包，但不知道路。",
+          "他在社区中心前面看到一个智能机器人。Steve 说：\"你能告诉我去商店怎么走吗？\"",
+          "机器人很快回答：\"当然！沿着这条街走。超市在你右边，在图书馆和卫生间之间。\"",
+          "Steve 问：\"图书馆离这儿近吗？\" 机器人说：\"近，就在超市旁边。新书在第三层书架上，字母 M 那一排。\"",
+          "Steve 很高兴。\"谢谢！我们的智能社区真棒！\""
+        ],
         questions: [
-          { q: "What does Steve want to buy?",            options: ['A book.', 'Some bread.', 'A flag.', 'A kite.'],                                  answer: 1, hint: '第一段。' },
-          { q: "Where is the smart robot?",               options: ['In the supermarket.', 'In front of the community centre.', 'On the playground.', 'On the third shelf.'], answer: 1, hint: '第二段。' },
-          { q: "Where is the supermarket?",               options: ['Far away.', 'Between the library and the toilet.', 'In a building.', 'Near the lake.'],            answer: 1, hint: '第三段。' },
-          { q: "Where are the new books?",                options: ['On the second shelf.', 'On the third shelf with letter M.', 'In the toilet.', 'In the cinema.'],   answer: 1, hint: '第四段最后一句。' }
+          { q: "What does Steve want to buy?",            options: ['A book.', 'Some bread.', 'A flag.', 'A kite.'],                                  answer: 1, hint: '第一段。',                          explanation: '考点：want to + 动词原形，need to + 动词原形。第一段 "He needs to buy some bread"。注意 some 后接不可数名词 bread（面包不能数）。' },
+          { q: "Where is the smart robot?",               options: ['In the supermarket.', 'In front of the community centre.', 'On the playground.', 'On the third shelf.'], answer: 1, hint: '第二段。',                          explanation: '★Unit 7 重点考点：方位介词 in front of = 在...前面。第二段 "in front of the community centre"。注意区分 in front of (前面) vs in the front of (内部前部)，以及 behind (后面)、beside (旁边)。' },
+          { q: "Where is the supermarket?",               options: ['Far away.', 'Between the library and the toilet.', 'In a building.', 'Near the lake.'],            answer: 1, hint: '第三段。',                          explanation: '考点：方位介词 between A and B = 在 A 和 B 之间。第三段 "between the library and the toilet"。between 后面一定是两个东西，用 and 连接。' },
+          { q: "Where are the new books?",                options: ['On the second shelf.', 'On the third shelf with letter M.', 'In the toilet.', 'In the cinema.'],   answer: 1, hint: '第四段最后一句。',                  explanation: '考点：序数词 + 名词。"on the third shelf"（在第三层架子上）。要熟练 first / second / third / fourth / fifth + floor / shelf 这种考查方位的搭配。注意 third 不是 threeth。' }
         ]
       }]
     }

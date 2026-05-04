@@ -282,6 +282,16 @@ window.App = (() => {
       Progress.save();
       $('setRateVal').textContent = e.target.value;
     };
+
+    // Voice picker
+    populateVoicePicker();
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = populateVoicePicker;
+    }
+    $('setVoice').onchange = (e) => {
+      TTS.setVoiceByName(e.target.value);
+    };
+    $('testVoiceBtn').onclick = () => TTS.speak('Hello, I am your English trainer. Let us learn together!');
     $('reportBtn').onclick = showReport;
     $('resetBtn').onclick = () => {
       if (confirm('确认清空所有进度？此操作不可恢复。')) {
@@ -289,6 +299,18 @@ window.App = (() => {
         location.reload();
       }
     };
+  }
+
+  function populateVoicePicker() {
+    const sel = $('setVoice');
+    if (!sel) return;
+    const voices = TTS.getAvailableVoices();
+    const cur = TTS.getCurrentVoice();
+    sel.innerHTML = voices.length
+      ? voices.map(v =>
+          `<option value="${v.name}" ${cur && v.name === cur.name ? 'selected' : ''}>${v.name} (${v.lang})</option>`
+        ).join('')
+      : '<option>(没有可用英语音色)</option>';
   }
 
   function showSettings() {
@@ -299,6 +321,7 @@ window.App = (() => {
     $('setMinutes').value = s.minutesGoal;
     $('setRate').value = s.ttsRate;
     $('setRateVal').textContent = s.ttsRate;
+    populateVoicePicker();
     document.querySelectorAll('.avatar-chip').forEach(x =>
       x.classList.toggle('on', x.dataset.a === s.avatar));
     renderHotbar('settings');
