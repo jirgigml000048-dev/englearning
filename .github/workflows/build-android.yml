@@ -50,19 +50,35 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Show env
+        run: |
+          set -e
+          echo "Node:" && node --version
+          echo "npm:"  && npm --version
+          echo "npx:"  && npx --version
+          echo "Java:" && java -version
+          echo "PWD:" && pwd && ls -la
+
       - name: Install npm deps (Capacitor)
-        run: npm install --no-audit --no-fund
+        run: |
+          set -e
+          npm install --no-audit --no-fund --no-progress
+          echo "--- node_modules/.bin ---"
+          ls -la node_modules/.bin | grep -E "cap|capacitor" || true
 
       - name: Prepare webDir (copy html/css/js/audio → dist/)
-        run: node scripts/prepare-webdir.mjs
+        run: |
+          set -e
+          node scripts/prepare-webdir.mjs
+          echo "--- dist/ ---"
+          ls -la dist/ | head -20
 
       - name: Audio status
         run: |
           if [ -d audio ] && [ "$(ls audio/words 2>/dev/null | wc -l)" -gt "0" ]; then
             echo "✓ Audio mp3s found ($(find audio -name '*.mp3' | wc -l) files)"
           else
-            echo "::warning::audio/ 文件夹为空或缺失。APK 里不会有 ElevenLabs 真人发音, 只能用 Web Speech 降级。"
-            echo "::warning::想要真人发音先跑 'Generate ElevenLabs Audio' workflow, 再来这里 Run。"
+            echo "::warning::audio/ 文件夹为空或缺失。APK 里不会有 ElevenLabs 真人发音。"
           fi
 
       - name: Cache Gradle
@@ -71,35 +87,52 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            android/.gradle
-          key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*', 'android/**/gradle-wrapper.properties') }}
-          restore-keys: gradle-${{ runner.os }}-
+          key: gradle-${{ runner.os }}-cap6-v1
 
-      - name: Add Android platform
-        run: npx cap add android || echo "Android platform already exists"
+      - name: Add Android platform (fail loudly if it errors)
+        run: |
+          set -e
+          if [ -d "android" ]; then
+            echo "android/ already exists, skip cap add"
+          else
+            npx cap add android
+          fi
+          echo "--- android/ contents ---"
+          ls -la android/
+          echo "--- android/app exists? ---"
+          test -d android/app && echo "yes" || (echo "android/app MISSING" && exit 1)
+          echo "--- gradlew exists? ---"
+          test -f android/gradlew && echo "yes" || (echo "gradlew MISSING" && exit 1)
+
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
 
       - name: Sync web assets to Android
-        run: npx cap sync android
-
-      - name: Set Android version
         run: |
-          BUILD_NUM=$(date -u +"%Y%m%d%H%M")
-          sed -i "s/versionCode 1/versionCode ${GITHUB_RUN_NUMBER}/" android/app/build.gradle || true
-          sed -i "s/versionName \"1.0\"/versionName \"1.${GITHUB_RUN_NUMBER}\"/" android/app/build.gradle || true
+          set -e
+          npx cap sync android
+          echo "--- assets/public ---"
+          ls -la android/app/src/main/assets/public/ | head -10
 
       - name: Build APK
         run: |
+          set -e
           cd android
-          ./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx4g"
+          ./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx4g" --stacktrace
+
+      - name: Verify APK exists
+        run: |
+          set -e
+          APK=android/app/build/outputs/apk/debug/app-debug.apk
+          test -f $APK && echo "✓ APK at $APK ($(stat -c%s $APK) bytes)" || (echo "APK MISSING" && exit 1)
 
       - name: Rename APK
-        run: |
-          cp android/app/build/outputs/apk/debug/app-debug.apk english-trainer-v1.${GITHUB_RUN_NUMBER}.apk
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk english-trainer-v1.${GITHUB_RUN_NUMBER}.apk
 
       - name: Upload APK as workflow artifact
         uses: actions/upload-artifact@v4
         with:
-          name: english-trainer-apk
+          name: english-trainer-apk-${{ github.run_number }}
           path: english-trainer-v1.*.apk
           retention-days: 30
 
@@ -111,18 +144,11 @@ jobs:
           body: |
             **英语训练师 Android 版** (调试版本, 离线可用)
 
-            ## 安装步骤 (OPPO Pad 4)
-            1. 下载下面的 `english-trainer-v1.${{ github.run_number }}.apk`
-            2. 把 APK 传到 Pad (微信/QQ/邮件/拷贝都行)
-            3. Pad 上打开 APK, 系统会提示"安装未知应用"
-            4. 设置 → 安全 → 允许这个应用来源 → 返回继续安装
-            5. 装完点开就能用, 全程不需要网络
-
-            ## 包含
-            - 全部 6 个单元 (24 篇阅读, 127 个单词)
-            - 错题本 / 自动进阶 / 战利品 / 主题包
-            - $(find audio -name '*.mp3' 2>/dev/null | wc -l) 个 ElevenLabs 真人发音 mp3 (如已生成)
-            - 跟读录音识别
+            装到 OPPO Pad 4 步骤:
+            1. 下载下面的 .apk 文件
+            2. 把 APK 传到 Pad (微信/QQ/邮件/拷贝)
+            3. Pad 打开 APK, 系统提示"未知来源" → 允许 → 安装
+            4. 装完点开图标, 全程不需要网络
           files: english-trainer-v1.*.apk
           prerelease: true
         env:
