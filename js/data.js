@@ -57,6 +57,56 @@ window.CURRICULUM = {
           { q: "Why does Alex join the Music Club?",     options: ['She is a fan of football.', 'She likes folk music.', 'Because music makes her happy.', 'She wants to travel.'], answer: 2, hint: '第四段，Alex 自己说的。',     explanation: '考点：because 引导原因。第四段 Alex 直接说 "Because music makes me happy."。"She likes folk music"虽然第三段提到，但这道题问 why she joins，要看 Alex 自己给的理由。' },
           { q: "How does Steve feel at the end?",        options: ['Sad.', 'Tired.', 'Angry.', 'Happy.'],                                            answer: 3, hint: '最后一段。',                   explanation: '最后一段 "Steve is happy too." 直接告诉答案。注意 too 表示"也"，因为 Alex 也开心。' }
         ]
+      }, {
+        id: 'u1-r2',
+        theme: 'minecraft',
+        title: "The Folk Music Festival",
+        emoji: '🎵',
+        paragraphs: [
+          "Today there is a folk music festival in the village. People come from far away.",
+          "Alex is a big fan of folk music. She wants to sing today. She is so excited.",
+          "Steve asks, \"What kind of music will you sing?\" Alex says, \"An old folk song. My grandma taught me.\"",
+          "The song is sweet. Everyone listens. They say Alex sings very well!",
+          "Steve is happy for her. Alex is happy too. Folk music brings everyone together."
+        ],
+        paragraphsZh: [
+          "今天村里有个民间音乐节。人们从远方赶来。",
+          "Alex 是民间音乐的超级粉丝。她今天想唱歌，非常激动。",
+          "Steve 问：\"你要唱哪种音乐？\" Alex 说：\"一首古老的民歌，我奶奶教我的。\"",
+          "歌声很甜美，大家都在听。他们都说 Alex 唱得真好！",
+          "Steve 替她开心，Alex 也开心。民间音乐让大家聚在一起。"
+        ],
+        questions: [
+          { q: "What is happening in the village today?", options: ['A football game.', 'A folk music festival.', 'A school day.', 'A birthday party.'], answer: 1, hint: '第一段第一句。', explanation: '"Today there is a folk music festival" 直接给答案。考点：there is + 名词 = 有...。' },
+          { q: "Why is Alex excited?",                    options: ['She wants to sing.', 'She wants to dance.', 'She wants to eat.', 'She wants to sleep.'], answer: 0, hint: '第二段。', explanation: '"She wants to sing today. She is so excited."。考点：want to + 动词原形 = 想做某事。注意 wants 加 -s（第三人称单数）。' },
+          { q: "Who taught Alex the folk song?",          options: ['Steve.', 'Her grandma.', 'Her teacher.', 'A friend.'],                       answer: 1, hint: '第三段。', explanation: '第三段 "My grandma taught me."。考点：teach 的过去式是 taught (不规则变化)。grandma 也是 Unit 6 词。' },
+          { q: "How do people feel at the end?",          options: ['Tired.', 'Angry.', 'Happy.', 'Sad.'],                                         answer: 2, hint: '最后一段。', explanation: 'Steve 和 Alex 都 happy，"Folk music brings everyone together" 也是积极情绪。' }
+        ]
+      }, {
+        id: 'u1-r3',
+        theme: 'minecraft',
+        title: "A Hobby for Steve",
+        emoji: '🔬',
+        paragraphs: [
+          "Steve wants a new hobby. He thinks for a long time.",
+          "His friend says, \"Why don't you join the Science Club? You like to study new things.\"",
+          "Steve says, \"What kind of things do they study?\" His friend says, \"Animals, plants, and travel.\"",
+          "Steve goes to the Science Club. He studies animals there. He likes it very well.",
+          "His new hobby is science. He is happy with his choice."
+        ],
+        paragraphsZh: [
+          "Steve 想要一个新爱好，他想了很久。",
+          "他的朋友说：\"你为什么不加入科学俱乐部？你喜欢研究新东西。\"",
+          "Steve 问：\"他们研究什么？\" 朋友说：\"动物、植物、还有旅行。\"",
+          "Steve 去了科学俱乐部，在那儿研究动物，他很喜欢。",
+          "他的新爱好是科学。他对这个选择很满意。"
+        ],
+        questions: [
+          { q: "What is Steve looking for?",              options: ['A new toy.', 'A new hobby.', 'A new school.', 'A new bike.'],                 answer: 1, hint: '第一段。', explanation: '"Steve wants a new hobby"。考点：want + a/an + 名词 = 想要一个...。' },
+          { q: "Which club does his friend suggest?",     options: ['Music Club.', 'Dance Club.', 'Science Club.', 'Football Club.'],              answer: 2, hint: '第二段。', explanation: '"Why don\'t you join the Science Club?"。考点：Why don\'t you...? 是建议句型，意为"你为什么不...？"。' },
+          { q: "What does the Science Club study?",       options: ['Music and dance.', 'Animals, plants, and travel.', 'Cooking.', 'Football games.'], answer: 1, hint: '第三段。', explanation: '"Animals, plants, and travel"。考点：study 在这里是动词"研究"，不是名词"书房"。' },
+          { q: "How does Steve feel about his new hobby?", options: ['He hates it.', 'He is bored.', 'He likes it well.', 'He is angry.'],         answer: 2, hint: '第四段最后一句 + 最后一段。', explanation: '"He likes it very well" + "He is happy"。考点：副词 well 修饰动词 like。' }
+        ]
       }]
     },
 
@@ -116,6 +166,56 @@ window.CURRICULUM = {
           { q: "Who tells Alex to be careful?",           options: ['Her mom.', 'A robot.', 'Steve.', 'A teacher.'],                                  answer: 2, hint: '第三段。',                       explanation: '第三段开头 "Steve says, \"Alex, be careful!\""。看引号前面是谁说话，是阅读题最常用的小窍门。' },
           { q: "What does Alex do at the red light?",     options: ['She runs fast.', 'She stops.', 'She walks back.', 'She skates.'],                answer: 1, hint: '最后一段。',                     explanation: '考点：交通规则 + should 用法。最后一段 "She stops" 直接说出答案。教材原句 "He should stop at the red light" 也是同一考点。' }
         ]
+      }, {
+        id: 'u2-r2',
+        theme: 'minecraft',
+        title: "Don't Throw Things!",
+        emoji: '🚫',
+        paragraphs: [
+          "Steve lives on the third floor. One day he throws an apple out of the window.",
+          "The apple falls down. It almost hits a man on the street. The man is angry.",
+          "Mum says, \"Steve! Don't throw things out of the window. It is very dangerous.\"",
+          "Steve says, \"Sorry, Mum. I will not do it again.\"",
+          "Now Steve is more careful. He puts things in the bin, not out of the window."
+        ],
+        paragraphsZh: [
+          "Steve 住在三楼。有一天他从窗户扔了一个苹果出去。",
+          "苹果掉了下来，差点砸到街上的一个男人。那个男人很生气。",
+          "妈妈说：\"Steve！别从窗户扔东西，太危险了。\"",
+          "Steve 说：\"对不起，妈妈，我下次不会了。\"",
+          "现在 Steve 更小心了，他把东西放进垃圾桶，不再扔出窗外。"
+        ],
+        questions: [
+          { q: "Where does Steve live?",                  options: ['First floor.', 'Second floor.', 'Third floor.', 'Fourth floor.'],            answer: 2, hint: '第一段第一句。', explanation: '"Steve lives on the third floor"。考点：on the + 序数词 + floor = 在第几层楼。' },
+          { q: "What does Steve throw out of the window?", options: ['A book.', 'An apple.', 'A toy.', 'A board.'],                                answer: 1, hint: '第一段第二句。', explanation: '"throws an apple out of the window"。考点：throw...out of = 扔出。out of + 地点。' },
+          { q: "Why is Mum angry?",                       options: ['Because it is too cold.', 'Because Steve fell down.', 'Because throwing things is dangerous.', 'Because Steve is late.'], answer: 2, hint: '第三段。', explanation: '"It is very dangerous"。考点：dangerous 是 Unit 2 高频词。It is + adj + to do 是常考句型。' },
+          { q: "What does Steve do now?",                 options: ['He is more careful.', 'He throws more things.', 'He goes downstairs.', 'He sleeps.'], answer: 0, hint: '最后一段。', explanation: '"Now Steve is more careful"。考点：more + 形容词 = 比较级，表示"更..."。' }
+        ]
+      }, {
+        id: 'u2-r3',
+        theme: 'minecraft',
+        title: "On the Crowded Street",
+        emoji: '👥',
+        paragraphs: [
+          "It is Saturday. The street is full of people. Many people walk fast.",
+          "Alex walks slowly. She is careful in the crowd. \"No pushing!\" she says.",
+          "Steve is in a hurry. He pushes a man. The man falls down.",
+          "\"Sorry, sir!\" Steve says. \"I should walk slowly too.\"",
+          "They wait at the red light together. The light turns green. They walk safely now."
+        ],
+        paragraphsZh: [
+          "今天是周六，街上挤满了人。很多人走得很快。",
+          "Alex 慢慢走，在人群里很小心。\"不要推！\"她说。",
+          "Steve 很急，他推了一个男人，那个男人摔倒了。",
+          "\"对不起先生！\"Steve 说，\"我也应该慢点走。\"",
+          "他们一起在红灯前等。灯变绿了，他们安全地走过去。"
+        ],
+        questions: [
+          { q: "How is the street?",                      options: ['Empty.', 'Full of people.', 'Dark.', 'Wet.'],                                  answer: 1, hint: '第一段。', explanation: '"The street is full of people"。考点：be full of = 充满，固定短语。' },
+          { q: "How does Alex walk?",                     options: ['Fast.', 'Slowly.', 'Backwards.', 'She runs.'],                                 answer: 1, hint: '第二段。', explanation: '"Alex walks slowly"。考点：副词 slowly 修饰动词 walk。注意区分形容词 slow 与副词 slowly。' },
+          { q: "What happens to the man?",                options: ['He sings.', 'He falls down.', 'He runs away.', 'He laughs.'],                  answer: 1, hint: '第三段最后一句。', explanation: '"The man falls down"。考点：fall down = 摔倒。也注意 fall 是 Unit 2 词。' },
+          { q: "When do they walk safely?",               options: ['At the red light.', 'When pushing.', 'When the light turns green.', 'When running.'], answer: 2, hint: '最后一段。', explanation: '"The light turns green. They walk safely now"。考点：交通规则——红停绿行。' }
+        ]
       }]
     },
 
@@ -171,6 +271,56 @@ window.CURRICULUM = {
           { q: "How many jumps does Steve make?",         options: ['Seventy.', 'Eighty.', 'Ninety.', 'A hundred.'],                                 answer: 2, hint: '第二段，"ninety jumps"。',          explanation: '考点：70/80/90/100 数字拼读。"ninety" = 90。要会区分 nineteen (19) vs ninety (90)，词尾 -teen vs -ty 是高频考点。' },
           { q: "Does Alex win the football game?",        options: ['Yes, she does.', 'No, she does not.', 'They draw.', 'The story does not say.'], answer: 0, hint: '第三段，"She wins the game"。',     explanation: '考点：一般疑问句的回答 Yes/No + 主语 + does/doesn\'t。"She wins" 表示赢了，所以回答 "Yes, she does."。注意第三人称单数动词加 -s。' },
           { q: "How does Alex feel after the game?",      options: ['Sad.', 'Tired.', 'Angry.', 'Hungry.'],                                          answer: 1, hint: '第四段第一句。',                      explanation: '第四段 "Alex is tired" 直接说出。Tired 是形容词表示"累了"，也是常考词。其它三个形容词读音也要会区分。' }
+        ]
+      }, {
+        id: 'u3-r2',
+        theme: 'minecraft',
+        title: "Kung Fu King",
+        emoji: '🥋',
+        paragraphs: [
+          "Steve learns kung fu in the village. His teacher is very strong.",
+          "One day Steve falls down. His leg hurts a lot. It hurts badly.",
+          "\"Don't worry,\" his teacher says. \"Even kung fu kings hurt sometimes.\"",
+          "Steve listens to his teacher. He is brave. He stands up again.",
+          "Next year, Steve visits the Great Wall. He shows his kung fu there. He is a small hero now."
+        ],
+        paragraphsZh: [
+          "Steve 在村里学功夫。他的老师非常强壮。",
+          "有一天 Steve 摔了一跤，腿很疼，伤得很严重。",
+          "\"别担心，\"老师说，\"功夫之王有时也会受伤。\"",
+          "Steve 听老师的话，他很勇敢，又站了起来。",
+          "第二年，Steve 去长城游玩，在那里展示功夫。他成了一个小英雄。"
+        ],
+        questions: [
+          { q: "What is Steve learning?",                 options: ['Football.', 'Kung fu.', 'Music.', 'Painting.'],                               answer: 1, hint: '第一段。', explanation: '"Steve learns kung fu"。考点：kung fu 拼写。' },
+          { q: "How badly is Steve hurt?",                options: ['Not at all.', 'A little.', 'Badly.', 'Just a tiny bit.'],                     answer: 2, hint: '第二段。', explanation: '"It hurts badly"。考点：副词 badly 修饰动词 hurt 表示程度。' },
+          { q: "What does Steve do after he falls?",      options: ['He goes home.', 'He cries.', 'He stands up again.', 'He sleeps.'],            answer: 2, hint: '第四段。', explanation: '"He stands up again"。考点：动词词组 stand up = 站起来。again 表示再一次。' },
+          { q: "Where does Steve visit next year?",       options: ['A zoo.', 'The Great Wall.', 'A cinema.', 'A lake.'],                          answer: 1, hint: '最后一段。', explanation: '"Steve visits the Great Wall"。考点：visit + 地点。专有名词 the Great Wall 中 the 不能丢。' }
+        ]
+      }, {
+        id: 'u3-r3',
+        theme: 'minecraft',
+        title: "Tired but Happy",
+        emoji: '🏃',
+        paragraphs: [
+          "The PE class is fun today. We have many games.",
+          "I run one hundred meters. I am tired, but I win!",
+          "My friend hurts his leg, but not badly. He is okay.",
+          "\"You are my hero,\" he says to me. I smile.",
+          "Sports make us strong. Sports make us happy too."
+        ],
+        paragraphsZh: [
+          "今天的体育课很有趣，我们玩了很多游戏。",
+          "我跑了 100 米。虽然累，但是我赢了！",
+          "我朋友腿受伤了，但不严重，他没事。",
+          "\"你是我的英雄，\"他对我说。我笑了。",
+          "运动让我们变强壮，运动也让我们快乐。"
+        ],
+        questions: [
+          { q: "How is the PE class today?",              options: ['Boring.', 'Fun.', 'Tired.', 'Sad.'],                                          answer: 1, hint: '第一段。', explanation: '"The PE class is fun today"。考点：fun 在美式英语里也常作形容词使用。' },
+          { q: "How far does the speaker run?",           options: ['Seventy meters.', 'Eighty meters.', 'Ninety meters.', 'One hundred meters.'], answer: 3, hint: '第二段。', explanation: '"I run one hundred meters"。考点：数字读法 hundred 一百，a/one hundred 都可以。' },
+          { q: "How is the friend's leg?",                options: ['Very bad.', 'Not hurt.', 'Hurt but not badly.', 'Lost.'],                     answer: 2, hint: '第三段。', explanation: '"hurts his leg, but not badly"。考点：but 表转折。badly 是程度副词。' },
+          { q: "What does sports do for us?",             options: ['Make us tired only.', 'Make us strong and happy.', 'Make us angry.', 'Nothing.'], answer: 1, hint: '最后一段。', explanation: '"Sports make us strong... happy too"。考点：make + 宾语 + 形容词 = 使...怎么样。' }
         ]
       }]
     },
@@ -235,6 +385,56 @@ window.CURRICULUM = {
           { q: "Where do they go in the evening?",        options: ['Cinema.', 'School.', 'The Great Wall.', 'The zoo.'],                            answer: 3, hint: '第四段。',                          explanation: '考点：地点词。第四段 "go to the zoo" 直接告诉。注意 cinema 是第三段下午做的事，evening 是晚上。要区分时间词 morning/afternoon/evening。' },
           { q: "When is Steve's birthday?",               options: ['October.', 'November.', 'May.', 'July.'],                                       answer: 1, hint: '最后一段，"next month"。',           explanation: '考点：月份顺序 + 推理。最后一段 "next month is my birthday in November"。故事里今天是 10 月 1 日，"next month"（下个月）就是 November。要会按顺序记 May, June, July, August, September, October, November。' }
         ]
+      }, {
+        id: 'u5-r2',
+        theme: 'minecraft',
+        title: "Children's Day Around the World",
+        emoji: '🎈',
+        paragraphs: [
+          "Children's Day is a special holiday. But it is on different days around the world.",
+          "In China, Children's Day is on 1st June. Many children go to the zoo.",
+          "In Canada, it is on 20th November. The children sing songs at school.",
+          "In the USA, children often have a fun day in the summer too.",
+          "\"Every country has its own day,\" Mum says. \"But children all enjoy it!\""
+        ],
+        paragraphsZh: [
+          "儿童节是一个特别的节日。但世界各地的日期不同。",
+          "在中国，儿童节是 6 月 1 日。很多孩子会去动物园。",
+          "在加拿大，儿童节是 11 月 20 日。孩子们在学校唱歌。",
+          "在美国，孩子们也常常在夏天有一个欢乐的日子。",
+          "\"每个国家都有自己的节日，\"妈妈说，\"但孩子们都喜欢！\""
+        ],
+        questions: [
+          { q: "When is Children's Day in China?",        options: ['1st May.', '1st June.', '1st October.', '20th November.'],                    answer: 1, hint: '第二段。', explanation: '"Children\'s Day is on 1st June"。考点：on + 序数词 + 月份。1st 读作 the first。' },
+          { q: "When is Children's Day in Canada?",       options: ['20th November.', '1st June.', '4th July.', '25th December.'],                 answer: 0, hint: '第三段。', explanation: '"In Canada, it is on 20th November"。考点：注意区分中国 vs 加拿大儿童节日期，常考连线题。' },
+          { q: "What do Chinese children often do?",      options: ['Sing at school.', 'Go to the zoo.', 'Have a fun day.', 'Watch a film.'],       answer: 1, hint: '第二段。', explanation: '"Many children go to the zoo"。考点：go to + 地点，zoo 是 Unit 5 词。' },
+          { q: "How is Children's Day in different countries?", options: ['The same day.', 'On different days.', 'Not celebrated.', 'Only in summer.'], answer: 1, hint: '第一段或最后一段。', explanation: '"on different days around the world"。考点：different + 复数 days = 不同的（多个）日子。' }
+        ]
+      }, {
+        id: 'u5-r3',
+        theme: 'minecraft',
+        title: "Naadam in Inner Mongolia",
+        emoji: '🐎',
+        paragraphs: [
+          "In Inner Mongolia, Naadam is a special festival. It is in July or August.",
+          "People get up early. They watch horse races and wrestling. It is so much fun!",
+          "The festival often lasts three to seven days. Children love it.",
+          "Steve and Alex visit Inner Mongolia this year. They watch a horse race.",
+          "\"Naadam is the best festival here!\" Steve says. He is glad to see it."
+        ],
+        paragraphsZh: [
+          "在内蒙古，那达慕是一个特别的节日，时间在 7 月或 8 月。",
+          "人们一早起来，看赛马和摔跤，非常有趣！",
+          "节日通常持续 3 到 7 天。孩子们都很喜欢。",
+          "Steve 和 Alex 今年去了内蒙古，看了一场赛马。",
+          "\"那达慕是这儿最棒的节日！\"Steve 说。他很高兴能看到。"
+        ],
+        questions: [
+          { q: "When is Naadam held?",                    options: ['May or June.', 'July or August.', 'October.', 'November.'],                  answer: 1, hint: '第一段。', explanation: '"It is in July or August"。考点：or 表二选一；July, August 月份名首字母大写。' },
+          { q: "What do people watch?",                   options: ['Films.', 'TV.', 'Horse races and wrestling.', 'Operas.'],                     answer: 2, hint: '第二段。', explanation: '"horse races and wrestling"。考点：Naadam 文化常识——赛马和摔跤是主要项目。' },
+          { q: "How long does Naadam last?",              options: ['One day.', 'Two days.', 'Three to seven days.', 'A whole month.'],            answer: 2, hint: '第三段。', explanation: '"lasts three to seven days"。考点：last 作动词 = 持续。three to seven 数字范围。' },
+          { q: "Where is Naadam held?",                   options: ['In the USA.', 'In Canada.', 'In Inner Mongolia.', 'In Beijing.'],             answer: 2, hint: '第一段。', explanation: '"In Inner Mongolia"。考点：地名 Inner Mongolia 拼写 + in + 地点。' }
+        ]
       }]
     },
 
@@ -294,6 +494,56 @@ window.CURRICULUM = {
           { q: "Where are Dad and Steve?",               options: ['In the garden.', 'In the kitchen.', 'In the sky.', 'At school.'],                 answer: 1, hint: '第三段。',                          explanation: '考点：方位介词 in。"in the kitchen"（在厨房里）。注意主语是两个人 (Dad and Steve)，所以用 are 不是 is。复数主语 → are doing，单数 → is doing。' },
           { q: "What is Mum painting?",                  options: ['A cat.', 'A flag.', 'A rabbit.', 'A plant.'],                                    answer: 2, hint: '第三段最后一句。',                  explanation: '考点：现在进行时 + 形容词修饰。"Mum is painting a funny rabbit"。形容词 funny 在名词 rabbit 前面（英语形容词放名词前）。' },
           { q: "What are people doing outside?",         options: ['Watching TV.', 'Flying kites.', 'Sleeping.', 'Painting walls.'],                  answer: 1, hint: '第四段。',                          explanation: '考点：are + 动名词 + 复数宾语。"many people are flying kites"。注意 fly 变 -ing 时直接加 ing 变 flying（fly 不去 y）。kites 是复数。' }
+        ]
+      }, {
+        id: 'u6-r2',
+        theme: 'minecraft',
+        title: "Beijing Opera at Home",
+        emoji: '🎭',
+        paragraphs: [
+          "It is Sunday. Mum is painting a Beijing opera face on Steve's face.",
+          "\"What role am I?\" Steve asks. Mum says, \"You are the Jing role. He is brave!\"",
+          "Dad is putting on Dan makeup. The Dan role plays a woman. Dad looks funny!",
+          "Grandma watches them and laughs. \"I really enjoy Beijing opera.\"",
+          "The four roles in Beijing opera are Sheng, Dan, Jing, and Chou. They are very special."
+        ],
+        paragraphsZh: [
+          "今天是周日。妈妈在 Steve 脸上画京剧脸谱。",
+          "\"我是什么角色？\"Steve 问。妈妈说：\"你是净角，他很勇敢！\"",
+          "爸爸正在化旦角的妆。旦角扮演女性。爸爸看起来很滑稽！",
+          "奶奶看着他们笑：\"我真的很喜欢京剧。\"",
+          "京剧有四大行当：生、旦、净、丑。它们非常特别。"
+        ],
+        questions: [
+          { q: "What is Mum doing?",                      options: ['Cooking.', 'Painting Steve\'s face.', 'Watching TV.', 'Singing.'],            answer: 1, hint: '第一段。', explanation: '"Mum is painting a Beijing opera face on Steve\'s face"。考点：现在进行时 is + V-ing。paint = 描绘。' },
+          { q: "Which role does Steve play?",             options: ['Sheng.', 'Dan.', 'Jing.', 'Chou.'],                                            answer: 2, hint: '第二段。', explanation: '"You are the Jing role"。考点：京剧四大行当文化常识 + Jing 角色 brave 描述。' },
+          { q: "Who plays a woman?",                      options: ['Sheng.', 'Dan.', 'Jing.', 'Chou.'],                                            answer: 1, hint: '第三段。', explanation: '"The Dan role plays a woman"。考点：Dan 角色扮演女性。这是 Unit 6 文化常识考点。' },
+          { q: "How many roles are in Beijing opera?",    options: ['Two.', 'Three.', 'Four.', 'Five.'],                                            answer: 2, hint: '最后一段。', explanation: '"The four roles in Beijing opera are Sheng, Dan, Jing, and Chou"。考点：京剧四大行当数字。' }
+        ]
+      }, {
+        id: 'u6-r3',
+        theme: 'minecraft',
+        title: "The Kite in the Sky",
+        emoji: '🪁',
+        paragraphs: [
+          "Today is a windy weekend. Many people are at the park.",
+          "They are flying kites. The kites fly high in the sky.",
+          "A little girl is flying a brave dragon kite. It is very tall.",
+          "\"Look at my kite!\" she says. \"It flies so well!\"",
+          "\"I really enjoy this,\" her dad says. \"Our world is so happy on weekends.\""
+        ],
+        paragraphsZh: [
+          "今天是个有风的周末，很多人在公园里。",
+          "他们在放风筝，风筝在天空中飞得很高。",
+          "一个小女孩在放一只勇敢的龙形风筝，它非常高。",
+          "\"看我的风筝！\"她说，\"它飞得多好啊！\"",
+          "\"我真喜欢这个，\"爸爸说，\"我们的世界在周末真幸福。\""
+        ],
+        questions: [
+          { q: "What are people doing in the park?",      options: ['Sleeping.', 'Flying kites.', 'Cooking.', 'Reading books.'],                   answer: 1, hint: '第二段。', explanation: '"They are flying kites"。考点：现在进行时 are + V-ing 复数主语。' },
+          { q: "What kind of kite does the little girl fly?", options: ['A cat kite.', 'A dragon kite.', 'A flower kite.', 'A star kite.'],         answer: 1, hint: '第三段。', explanation: '"a brave dragon kite"。考点：形容词 brave 修饰名词 + 名词修饰名词 dragon kite。' },
+          { q: "How does the kite fly?",                  options: ['Low.', 'Backwards.', 'So well.', 'Slowly.'],                                  answer: 2, hint: '第四段。', explanation: '"It flies so well"。考点：so + 副词 = 程度。well 修饰 fly。' },
+          { q: "How does the dad feel about weekends?",   options: ['Boring.', 'Tired.', 'Happy.', 'Sad.'],                                          answer: 2, hint: '最后一段。', explanation: '"Our world is so happy on weekends"。考点：on weekends = 周末时（注意 on 介词 + 复数）。' }
         ]
       }]
     },
@@ -361,6 +611,56 @@ window.CURRICULUM = {
           { q: "Where is the smart robot?",               options: ['In the supermarket.', 'In front of the community centre.', 'On the playground.', 'On the third shelf.'], answer: 1, hint: '第二段。',                          explanation: '★Unit 7 重点考点：方位介词 in front of = 在...前面。第二段 "in front of the community centre"。注意区分 in front of (前面) vs in the front of (内部前部)，以及 behind (后面)、beside (旁边)。' },
           { q: "Where is the supermarket?",               options: ['Far away.', 'Between the library and the toilet.', 'In a building.', 'Near the lake.'],            answer: 1, hint: '第三段。',                          explanation: '考点：方位介词 between A and B = 在 A 和 B 之间。第三段 "between the library and the toilet"。between 后面一定是两个东西，用 and 连接。' },
           { q: "Where are the new books?",                options: ['On the second shelf.', 'On the third shelf with letter M.', 'In the toilet.', 'In the cinema.'],   answer: 1, hint: '第四段最后一句。',                  explanation: '考点：序数词 + 名词。"on the third shelf"（在第三层架子上）。要熟练 first / second / third / fourth / fifth + floor / shelf 这种考查方位的搭配。注意 third 不是 threeth。' }
+        ]
+      }, {
+        id: 'u7-r2',
+        theme: 'minecraft',
+        title: "Looking for the Library",
+        emoji: '📚',
+        paragraphs: [
+          "Alex needs a book. She wants to go to the library, but she does not know the way.",
+          "A girl says, \"The library is near here. Walk down this street.\"",
+          "\"Is it far?\" Alex asks. \"No, it is between the supermarket and the toilet.\"",
+          "Alex finds the library. She looks for the book on the third shelf.",
+          "The book is there, with the letter A. Alex is very glad."
+        ],
+        paragraphsZh: [
+          "Alex 需要一本书。她想去图书馆，但不知道路。",
+          "一个女孩说：\"图书馆就在附近。沿着这条街走。\"",
+          "\"远吗？\"Alex 问。\"不远，它在超市和卫生间之间。\"",
+          "Alex 找到了图书馆，在第三层书架上找那本书。",
+          "书在那儿，标着字母 A。Alex 非常高兴。"
+        ],
+        questions: [
+          { q: "What does Alex want to do?",              options: ['Buy bread.', 'Go to the library.', 'Watch a film.', 'Sleep.'],                answer: 1, hint: '第一段。', explanation: '"She wants to go to the library"。考点：want to + 动词原形。' },
+          { q: "Where is the library?",                   options: ['Far away.', 'Near here.', 'In a building.', 'On a lake.'],                    answer: 1, hint: '第二段。', explanation: '"near here"。考点：方位副词 near = 在...附近。' },
+          { q: "What is the library between?",            options: ['Two parks.', 'The supermarket and the toilet.', 'Two schools.', 'A robot and a tree.'], answer: 1, hint: '第三段。', explanation: '"between the supermarket and the toilet"。考点：between A and B = 在 A 和 B 之间。between 后必接两件事物。' },
+          { q: "Where is the book?",                      options: ['On the second shelf.', 'On the third shelf.', 'In the toilet.', 'In the dark.'], answer: 1, hint: '第四段。', explanation: '"on the third shelf"。考点：序数词 third + 名词 shelf。' }
+        ]
+      }, {
+        id: 'u7-r3',
+        theme: 'minecraft',
+        title: "The Lost Book",
+        emoji: '🔦',
+        paragraphs: [
+          "Steve is in a smart community. There are many shops, a school, and a supermarket.",
+          "One day Steve loses his book. The supermarket is beside the school.",
+          "He looks in the supermarket. It is dark. He cannot see his book.",
+          "\"Could you tell me the way to the building's lights?\" he asks. A robot helps him.",
+          "The book is on the second floor of the school. Steve is glad. The smart community helps him!"
+        ],
+        paragraphsZh: [
+          "Steve 住在一个智能社区。这里有很多商店、一所学校和一家超市。",
+          "有一天 Steve 把书弄丢了。超市就在学校旁边。",
+          "他在超市里找。里面很暗，他看不见自己的书。",
+          "\"能告诉我建筑物里灯怎么开吗？\"他问。一个机器人来帮他。",
+          "书在学校的二楼。Steve 很高兴。智能社区帮了他！"
+        ],
+        questions: [
+          { q: "Where does Steve live?",                  options: ['In a forest.', 'In a smart community.', 'In a cave.', 'On a farm.'],         answer: 1, hint: '第一段。', explanation: '"Steve is in a smart community"。考点：smart 修饰 community = 智能社区，是 Unit 7 主题词。' },
+          { q: "Where is the supermarket?",               options: ['Beside the school.', 'Beside the lake.', 'Far from school.', 'In the classroom.'], answer: 0, hint: '第二段。', explanation: '"The supermarket is beside the school"。考点：beside = 在...旁边。区分 beside (旁边) vs besides (除...之外)。' },
+          { q: "Why can't Steve see his book?",           options: ['It is too small.', 'It is dark.', 'The book is far away.', 'Steve is sleepy.'], answer: 1, hint: '第三段。', explanation: '"It is dark. He cannot see"。考点：dark 黑暗的。cannot = can not = 不能。' },
+          { q: "Where is the book?",                      options: ['On the first floor.', 'On the second floor.', 'On the third floor.', 'In the supermarket.'], answer: 1, hint: '第四段最后。', explanation: '"on the second floor of the school"。考点：on the + 序数词 + floor 是楼层方位常用句型。' }
         ]
       }]
     }

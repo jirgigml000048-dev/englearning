@@ -9,11 +9,19 @@ window.App = (() => {
 
   function questsForToday() {
     const errCount = Progress.errorBookCount();
+    const lessonIdx = Progress.getTodayLesson(currentUnit);
+    const remainingReadings = currentUnit.readings.filter(
+      r => !Progress.get().readsCompleted.includes(r.id)
+    ).length;
     return [
       { id: 'warmup',  icon: '🔁', label: '热身复习',
         desc: errCount > 0 ? `${errCount} 道错题等你 →` : '5 min · 复习昨日词', block: 'dirt'  },
-      { id: 'words',   icon: '📚', label: '新词学习', desc: '10 min · 解锁新单词',    block: 'wood'  },
-      { id: 'reading', icon: '📖', label: '阅读冒险', desc: '20 min · 故事 + 选择题', block: 'paper' },
+      { id: 'words',   icon: '📚', label: '新词学习',
+        desc: `今日 ${lessonIdx.length} 个词 · 来自 ${currentUnit.name.split('·')[0].trim()}`, block: 'wood'  },
+      { id: 'reading', icon: '📖', label: '阅读冒险',
+        desc: remainingReadings > 0
+          ? `还有 ${remainingReadings} 篇新故事 · 故事 + 选择题`
+          : '本单元已读完 · 复习已读故事', block: 'paper' },
       { id: 'fun',     icon: '⚔',  label: '拼写打怪',
         desc: errCount > 0 ? `打怪同时复习 ${Math.min(errCount, 2)} 个错题` : '10 min · 拼字击败怪物',  block: 'stone' },
     ];
@@ -88,7 +96,8 @@ window.App = (() => {
       ? `🎉 今日 4 关全部完成！打开宝箱领取奖励。`
       : `完成 4 关 · 约 45 分钟 · 今日已 ${done}/4`;
     const today = new Date();
-    $('metaDate').textContent = `⛏ ${currentUnit.name}`;
+    const masteryPct = Progress.getUnitMasteryPct(currentUnit);
+    $('metaDate').textContent = `⛏ ${currentUnit.name} · 掌握 ${masteryPct}%`;
     $('metaStreak').textContent = `⏱ 累计 ${s.streak} 天 · ${today.getMonth()+1} 月 ${today.getDate()} 日`;
     const errCount = Progress.errorBookCount();
     $('metaErrorBook').textContent = errCount > 0 ? `📋 错题本 ${errCount}` : '✨ 没有待复习错题';
@@ -194,6 +203,15 @@ window.App = (() => {
     const newBadges = Progress.checkBadges();
     if (newBadges && newBadges.length) {
       newBadges.forEach(b => toast(`🏅 解锁成就：${b.name}`, 'success', 2200));
+    }
+
+    // 检查 Unit 是否已掌握 → 自动进阶
+    const allUnits = window.CURRICULUM.units;
+    const advance = Progress.maybeAutoAdvance(Progress.get().currentUnitIdx, allUnits);
+    if (advance.advanced) {
+      const nextUnit = allUnits[advance.toIdx];
+      currentUnit = nextUnit;
+      toast(`🎉 ${allUnits[advance.fromIdx].name} 已掌握！进入 ${nextUnit.name}`, 'success', 3500);
     }
 
     const allDone = ['warmup','words','reading','fun'].every(s => Progress.isStageCompleteToday(s));

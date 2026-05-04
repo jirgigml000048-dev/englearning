@@ -17,12 +17,17 @@ window.Progress = (() => {
     streak: 0,
     lastDate: null,
     badges: [],
-    words: {},          // { word: { firstSeen, correctCount, wrongCount, lastReviewed } }
+    words: {},          // { word: { firstSeen, correctCount, wrongCount, correctStreakSinceWrong, lastReviewed } }
     readsCompleted: [], // [readingId]
     perfectDays: 0,
-    dailyLog: {},       // { '2026-05-01': { stages: ['warmup','words','reading','fun'], newWords:N, accuracy:N, xp:N } }
-    todayStages: { date: null, stages: {} } // 今日完成的关卡
+    dailyLog: {},       // { '2026-05-01': { stages, newWords, accuracy, xp } }
+    todayStages: { date: null, stages: {} },
+    dailyLessonPlan: { date: null, unitId: null, wordIndices: [] }, // 今日要学的单词索引
+    voiceName: null
   });
+
+  // 每日学习的单词数 (新词 + 旧词复习) 总数
+  const DAILY_LESSON_SIZE = 6;
 
   let state = load();
 
@@ -215,11 +220,94 @@ window.Progress = (() => {
     return out;
   }
 
+  /* ---------------- Daily Lesson Plan (每日学单词计划) ----------------
+   * 每天选 6 个词：优先没见过的 (不在 state.words 里)，剩余补错题本词，
+   * 最后还不够再补当前 unit 的随机词。一天内反复进入 words 关卡时复用同一份。
+   */
+  function getTodayLesson(unit) {
+    const today = todayStr();
+    const plan = state.dailyLessonPlan;
+    if (plan.date === today && plan.unitId === unit.id && plan.wordIndices.length) {
+      return plan.wordIndices.slice();
+    }
+    const unitWords = unit.words;
+    const seenSet = new Set(Object.keys(state.words));
+    const unseenIdx = [];
+    const errIdx = [];
+    const otherIdx = [];
+    unitWords.forEach((w, i) => {
+      if (!seenSet.has(w.en)) unseenIdx.push(i);
+      else if (isInErrorBook(state.words[w.en])) errIdx.push(i);
+      else otherIdx.push(i);
+    });
+    // 洗牌
+    [unseenIdx, errIdx, otherIdx].forEach(arr => arr.sort(() => Math.random() - 0.5));
+
+    // 优先选: 4 个没见过的 + 2 个错题；不够再补
+    const picked = [];
+    const N = Math.min(DAILY_LESSON_SIZE, unitWords.length);
+    while (picked.length < N) {
+      if (picked.length < 4 && unseenIdx.length) picked.push(unseenIdx.shift());
+      else if (errIdx.length) picked.push(errIdx.shift());
+      else if (unseenIdx.length) picked.push(unseenIdx.shift());
+      else if (otherIdx.length) picked.push(otherIdx.shift());
+      else break;
+    }
+    state.dailyLessonPlan = { date: today, unitId: unit.id, wordIndices: picked };
+    save();
+    return picked.slice();
+  }
+
+  /* ---------------- Unit Mastery & Auto-Advance ----------------
+   * 一个 Unit "已掌握" 的判定:
+   *   - 至少 80% 的词不在错题本（即 streak>=3 或没错过）
+   *   - 至少完成过 1 篇该 Unit 的阅读
+   * 自动进阶: 当前 unit 已掌握 + 还有下一个 unit → currentUnitIdx++
+   */
+  function getUnitMasteryPct(unit) {
+    if (!unit || !unit.words.length) return 0;
+    const total = unit.words.length;
+    let mastered = 0;
+    unit.words.forEach(w => {
+      const rec = state.words[w.en];
+      if (!rec) return; // 没学过不算掌握
+      if ((rec.wrongCount || 0) === 0 && (rec.correctCount || 0) >= 1) mastered++;
+      else if ((rec.correctStreakSinceWrong || 0) >= MASTERY_STREAK) mastered++;
+    });
+    return Math.round((mastered / total) * 100);
+  }
+
+  function isUnitMastered(unit) {
+    if (!unit) return false;
+    const pct = getUnitMasteryPct(unit);
+    const hasReading = unit.readings.some(r => state.readsCompleted.includes(r.id));
+    return pct >= 80 && hasReading;
+  }
+
+  // 返回下一个未掌握的 unit 的 idx；如果当前已掌握，调用方可触发自动进阶
+  function maybeAutoAdvance(curIdx, units) {
+    const cur = units[curIdx];
+    if (!cur || !isUnitMastered(cur)) return { advanced: false, fromIdx: curIdx, toIdx: curIdx };
+    // 找下一个还没掌握的
+    for (let i = curIdx + 1; i < units.length; i++) {
+      if (!isUnitMastered(units[i])) {
+        state.currentUnitIdx = i;
+        // 重置 lesson plan 让明天重新选
+        state.dailyLessonPlan = { date: null, unitId: null, wordIndices: [] };
+        save();
+        return { advanced: true, fromIdx: curIdx, toIdx: i };
+      }
+    }
+    // 全部掌握了（理论上）
+    return { advanced: false, fromIdx: curIdx, toIdx: curIdx, allMastered: true };
+  }
+
   return {
     get, save, reset, tick,
     completeStage, isStageCompleteToday, todayCompletedCount,
     recordWord, totalWords, masteredWords, reviewCandidates,
     errorBookCount, errorBookCandidates,
+    getTodayLesson, getUnitMasteryPct, isUnitMastered, maybeAutoAdvance,
     checkBadges, weekReport, addXp
   };
 })();

@@ -7,7 +7,9 @@ window.WordsModule = (() => {
 
   function start({ unit: u, body: b, footer: f, onDone: cb }) {
     unit = u;
-    words = u.words;
+    // 每天的小课程：从 progress 取今日 lesson plan (优先未学+错题)
+    const indices = Progress.getTodayLesson(u);
+    words = indices.length ? indices.map(i => u.words[i]) : u.words.slice(0, 6);
     idx = 0;
     body = b;
     footer = f;
