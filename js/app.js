@@ -39,6 +39,7 @@ window.App = (() => {
     Progress.tick();
     currentUnit = window.CURRICULUM.units[Progress.get().currentUnitIdx] || window.CURRICULUM.units[0];
 
+    applyPalette(Progress.get().palette || 'grass');
     renderHud();
     renderHome();
     renderHotbar('home');
@@ -139,8 +140,24 @@ window.App = (() => {
     $('finishBtn').classList.toggle('hidden', !allDone);
     $('finishBtn').onclick = () => showDone();
 
+    renderLoot();
     renderBadges();
     renderHotbar('home');
+  }
+
+  function renderLoot() {
+    const items = Progress.getTodayLoot();
+    const container = $('lootRowItems');
+    if (!container) return;
+    if (!items.length) {
+      container.innerHTML = `<div class="loot-empty">完成关卡掉落战利品 · 💎 卷轴 / 钻石 / 古书 / 剑</div>`;
+      $('lootCount').textContent = '';
+      return;
+    }
+    container.innerHTML = items.map(it =>
+      `<div class="loot-item-chip" title="${it.name}"><span class="loot-icon">${it.icon}</span><span class="loot-name">${it.name}</span></div>`
+    ).join('');
+    $('lootCount').textContent = `· ${items.length} 件`;
   }
 
   function renderBadges() {
@@ -329,6 +346,26 @@ window.App = (() => {
         location.reload();
       }
     };
+
+    // Palette picker
+    document.querySelectorAll('#palettePicker .palette-opt').forEach(btn => {
+      btn.onclick = () => {
+        const p = btn.dataset.p;
+        Progress.get().palette = p;
+        Progress.save();
+        applyPalette(p);
+        document.querySelectorAll('#palettePicker .palette-opt').forEach(x =>
+          x.classList.toggle('on', x.dataset.p === p));
+        toast(`已切换主题：${btn.textContent}`, 'success', 1500);
+      };
+    });
+  }
+
+  function applyPalette(palette) {
+    const app = document.getElementById('app');
+    if (!app) return;
+    app.classList.remove('palette-grass', 'palette-night', 'palette-nether', 'palette-pokemon', 'palette-scout');
+    app.classList.add('palette-' + palette);
   }
 
   function populateVoicePicker() {
@@ -354,6 +391,8 @@ window.App = (() => {
     populateVoicePicker();
     document.querySelectorAll('.avatar-chip').forEach(x =>
       x.classList.toggle('on', x.dataset.a === s.avatar));
+    document.querySelectorAll('#palettePicker .palette-opt').forEach(x =>
+      x.classList.toggle('on', x.dataset.p === (s.palette || 'grass')));
     renderHotbar('settings');
   }
 

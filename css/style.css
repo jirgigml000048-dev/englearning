@@ -926,3 +926,155 @@ body {
   margin-right: 8px;
   letter-spacing: 1px;
 }
+
+/* ============ Loot row (今日战利品) ============ */
+.loot-row {
+  background: rgba(0,0,0,0.45);
+  border: 4px solid #000;
+  box-shadow: inset 3px 3px 0 rgba(255,255,255,0.08), inset -3px -3px 0 rgba(0,0,0,0.4), 4px 4px 0 #000;
+  padding: 10px 14px;
+}
+.loot-row-title {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  color: var(--gold);
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+.loot-row-items {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  min-height: 44px;
+  align-items: center;
+}
+.loot-item-chip {
+  background: rgba(0,0,0,0.4);
+  border: 2px solid var(--gold-dk);
+  padding: 4px 8px;
+  display: flex; align-items: center; gap: 4px;
+  font-family: var(--font-cn);
+  font-size: 12px;
+  color: var(--text-light);
+  text-shadow: 1px 1px 0 #000;
+  animation: lootIn 0.4s steps(2);
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.1);
+}
+.loot-icon { font-size: 18px; line-height: 1; }
+.loot-name { font-size: 11px; opacity: 0.85; }
+@keyframes lootIn {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.loot-empty {
+  font-family: var(--font-cn);
+  font-size: 13px;
+  color: var(--text-light);
+  opacity: 0.55;
+  font-style: italic;
+}
+
+/* ============ Easter egg word (彩蛋词) ============ */
+.tap-word.easter-egg {
+  color: var(--gold-dk);
+  font-weight: 700;
+  position: relative;
+  background: rgba(247, 201, 72, 0.18);
+  padding: 0 2px;
+  border-radius: 2px;
+  border-bottom: 2px dotted var(--gold-dk);
+}
+.tap-word.easter-egg::after {
+  content: '✦';
+  font-size: 0.7em;
+  margin-left: 1px;
+  color: var(--gold-dk);
+  vertical-align: super;
+}
+.book-review .tap-word.easter-egg,
+.book .tap-word.easter-egg {
+  color: var(--wood-dk);
+  background: rgba(247, 201, 72, 0.35);
+  border-bottom-color: var(--wood-dk);
+}
+.tap-word.easter-egg:active {
+  background: var(--gold);
+  color: #fff;
+}
+
+/* ============ Palette: Pokemon Center (亮黄红主题) ============ */
+.palette-pokemon { background: #ffd54f; }
+.palette-pokemon .vox-sky {
+  background: linear-gradient(to bottom, #fff5d6 0%, #ffe58a 55%, #ffd54f 60%, transparent 60.1%);
+}
+.palette-pokemon .sun {
+  background: #ee1515;
+  box-shadow: 0 0 0 4px #fff, 0 0 0 8px rgba(238,21,21,0.4), 0 0 0 16px rgba(238,21,21,0.2);
+}
+.palette-pokemon .hills {
+  background:
+    radial-gradient(ellipse 200px 60px at 15% 100%, #c0392b 60%, transparent 61%),
+    radial-gradient(ellipse 280px 80px at 50% 100%, #c0392b 60%, transparent 61%),
+    radial-gradient(ellipse 220px 70px at 85% 100%, #c0392b 60%, transparent 61%);
+  opacity: 0.5;
+}
+.palette-pokemon .ground {
+  background: linear-gradient(to bottom,
+    #ffe58a 0%, #ffe58a 6px,
+    #f7c948 6px, #f7c948 18px,
+    #d4a024 18px, #d4a024 24px,
+    #ee1515 24px, #ee1515 60px,
+    #8b0000 60px);
+}
+.palette-pokemon .vox-topbar {
+  background: linear-gradient(to bottom, rgba(238,21,21,0.7), rgba(180,15,15,0.5));
+}
+.palette-pokemon .vox-avatar { background: #ee1515; }
+.palette-pokemon .settings-btn { background: #c0392b; }
+.palette-pokemon .block-btn.primary { background: #ee1515; }
+.palette-pokemon .streak-pill { background: #2c3e50; }
+
+/* ============ Palette: Scout Base (战术绿黑橙) ============ */
+.palette-scout { background: #1a1a1a; }
+.palette-scout .vox-sky {
+  background: linear-gradient(to bottom, #2a3a2a 0%, #1a2a1a 55%, #0a1a0a 60%, transparent 60.1%);
+}
+.palette-scout .sun {
+  background: #ff8c2a;
+  box-shadow: 0 0 0 4px #ffae5c, 0 0 0 8px rgba(255,140,42,0.3);
+}
+.palette-scout .hills {
+  background:
+    radial-gradient(ellipse 200px 60px at 15% 100%, #2a3a1a 60%, transparent 61%),
+    radial-gradient(ellipse 280px 80px at 50% 100%, #2a3a1a 60%, transparent 61%),
+    radial-gradient(ellipse 220px 70px at 85% 100%, #2a3a1a 60%, transparent 61%);
+  opacity: 0.4;
+}
+.palette-scout .ground {
+  background: linear-gradient(to bottom,
+    #4a5a3a 0%, #4a5a3a 6px,
+    #3a4a2a 6px, #3a4a2a 18px,
+    #2a3a1a 18px, #2a3a1a 24px,
+    #1a2a0a 24px, #1a2a0a 60px,
+    #050a00 60px);
+}
+.palette-scout .cloud { display: none; }
+.palette-scout .vox-topbar {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.6));
+}
+.palette-scout .vox-avatar { background: #2a3a1a; }
+.palette-scout .settings-btn { background: #1a1a1a; }
+.palette-scout .block-btn.primary { background: #ff8c2a; }
+.palette-scout .streak-pill { background: #ff8c2a; color: #000; }
+
+/* ============ Palette picker ============ */
+.palette-row {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.palette-row .palette-opt {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+.palette-row .palette-opt.on {
+  background: var(--gold);
+  color: #000;
+  text-shadow: 1px 1px 0 var(--gold-lt);
+}

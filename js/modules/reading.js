@@ -44,14 +44,32 @@ window.ReadingModule = (() => {
     document.getElementById('readAllBtn').onclick = () => TTS.speak(r.paragraphs.join(' '));
     document.getElementById('stopBtn').onclick = () => TTS.stop();
     document.getElementById('startQBtn').onclick = () => { TTS.stop(); renderReadAlong(); };
-    document.querySelectorAll('#story .tap-word').forEach(el => {
-      el.onclick = () => TTS.speak(el.textContent);
-    });
+    bindTapWords('#story');
     document.getElementById('stageProgress').textContent = '阅读中';
   }
 
+  function bindTapWords(scopeSel) {
+    const eggs = window.CURRICULUM.easterEggDict || {};
+    document.querySelectorAll(`${scopeSel} .tap-word`).forEach(el => {
+      el.onclick = () => {
+        TTS.speak(el.textContent);
+        if (el.classList.contains('easter-egg')) {
+          const desc = eggs[el.dataset.egg];
+          if (desc) App.toast(desc, 'success', 4000);
+        }
+      };
+    });
+  }
+
   function tappable(text) {
-    return text.replace(/([A-Za-z']+)/g, '<span class="tap-word">$1</span>');
+    const eggs = window.CURRICULUM.easterEggDict || {};
+    return text.replace(/([A-Za-z']+)/g, (m) => {
+      const lower = m.toLowerCase();
+      if (eggs[lower]) {
+        return `<span class="tap-word easter-egg" data-egg="${lower}">${m}</span>`;
+      }
+      return `<span class="tap-word">${m}</span>`;
+    });
   }
 
   /* ---------------- Read-Along (跟读 + 录音检查) ---------------- */
@@ -88,9 +106,7 @@ window.ReadingModule = (() => {
       if (!supported) { nextReadAlongPara(); return; }
       startRecognition(p);
     };
-    document.querySelectorAll('.ra-paragraph .tap-word').forEach(el => {
-      el.onclick = () => TTS.speak(el.textContent);
-    });
+    bindTapWords('.ra-paragraph');
     document.getElementById('stageProgress').textContent = `跟读 ${paraIdx + 1}/${r.paragraphs.length}`;
   }
 
@@ -286,9 +302,7 @@ window.ReadingModule = (() => {
     `;
     document.getElementById('readAllBtn').onclick = () => TTS.speak(r.paragraphs.join(' '));
     document.getElementById('finishBtn').onclick = () => { TTS.stop(); finish(); };
-    document.querySelectorAll('#story .tap-word').forEach(el => {
-      el.onclick = () => TTS.speak(el.textContent);
-    });
+    bindTapWords('#story');
     document.getElementById('stageProgress').textContent = '翻译回看';
   }
 

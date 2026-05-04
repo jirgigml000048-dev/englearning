@@ -78,6 +78,11 @@
           </div>
         </div>
 
+        <div class="loot-row" id="lootRow">
+          <div class="loot-row-title">📦 今日战利品 <span id="lootCount" style="color:var(--gold-lt);"></span></div>
+          <div class="loot-row-items" id="lootRowItems"></div>
+        </div>
+
         <div class="quests-grid" id="questsGrid">
           <!-- 由 app.js 渲染 -->
         </div>
@@ -144,6 +149,14 @@
               <div class="set-row">
                 <label>头像</label>
                 <div class="avatar-row" id="avatarPicker"></div>
+              </div>
+              <div class="set-row">
+                <label>主题包</label>
+                <div class="palette-row" id="palettePicker">
+                  <button class="block-btn block-stone palette-opt" data-p="grass">🌳 方块世界</button>
+                  <button class="block-btn block-stone palette-opt" data-p="pokemon">⚡ 宝可梦中心</button>
+                  <button class="block-btn block-stone palette-opt" data-p="scout">🔦 侦察基地</button>
+                </div>
               </div>
               <div class="set-row">
                 <label>当前学习单元</label>

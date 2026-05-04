@@ -817,6 +817,53 @@ window.CURRICULUM = {
 
   ],
 
+  /* 彩蛋词字典 — 课文里出现这些词时变成可点击的金色字, 点击除发音外还弹出小百科 */
+  easterEggDict: {
+    // 宝可梦
+    'pikachu':    '⚡ Pikachu (皮卡丘) — Ash 的最强搭档, 大招是十万伏特！',
+    'charmander': '🔥 Charmander (小火龙) — 火属性, 进化后变成喷火龙。',
+    'charizard':  '🐉 Charizard (喷火龙) — 小火龙的最终进化, 能在天空飞。',
+    'squirtle':   '💧 Squirtle (杰尼龟) — 水属性, 缩进壳里防御。',
+    'eevee':      '🦊 Eevee (伊布) — 可以进化成 8 种形态！',
+    'bulbasaur':  '🌱 Bulbasaur (妙蛙种子) — 草+毒属性, 背上有植物种子。',
+    'misty':      '🌊 Misty (小霞) — 华蓝道馆水系训练师。',
+    'brock':      '🪨 Brock (小刚) — 深灰道馆岩石系训练师。',
+    'ash':        '👦 Ash (小智) — 立志成为宝可梦大师！',
+    'pokeball':   '⚪ Pokeball (精灵球) — 用来捕获宝可梦的红白球。',
+    'pokemon':    '⚡ Pokemon (宝可梦) — 神奇的口袋怪兽世界！',
+    'thunderbolt': '⚡ Thunderbolt (十万伏特) — 皮卡丘的招牌技能！',
+    'pidgey':     '🕊 Pidgey (波波) — 普通+飞行属性的小鸟。',
+    'butterfree': '🦋 Butterfree (巴大蝶) — 虫+飞行属性的蝴蝶。',
+    // 我的世界
+    'creeper':    '💚 Creeper (苦力怕) — 嘶嘶嘶...靠近你就爆炸！',
+    'zombie':     '🧟 Zombie (僵尸) — 阳光下会燃烧, 别在白天接近！',
+    'skeleton':   '💀 Skeleton (骷髅) — 用弓箭射你, 阳光下也会燃烧。',
+    'enderman':   '🌑 Enderman (末影人) — 不要直视它的眼睛！',
+    'blaze':      '🔥 Blaze (烈焰人) — 在地狱出没, 会喷火球。',
+    'slime':      '🟢 Slime (史莱姆) — 跳跃移动的绿色史莱姆。',
+    'redstone':   '⚙️ Redstone (红石) — 我的世界的"电"！',
+    'golem':      '🤖 Iron Golem (铁傀儡) — 村民的守护者。',
+    'wolf':       '🐺 Wolf (狼) — 喂骨头可以驯服成你的伙伴。',
+    'elytra':     '🪽 Elytra (鞘翅) — 让你像鸟一样滑翔！',
+    'minecraft':  '⛏ Minecraft (我的世界) — 一切皆可建造的方块世界！',
+    'parkour':    '🏃 Parkour (跑酷) — 在方块上跳来跳去的极限运动。',
+    'lava':       '🌋 Lava (岩浆) — 别掉进去！会瞬间烧死。',
+    'diamond':    '💎 Diamond (钻石) — 最坚硬的工具材料。',
+    // 文化
+    'naadam':     '🐎 Naadam (那达慕) — 蒙古族传统节日, 赛马 + 摔跤。',
+    'beijing':    '🏛 Beijing (北京) — 中国首都！'
+  },
+
+  /* 战利品定义 (每完成一关掉落) */
+  loot: {
+    warmup:  { icon: '📜', name: '卷轴',   color: '#fbbf24' },
+    words:   { icon: '💎', name: '钻石',   color: '#60a5fa' },
+    reading: { icon: '📕', name: '古书',   color: '#c084fc' },
+    fun:     { icon: '⚔️', name: '剑',     color: '#94a3b8' },
+    perfect: { icon: '💚', name: '绿宝石', color: '#34d399' }, // 满分加掉
+    chest:   { icon: '🎁', name: '宝箱',   color: '#f59e0b' }  // 4 关全完成加掉
+  },
+
   /* 主题徽章 */
   themeBadge: {
     pokemon:   { icon: '⚡', label: '宝可梦特别篇',    color: '#fbbf24' },

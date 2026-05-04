@@ -23,7 +23,10 @@ window.Progress = (() => {
     dailyLog: {},       // { '2026-05-01': { stages, newWords, accuracy, xp } }
     todayStages: { date: null, stages: {} },
     dailyLessonPlan: { date: null, unitId: null, wordIndices: [] }, // 今日要学的单词索引
-    voiceName: null
+    voiceName: null,
+    palette: 'grass',                              // voxel theme: grass | pokemon | scout
+    todayLoot: { date: null, items: [] },          // 今日战利品
+    lifetimeLoot: {}                                // 累计战利品 { warmup: 5, words: 8, perfect: 2, ... }
   });
 
   // 每日学习的单词数 (新词 + 旧词复习) 总数
@@ -82,14 +85,43 @@ window.Progress = (() => {
     if (payload.newWords) state.dailyLog[today].newWords += payload.newWords;
     if (payload.accuracy != null) state.dailyLog[today].accuracy = Math.max(state.dailyLog[today].accuracy, payload.accuracy);
 
+    // 战利品掉落
+    addLoot(stage, payload.accuracy);
+
     // 4 关全完成 + 阅读满分 = perfect day
     const allDone = ['warmup','words','reading','fun'].every(s => state.todayStages.stages[s]);
-    if (allDone && (state.dailyLog[today].accuracy === 100)) {
-      state.perfectDays += 1;
+    if (allDone) {
+      addLoot('chest');
+      if (state.dailyLog[today].accuracy === 100) {
+        state.perfectDays += 1;
+      }
     }
 
     checkBadges();
     save();
+  }
+
+  // 战利品系统：每完成关卡掉落，满分额外掉绿宝石，4 关全过额外掉宝箱
+  function addLoot(stage, accuracy) {
+    const today = todayStr();
+    if (state.todayLoot.date !== today) state.todayLoot = { date: today, items: [] };
+    const def = window.CURRICULUM.loot[stage];
+    if (def) {
+      state.todayLoot.items.push({ stage, icon: def.icon, name: def.name, at: Date.now() });
+      state.lifetimeLoot[stage] = (state.lifetimeLoot[stage] || 0) + 1;
+    }
+    // 满分加掉绿宝石（仅对答题关）
+    if (['warmup','words','reading','fun'].includes(stage) && accuracy === 100) {
+      const perfectDef = window.CURRICULUM.loot.perfect;
+      state.todayLoot.items.push({ stage: 'perfect', icon: perfectDef.icon, name: perfectDef.name, at: Date.now() });
+      state.lifetimeLoot.perfect = (state.lifetimeLoot.perfect || 0) + 1;
+    }
+  }
+
+  function getTodayLoot() {
+    const today = todayStr();
+    if (state.todayLoot.date !== today) return [];
+    return state.todayLoot.items.slice();
   }
 
   function isStageCompleteToday(stage) {
@@ -308,6 +340,7 @@ window.Progress = (() => {
     recordWord, totalWords, masteredWords, reviewCandidates,
     errorBookCount, errorBookCandidates,
     getTodayLesson, getUnitMasteryPct, isUnitMastered, maybeAutoAdvance,
+    getTodayLoot,
     checkBadges, weekReport, addXp
   };
 })();
