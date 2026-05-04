@@ -102,6 +102,17 @@ window.App = (() => {
     const errCount = Progress.errorBookCount();
     $('metaErrorBook').textContent = errCount > 0 ? `📋 错题本 ${errCount}` : '✨ 没有待复习错题';
 
+    // 角色问候轮换
+    const greetings = window.CURRICULUM.greetings || { normal: [] };
+    const pool = s.streak >= 7 ? (greetings.streak7 || greetings.normal)
+              : s.streak >= 3 ? (greetings.streak3 || greetings.normal)
+              : greetings.normal;
+    if (pool && pool.length) {
+      const g = pool[Math.floor(Math.random() * pool.length)];
+      $('greetingWho').textContent = g.who;
+      $('greetingSay').textContent = g.say;
+    }
+
     // Quests grid
     $('questsGrid').innerHTML = questsForToday().map((q, i) => {
       const completed = Progress.isStageCompleteToday(q.id);

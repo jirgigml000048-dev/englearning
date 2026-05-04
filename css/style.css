@@ -890,3 +890,39 @@ body {
   border: 2px dashed var(--gold-dk);
   min-height: 40px;
 }
+
+/* ============ Theme banner (强主题阅读) ============ */
+.theme-banner {
+  max-width: 800px;
+  margin: 0 auto 14px;
+  padding: 8px 16px;
+  text-align: center;
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  letter-spacing: 2px;
+  background: rgba(0,0,0,0.6);
+  border: 3px solid var(--gold);
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,0.1), 4px 4px 0 #000;
+  text-shadow: 2px 2px 0 #000;
+  text-transform: uppercase;
+}
+
+/* ============ Hero greeting bubble ============ */
+.greeting-bubble {
+  margin-top: 8px;
+  padding: 8px 12px;
+  font-family: var(--font-cn);
+  font-size: 13px;
+  background: rgba(0,0,0,0.35);
+  border-left: 3px solid var(--gold);
+  color: var(--gold-lt);
+  font-style: italic;
+  line-height: 1.4;
+}
+.greeting-who {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  color: var(--gold);
+  margin-right: 8px;
+  letter-spacing: 1px;
+}

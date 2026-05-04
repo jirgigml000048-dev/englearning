@@ -83,29 +83,54 @@ window.CURRICULUM = {
           { q: "How do people feel at the end?",          options: ['Tired.', 'Angry.', 'Happy.', 'Sad.'],                                         answer: 2, hint: '最后一段。', explanation: 'Steve 和 Alex 都 happy，"Folk music brings everyone together" 也是积极情绪。' }
         ]
       }, {
-        id: 'u1-r3',
-        theme: 'minecraft',
-        title: "A Hobby for Steve",
-        emoji: '🔬',
+        id: 'u1-r3p',
+        theme: 'pokemon',
+        title: "Pikachu's Hobby",
+        emoji: '⚡',
         paragraphs: [
-          "Steve wants a new hobby. He thinks for a long time.",
-          "His friend says, \"Why don't you join the Science Club? You like to study new things.\"",
-          "Steve says, \"What kind of things do they study?\" His friend says, \"Animals, plants, and travel.\"",
-          "Steve goes to the Science Club. He studies animals there. He likes it very well.",
-          "His new hobby is science. He is happy with his choice."
+          "Pikachu has many hobbies. He likes battles, food, and singing.",
+          "Today there is a new club. It is the Trainers' Club. Pikachu wants to join.",
+          "\"Why do you want to join?\" Eevee asks. Pikachu says, \"Because I am a big fan of Ash. I want to study how to be the best.\"",
+          "The club leader is Pikachu's friend. He sings folk songs very well.",
+          "Pikachu is happy with his new club. His hobby is now bigger than ever."
         ],
         paragraphsZh: [
-          "Steve 想要一个新爱好，他想了很久。",
-          "他的朋友说：\"你为什么不加入科学俱乐部？你喜欢研究新东西。\"",
-          "Steve 问：\"他们研究什么？\" 朋友说：\"动物、植物、还有旅行。\"",
-          "Steve 去了科学俱乐部，在那儿研究动物，他很喜欢。",
-          "他的新爱好是科学。他对这个选择很满意。"
+          "皮卡丘有很多爱好，他喜欢对战、美食和唱歌。",
+          "今天有个新俱乐部，是训练师俱乐部。皮卡丘想加入。",
+          "\"你为什么想加入？\" 伊布问。皮卡丘说：\"因为我是小智的超级粉丝，我想研究怎么变最强。\"",
+          "俱乐部队长是皮卡丘的朋友，他民歌唱得非常好。",
+          "皮卡丘对新俱乐部很满意，他的爱好比以前更大了。"
         ],
         questions: [
-          { q: "What is Steve looking for?",              options: ['A new toy.', 'A new hobby.', 'A new school.', 'A new bike.'],                 answer: 1, hint: '第一段。', explanation: '"Steve wants a new hobby"。考点：want + a/an + 名词 = 想要一个...。' },
-          { q: "Which club does his friend suggest?",     options: ['Music Club.', 'Dance Club.', 'Science Club.', 'Football Club.'],              answer: 2, hint: '第二段。', explanation: '"Why don\'t you join the Science Club?"。考点：Why don\'t you...? 是建议句型，意为"你为什么不...？"。' },
-          { q: "What does the Science Club study?",       options: ['Music and dance.', 'Animals, plants, and travel.', 'Cooking.', 'Football games.'], answer: 1, hint: '第三段。', explanation: '"Animals, plants, and travel"。考点：study 在这里是动词"研究"，不是名词"书房"。' },
-          { q: "How does Steve feel about his new hobby?", options: ['He hates it.', 'He is bored.', 'He likes it well.', 'He is angry.'],         answer: 2, hint: '第四段最后一句 + 最后一段。', explanation: '"He likes it very well" + "He is happy"。考点：副词 well 修饰动词 like。' }
+          { q: "What are Pikachu's hobbies?",             options: ['Just sleeping.', 'Battles, food, and singing.', 'Reading only.', 'Math.'],     answer: 1, hint: '第一段。', explanation: '"He likes battles, food, and singing"。考点：likes + 动名词或名词 = 喜欢...。' },
+          { q: "Why does Pikachu join the club?",         options: ['He is a fan of Ash.', 'He is hungry.', 'He is sleepy.', 'He is alone.'],       answer: 0, hint: '第三段。', explanation: '"Because I am a big fan of Ash"。考点：be a fan of = ...的粉丝；because 引导原因。' },
+          { q: "Who sings folk songs well?",              options: ['Pikachu.', 'Eevee.', 'Ash.', 'The club leader.'],                              answer: 3, hint: '第四段。', explanation: '"The club leader is Pikachu\'s friend. He sings folk songs very well"。考点：代词 he 指代上一句的主语 leader。' },
+          { q: "How does Pikachu feel?",                  options: ['Sad.', 'Tired.', 'Happy.', 'Angry.'],                                          answer: 2, hint: '最后一段。', explanation: '"Pikachu is happy with his new club"。考点：be happy with = 对...满意。' }
+        ]
+      }, {
+        id: 'u1-r4m',
+        theme: 'minecraft',
+        title: "Steve's Mining Club",
+        emoji: '⛏️',
+        paragraphs: [
+          "Steve is a big fan of mining. His hobby is digging in caves.",
+          "One day his friend says, \"Why don't you start a Mining Club?\"",
+          "Steve says, \"Good idea! What kind of mining do we want to study?\"",
+          "\"Diamond, gold, and redstone!\" his friend says. \"We can travel to deep caves together.\"",
+          "Many friends join the club. Steve is the leader. He explains mining well. The club is fun."
+        ],
+        paragraphsZh: [
+          "Steve 是挖矿的超级粉丝，他的爱好是在洞穴里挖东西。",
+          "有一天朋友说：\"你为什么不办个挖矿俱乐部？\"",
+          "Steve 说：\"好主意！我们想研究哪种挖矿？\"",
+          "\"钻石、金子和红石！\"朋友说，\"我们能一起去深洞探险。\"",
+          "很多朋友加入了俱乐部。Steve 是队长，他讲挖矿讲得很清楚，俱乐部很有趣。"
+        ],
+        questions: [
+          { q: "What is Steve's hobby?",                  options: ['Cooking.', 'Mining (digging in caves).', 'Reading books.', 'Travel only.'],   answer: 1, hint: '第一段。', explanation: '"His hobby is digging in caves"。考点：动名词 digging 作表语。is doing 这里不是进行时，而是 is + 动名词描述爱好。' },
+          { q: "What does the friend suggest?",           options: ['Start a Mining Club.', 'Stop mining.', 'Buy a diamond.', 'Sleep more.'],       answer: 0, hint: '第二段。', explanation: '"Why don\'t you start a Mining Club?"。考点：Why don\'t you + V 是建议句型。' },
+          { q: "What will the club study?",               options: ['Cooking.', 'Football.', 'Diamond, gold, and redstone.', 'Music.'],            answer: 2, hint: '第四段。', explanation: '"Diamond, gold, and redstone!"。考点：列举用 and 连接最后一项。' },
+          { q: "How is the club?",                        options: ['Boring.', 'Tired.', 'Fun.', 'Sad.'],                                          answer: 2, hint: '最后一段。', explanation: '"The club is fun"。考点：fun 在这里作形容词表语。' }
         ]
       }]
     },
@@ -192,29 +217,54 @@ window.CURRICULUM = {
           { q: "What does Steve do now?",                 options: ['He is more careful.', 'He throws more things.', 'He goes downstairs.', 'He sleeps.'], answer: 0, hint: '最后一段。', explanation: '"Now Steve is more careful"。考点：more + 形容词 = 比较级，表示"更..."。' }
         ]
       }, {
-        id: 'u2-r3',
+        id: 'u2-r3m',
         theme: 'minecraft',
-        title: "On the Crowded Street",
-        emoji: '👥',
+        title: "Don't Dig Straight Down!",
+        emoji: '⛏️',
         paragraphs: [
-          "It is Saturday. The street is full of people. Many people walk fast.",
-          "Alex walks slowly. She is careful in the crowd. \"No pushing!\" she says.",
-          "Steve is in a hurry. He pushes a man. The man falls down.",
-          "\"Sorry, sir!\" Steve says. \"I should walk slowly too.\"",
-          "They wait at the red light together. The light turns green. They walk safely now."
+          "Steve is mining. He is careful. He does not dig straight down.",
+          "\"Why? It's faster!\" his friend says.",
+          "Steve says, \"Don't dig down! It is dangerous. You may fall into lava!\"",
+          "The cave is dark. Steve puts a light on the wall. Now they can see well.",
+          "\"Be careful again next time,\" Steve says. \"Safe mining is good mining.\""
         ],
         paragraphsZh: [
-          "今天是周六，街上挤满了人。很多人走得很快。",
-          "Alex 慢慢走，在人群里很小心。\"不要推！\"她说。",
-          "Steve 很急，他推了一个男人，那个男人摔倒了。",
-          "\"对不起先生！\"Steve 说，\"我也应该慢点走。\"",
-          "他们一起在红灯前等。灯变绿了，他们安全地走过去。"
+          "Steve 在挖矿，他很小心，不会直直地往下挖。",
+          "\"为什么不？这样更快！\"朋友说。",
+          "Steve 说：\"别向下挖！太危险了，你可能掉进岩浆！\"",
+          "洞穴很黑。Steve 在墙上挂了一盏灯，现在他们能看清楚了。",
+          "\"下次也要小心，\"Steve 说，\"安全挖矿才是好挖矿。\""
         ],
         questions: [
-          { q: "How is the street?",                      options: ['Empty.', 'Full of people.', 'Dark.', 'Wet.'],                                  answer: 1, hint: '第一段。', explanation: '"The street is full of people"。考点：be full of = 充满，固定短语。' },
-          { q: "How does Alex walk?",                     options: ['Fast.', 'Slowly.', 'Backwards.', 'She runs.'],                                 answer: 1, hint: '第二段。', explanation: '"Alex walks slowly"。考点：副词 slowly 修饰动词 walk。注意区分形容词 slow 与副词 slowly。' },
-          { q: "What happens to the man?",                options: ['He sings.', 'He falls down.', 'He runs away.', 'He laughs.'],                  answer: 1, hint: '第三段最后一句。', explanation: '"The man falls down"。考点：fall down = 摔倒。也注意 fall 是 Unit 2 词。' },
-          { q: "When do they walk safely?",               options: ['At the red light.', 'When pushing.', 'When the light turns green.', 'When running.'], answer: 2, hint: '最后一段。', explanation: '"The light turns green. They walk safely now"。考点：交通规则——红停绿行。' }
+          { q: "What is Steve doing?",                    options: ['Cooking.', 'Mining.', 'Sleeping.', 'Watching TV.'],                            answer: 1, hint: '第一段。', explanation: '"Steve is mining"。考点：现在进行时 be + V-ing。' },
+          { q: "Why shouldn't they dig straight down?",   options: ['It is too slow.', 'It is dangerous, may fall into lava.', 'It is too cold.', 'It is fun.'], answer: 1, hint: '第三段。', explanation: '"It is dangerous. You may fall into lava!"。考点：It is + adj + to do 句型 + may 表可能。' },
+          { q: "What does Steve put on the wall?",        options: ['A board.', 'A flag.', 'A light.', 'A picture.'],                               answer: 2, hint: '第四段。', explanation: '"Steve puts a light on the wall"。考点：put + 物 + on + 地点。' },
+          { q: "What is Steve's safety rule?",            options: ['Dig fast.', 'Be careful and safe.', 'Dig in the dark.', 'No mining.'],          answer: 1, hint: '最后一段。', explanation: '"Safe mining is good mining"。考点：careful + safe 是 Unit 2 高频词。' }
+        ]
+      }, {
+        id: 'u2-r4d',
+        theme: 'delta',
+        title: "The Scout Mission",
+        emoji: '🔦',
+        paragraphs: [
+          "Captain Alex tells her team, \"Today's mission: scout the dark forest. Be careful!\"",
+          "The forest is dark and dangerous. The team walks slowly.",
+          "They see a crowd of strange shadows. Alex says, \"No pushing. Stay safe.\"",
+          "Steve carries a small light. He helps everyone see the way.",
+          "After two hours, they go home safely. \"Good job, team! Be careful again next mission.\""
+        ],
+        paragraphsZh: [
+          "Alex 队长对队员说：\"今天任务：侦察暗林。注意安全！\"",
+          "森林又黑又危险，队员慢慢走。",
+          "他们看到一群奇怪的影子。Alex 说：\"不要推，注意安全。\"",
+          "Steve 拿着一盏小灯，帮大家看清前路。",
+          "两小时后他们安全回家。\"干得好，队友们！下次任务也要小心。\""
+        ],
+        questions: [
+          { q: "What is the team's mission?",             options: ['Cook dinner.', 'Scout the dark forest.', 'Build a house.', 'Watch TV.'],       answer: 1, hint: '第一段。', explanation: '"scout the dark forest"。考点：scout = 侦察。dark forest 形容词修饰名词。' },
+          { q: "How does the team walk?",                 options: ['Fast.', 'Slowly.', 'Backwards.', 'They run.'],                                 answer: 1, hint: '第二段。', explanation: '"The team walks slowly"。考点：副词 slowly 修饰动词 walk。' },
+          { q: "Who carries the light?",                  options: ['Alex.', 'Steve.', 'The captain.', 'Nobody.'],                                  answer: 1, hint: '第四段。', explanation: '"Steve carries a small light"。考点：carry + 物 = 携带。' },
+          { q: "How does the mission end?",               options: ['They get hurt.', 'They go home safely.', 'They get lost.', 'They fight.'],     answer: 1, hint: '最后一段。', explanation: '"they go home safely"。考点：副词 safely 修饰动词 go。Be careful + again 是 Unit 2 词。' }
         ]
       }]
     },
@@ -298,29 +348,54 @@ window.CURRICULUM = {
           { q: "Where does Steve visit next year?",       options: ['A zoo.', 'The Great Wall.', 'A cinema.', 'A lake.'],                          answer: 1, hint: '最后一段。', explanation: '"Steve visits the Great Wall"。考点：visit + 地点。专有名词 the Great Wall 中 the 不能丢。' }
         ]
       }, {
-        id: 'u3-r3',
-        theme: 'minecraft',
-        title: "Tired but Happy",
-        emoji: '🏃',
+        id: 'u3-r3p',
+        theme: 'pokemon',
+        title: "The Pokemon Gym Battle",
+        emoji: '⚡',
         paragraphs: [
-          "The PE class is fun today. We have many games.",
-          "I run one hundred meters. I am tired, but I win!",
-          "My friend hurts his leg, but not badly. He is okay.",
-          "\"You are my hero,\" he says to me. I smile.",
-          "Sports make us strong. Sports make us happy too."
+          "Pikachu and Charmander play a game in the Pokemon Gym. It is so much fun!",
+          "Charmander is good at fire moves. But Pikachu is good at Thunderbolt.",
+          "Pikachu uses Thunderbolt one hundred times. Charmander's leg hurts a little, but not badly.",
+          "\"I am tired,\" Charmander says. Pikachu wins the game!",
+          "\"You are my hero, Pikachu!\" Ash shouts. Pikachu is the gym champion today."
         ],
         paragraphsZh: [
-          "今天的体育课很有趣，我们玩了很多游戏。",
-          "我跑了 100 米。虽然累，但是我赢了！",
-          "我朋友腿受伤了，但不严重，他没事。",
-          "\"你是我的英雄，\"他对我说。我笑了。",
-          "运动让我们变强壮，运动也让我们快乐。"
+          "皮卡丘和小火龙在宝可梦道馆里玩游戏，太有趣了！",
+          "小火龙擅长火系招式，但皮卡丘擅长十万伏特。",
+          "皮卡丘用了一百次十万伏特，小火龙腿有点疼，但不严重。",
+          "\"我累了，\"小火龙说。皮卡丘赢了！",
+          "\"皮卡丘，你是我的英雄！\"小智喊。皮卡丘今天是道馆冠军。"
         ],
         questions: [
-          { q: "How is the PE class today?",              options: ['Boring.', 'Fun.', 'Tired.', 'Sad.'],                                          answer: 1, hint: '第一段。', explanation: '"The PE class is fun today"。考点：fun 在美式英语里也常作形容词使用。' },
-          { q: "How far does the speaker run?",           options: ['Seventy meters.', 'Eighty meters.', 'Ninety meters.', 'One hundred meters.'], answer: 3, hint: '第二段。', explanation: '"I run one hundred meters"。考点：数字读法 hundred 一百，a/one hundred 都可以。' },
-          { q: "How is the friend's leg?",                options: ['Very bad.', 'Not hurt.', 'Hurt but not badly.', 'Lost.'],                     answer: 2, hint: '第三段。', explanation: '"hurts his leg, but not badly"。考点：but 表转折。badly 是程度副词。' },
-          { q: "What does sports do for us?",             options: ['Make us tired only.', 'Make us strong and happy.', 'Make us angry.', 'Nothing.'], answer: 1, hint: '最后一段。', explanation: '"Sports make us strong... happy too"。考点：make + 宾语 + 形容词 = 使...怎么样。' }
+          { q: "Where do they play?",                     options: ['At home.', 'In the Pokemon Gym.', 'In a cave.', 'On the street.'],             answer: 1, hint: '第一段。', explanation: '"in the Pokemon Gym"。考点：in + 地点。' },
+          { q: "What is Pikachu good at?",                options: ['Fire moves.', 'Thunderbolt.', 'Sleeping.', 'Cooking.'],                       answer: 1, hint: '第二段。', explanation: '"Pikachu is good at Thunderbolt"。考点：be good at = 擅长，后接名词或动名词。' },
+          { q: "How many times does Pikachu use Thunderbolt?", options: ['Seventy.', 'Eighty.', 'Ninety.', 'One hundred.'],                          answer: 3, hint: '第三段。', explanation: '"one hundred times"。考点：数字 hundred 100。times = 次。' },
+          { q: "Who wins the game?",                      options: ['Charmander.', 'Pikachu.', 'Ash.', 'Nobody.'],                                  answer: 1, hint: '第四段。', explanation: '"Pikachu wins the game"。考点：win 一般现在时第三人称单数 wins。' }
+        ]
+      }, {
+        id: 'u3-r4m',
+        theme: 'minecraft',
+        title: "Steve's Parkour Race",
+        emoji: '🏃',
+        paragraphs: [
+          "Today is Parkour Day. Steve and Alex play a jumping game on the blocks.",
+          "Steve is good at jumping. He jumps from block to block very fast.",
+          "Alex is also good at it. She jumps over a hundred blocks!",
+          "Steve's leg hurts a little, but not badly. He finishes the race tired but happy.",
+          "Alex wins the game. \"You are my parkour hero, Alex!\" Steve says."
+        ],
+        paragraphsZh: [
+          "今天是跑酷日，Steve 和 Alex 在方块上玩跳跃游戏。",
+          "Steve 擅长跳跃，他从一块跳到另一块跳得很快。",
+          "Alex 也很擅长，她跳过了一百多个方块！",
+          "Steve 的腿有点疼，但不严重。他累但很开心地完赛。",
+          "Alex 赢了。\"Alex，你是我的跑酷英雄！\"Steve 说。"
+        ],
+        questions: [
+          { q: "What kind of game do they play?",         options: ['A football game.', 'A jumping game on blocks.', 'A music game.', 'A reading game.'], answer: 1, hint: '第一段。', explanation: '"a jumping game on the blocks"。考点：动名词 jumping 修饰 game。' },
+          { q: "Who is good at jumping?",                 options: ['Only Steve.', 'Only Alex.', 'Both Steve and Alex.', 'Neither.'],               answer: 2, hint: '第二段 + 第三段。', explanation: '"Steve is good at jumping" + "Alex is also good at it"。考点：also = 也。both A and B。' },
+          { q: "How many blocks does Alex jump over?",    options: ['Seventy.', 'Eighty.', 'Ninety.', 'Over a hundred.'],                          answer: 3, hint: '第三段。', explanation: '"over a hundred blocks"。考点：over + 数字 = 超过。' },
+          { q: "Who wins?",                               options: ['Steve.', 'Alex.', 'Both win.', 'Nobody.'],                                    answer: 1, hint: '最后一段。', explanation: '"Alex wins the game"。考点：win 主语第三人称单数 + s。' }
         ]
       }]
     },
@@ -411,29 +486,54 @@ window.CURRICULUM = {
           { q: "How is Children's Day in different countries?", options: ['The same day.', 'On different days.', 'Not celebrated.', 'Only in summer.'], answer: 1, hint: '第一段或最后一段。', explanation: '"on different days around the world"。考点：different + 复数 days = 不同的（多个）日子。' }
         ]
       }, {
-        id: 'u5-r3',
-        theme: 'minecraft',
-        title: "Naadam in Inner Mongolia",
-        emoji: '🐎',
+        id: 'u5-r3p',
+        theme: 'pokemon',
+        title: "Pokemon Center Festival",
+        emoji: '⚡',
         paragraphs: [
-          "In Inner Mongolia, Naadam is a special festival. It is in July or August.",
-          "People get up early. They watch horse races and wrestling. It is so much fun!",
-          "The festival often lasts three to seven days. Children love it.",
-          "Steve and Alex visit Inner Mongolia this year. They watch a horse race.",
-          "\"Naadam is the best festival here!\" Steve says. He is glad to see it."
+          "The Pokemon Center has a special holiday on 1st June. It is Trainer Day.",
+          "Trainers get up early. They put up colorful flags. Pikachu watches and smiles.",
+          "Children from many countries come — from the USA, Canada, and more.",
+          "They often play games and battles. The Pokemon Center is full of fun.",
+          "\"Trainer Day is the best holiday!\" Ash says. He hugs Pikachu."
         ],
         paragraphsZh: [
-          "在内蒙古，那达慕是一个特别的节日，时间在 7 月或 8 月。",
-          "人们一早起来，看赛马和摔跤，非常有趣！",
-          "节日通常持续 3 到 7 天。孩子们都很喜欢。",
-          "Steve 和 Alex 今年去了内蒙古，看了一场赛马。",
-          "\"那达慕是这儿最棒的节日！\"Steve 说。他很高兴能看到。"
+          "宝可梦中心 6 月 1 日有个特别节日，是训练师节。",
+          "训练师们一早起来，挂上五彩的旗帜。皮卡丘看着笑了。",
+          "来自很多国家的孩子来这里——美国、加拿大等等。",
+          "他们经常玩游戏、对战。宝可梦中心充满欢乐。",
+          "\"训练师节是最棒的节日！\"小智说。他抱了抱皮卡丘。"
         ],
         questions: [
-          { q: "When is Naadam held?",                    options: ['May or June.', 'July or August.', 'October.', 'November.'],                  answer: 1, hint: '第一段。', explanation: '"It is in July or August"。考点：or 表二选一；July, August 月份名首字母大写。' },
-          { q: "What do people watch?",                   options: ['Films.', 'TV.', 'Horse races and wrestling.', 'Operas.'],                     answer: 2, hint: '第二段。', explanation: '"horse races and wrestling"。考点：Naadam 文化常识——赛马和摔跤是主要项目。' },
-          { q: "How long does Naadam last?",              options: ['One day.', 'Two days.', 'Three to seven days.', 'A whole month.'],            answer: 2, hint: '第三段。', explanation: '"lasts three to seven days"。考点：last 作动词 = 持续。three to seven 数字范围。' },
-          { q: "Where is Naadam held?",                   options: ['In the USA.', 'In Canada.', 'In Inner Mongolia.', 'In Beijing.'],             answer: 2, hint: '第一段。', explanation: '"In Inner Mongolia"。考点：地名 Inner Mongolia 拼写 + in + 地点。' }
+          { q: "When is Trainer Day?",                    options: ['1st May.', '1st June.', '1st October.', '20th November.'],                    answer: 1, hint: '第一段。', explanation: '"a special holiday on 1st June"。考点：on + 序数词 + 月份。' },
+          { q: "What do trainers do early?",              options: ['Sleep.', 'Put up flags.', 'Play games.', 'Eat food.'],                         answer: 1, hint: '第二段。', explanation: '"They put up colorful flags"。考点：put up = 升起/挂起，是 Unit 5 高频词组。' },
+          { q: "Where do the children come from?",        options: ['Only China.', 'Many countries (USA, Canada).', 'Mars.', 'A small village.'], answer: 1, hint: '第三段。', explanation: '"from the USA, Canada, and more"。考点：from + 国家。注意 the USA 前面要加 the。' },
+          { q: "How does Ash feel?",                      options: ['Sad.', 'Tired.', 'Happy.', 'Angry.'],                                          answer: 2, hint: '最后一段。', explanation: '"He hugs Pikachu" + "is the best holiday" 都是积极。考点：hug = 拥抱。' }
+        ]
+      }, {
+        id: 'u5-r4m',
+        theme: 'minecraft',
+        title: "Anniversary in the Village",
+        emoji: '🏘️',
+        paragraphs: [
+          "The village has a special anniversary in October. It is Village Day.",
+          "Steve gets up early. He puts up a flag in front of his house.",
+          "Alex watches the parade. There are mobs from the zoo too — a tame wolf, a fox, and a panda.",
+          "People often build new houses on this day. Steve builds a tower.",
+          "\"Village Day is special!\" Alex says. \"Next month is also Children's Day in November.\""
+        ],
+        paragraphsZh: [
+          "村庄在 10 月有一个特别的纪念日，叫村庄日。",
+          "Steve 一早起来，在家门前升起一面旗。",
+          "Alex 看着游行队伍，里面还有动物园来的友好生物——一只驯服的狼、一只狐狸、一只熊猫。",
+          "这一天人们常常建新房子。Steve 建了一座塔。",
+          "\"村庄日很特别！\"Alex 说，\"下个月 11 月也是儿童节。\""
+        ],
+        questions: [
+          { q: "When is Village Day?",                    options: ['May.', 'June.', 'October.', 'November.'],                                      answer: 2, hint: '第一段。', explanation: '"a special anniversary in October"。考点：in + 月份 = 在某月。' },
+          { q: "What does Steve put up?",                 options: ['A photo.', 'A flag.', 'A board.', 'A light.'],                                 answer: 1, hint: '第二段。', explanation: '"He puts up a flag"。考点：put up + 物 = 升起。' },
+          { q: "What does Steve build?",                  options: ['A house.', 'A tower.', 'A bridge.', 'A boat.'],                                answer: 1, hint: '第四段。', explanation: '"Steve builds a tower"。考点：第三人称单数 builds。' },
+          { q: "When is Children's Day in the story?",    options: ['October.', 'November.', 'May.', 'July.'],                                      answer: 1, hint: '最后一段。', explanation: '"Next month is also Children\'s Day in November"。考点：next month + 推理（10 月的下个月就是 11 月）。' }
         ]
       }]
     },
@@ -521,29 +621,54 @@ window.CURRICULUM = {
           { q: "How many roles are in Beijing opera?",    options: ['Two.', 'Three.', 'Four.', 'Five.'],                                            answer: 2, hint: '最后一段。', explanation: '"The four roles in Beijing opera are Sheng, Dan, Jing, and Chou"。考点：京剧四大行当数字。' }
         ]
       }, {
-        id: 'u6-r3',
-        theme: 'minecraft',
-        title: "The Kite in the Sky",
-        emoji: '🪁',
+        id: 'u6-r3p',
+        theme: 'pokemon',
+        title: "The Pokemon Family",
+        emoji: '⚡',
         paragraphs: [
-          "Today is a windy weekend. Many people are at the park.",
-          "They are flying kites. The kites fly high in the sky.",
-          "A little girl is flying a brave dragon kite. It is very tall.",
-          "\"Look at my kite!\" she says. \"It flies so well!\"",
-          "\"I really enjoy this,\" her dad says. \"Our world is so happy on weekends.\""
+          "It is Saturday at the Pokemon Center. Pikachu is at home with friends.",
+          "Bulbasaur is watering the plants. Squirtle is drinking water and watching TV.",
+          "Ash and Brock are cooking in the kitchen. Misty is painting a brave Charizard on the wall.",
+          "Outside, many Pokemon are flying high in the sky — Pidgey, Butterfree, and more.",
+          "\"I really enjoy our Saturdays!\" Ash says. \"Our Pokemon world is so happy.\""
         ],
         paragraphsZh: [
-          "今天是个有风的周末，很多人在公园里。",
-          "他们在放风筝，风筝在天空中飞得很高。",
-          "一个小女孩在放一只勇敢的龙形风筝，它非常高。",
-          "\"看我的风筝！\"她说，\"它飞得多好啊！\"",
-          "\"我真喜欢这个，\"爸爸说，\"我们的世界在周末真幸福。\""
+          "今天是周六。皮卡丘和朋友们在宝可梦中心。",
+          "妙蛙种子在浇花，杰尼龟在喝水看电视。",
+          "小智和小刚在厨房做饭，小霞在墙上画一只勇敢的喷火龙。",
+          "屋外许多宝可梦在天空高飞——波波、巴大蝶等等。",
+          "\"我真喜欢我们的周六！\"小智说，\"我们的宝可梦世界真幸福。\""
         ],
         questions: [
-          { q: "What are people doing in the park?",      options: ['Sleeping.', 'Flying kites.', 'Cooking.', 'Reading books.'],                   answer: 1, hint: '第二段。', explanation: '"They are flying kites"。考点：现在进行时 are + V-ing 复数主语。' },
-          { q: "What kind of kite does the little girl fly?", options: ['A cat kite.', 'A dragon kite.', 'A flower kite.', 'A star kite.'],         answer: 1, hint: '第三段。', explanation: '"a brave dragon kite"。考点：形容词 brave 修饰名词 + 名词修饰名词 dragon kite。' },
-          { q: "How does the kite fly?",                  options: ['Low.', 'Backwards.', 'So well.', 'Slowly.'],                                  answer: 2, hint: '第四段。', explanation: '"It flies so well"。考点：so + 副词 = 程度。well 修饰 fly。' },
-          { q: "How does the dad feel about weekends?",   options: ['Boring.', 'Tired.', 'Happy.', 'Sad.'],                                          answer: 2, hint: '最后一段。', explanation: '"Our world is so happy on weekends"。考点：on weekends = 周末时（注意 on 介词 + 复数）。' }
+          { q: "What is Bulbasaur doing?",                options: ['Cooking.', 'Watering the plants.', 'Watching TV.', 'Painting.'],               answer: 1, hint: '第二段。', explanation: '"Bulbasaur is watering the plants"。★Unit 6 重点：现在进行时 is + V-ing。' },
+          { q: "Where are Ash and Brock?",                options: ['In the garden.', 'In the kitchen.', 'In the sky.', 'At the gym.'],             answer: 1, hint: '第三段。', explanation: '"in the kitchen"。考点：复数主语 (Ash and Brock) → are cooking。' },
+          { q: "What is Misty painting?",                 options: ['A cat.', 'A flag.', 'A brave Charizard.', 'A plant.'],                         answer: 2, hint: '第三段最后一句。', explanation: '"painting a brave Charizard"。考点：现在进行时 + 形容词修饰名词。' },
+          { q: "What are the Pokemon outside doing?",     options: ['Sleeping.', 'Flying high in the sky.', 'Cooking.', 'Reading.'],                answer: 1, hint: '第四段。', explanation: '"many Pokemon are flying high in the sky"。考点：are + V-ing 复数主语。fly 加 ing 不去 y。' }
+        ]
+      }, {
+        id: 'u6-r4m',
+        theme: 'minecraft',
+        title: "A Day in the Minecraft Farm",
+        emoji: '🌾',
+        paragraphs: [
+          "It is the weekend. Steve is at his Minecraft farm.",
+          "His grandpa is watering the plants. His grandma is drinking tea in the sun.",
+          "Steve and his sister are cooking pumpkin pie in the kitchen.",
+          "Outside, many people are flying with Elytras. The wings glide in the blue sky.",
+          "\"Our farm is so peaceful,\" Steve says. \"Mum is painting a brave Iron Golem on the wall.\""
+        ],
+        paragraphsZh: [
+          "今天是周末，Steve 在他的我的世界农场。",
+          "爷爷在浇花，奶奶在阳光下喝茶。",
+          "Steve 和姐姐在厨房做南瓜派。",
+          "屋外许多人在用鞘翅飞行，翅膀在蓝天上滑翔。",
+          "\"我们的农场很安静，\"Steve 说，\"妈妈在墙上画一只勇敢的铁傀儡。\""
+        ],
+        questions: [
+          { q: "What is grandpa doing?",                  options: ['Drinking tea.', 'Watering the plants.', 'Cooking.', 'Sleeping.'],              answer: 1, hint: '第二段。', explanation: '"His grandpa is watering the plants"。★Unit 6 重点：现在进行时 is + V-ing 单数主语。' },
+          { q: "What are Steve and his sister cooking?",  options: ['A cake.', 'Pumpkin pie.', 'Bread.', 'Beef.'],                                  answer: 1, hint: '第三段。', explanation: '"cooking pumpkin pie"。考点：复数主语 → are cooking + 名词搭配。' },
+          { q: "How do people fly?",                      options: ['On a kite.', 'With Elytras.', 'On a horse.', 'In a plane.'],                   answer: 1, hint: '第四段。', explanation: '"flying with Elytras"。考点：fly with + 工具。Elytras 是 Minecraft 鞘翅。' },
+          { q: "What is Mum painting?",                   options: ['A cat.', 'A flag.', 'A brave Iron Golem.', 'A horse.'],                        answer: 2, hint: '最后一段。', explanation: '"painting a brave Iron Golem"。考点：brave 修饰名词。' }
         ]
       }]
     },
@@ -638,34 +763,89 @@ window.CURRICULUM = {
           { q: "Where is the book?",                      options: ['On the second shelf.', 'On the third shelf.', 'In the toilet.', 'In the dark.'], answer: 1, hint: '第四段。', explanation: '"on the third shelf"。考点：序数词 third + 名词 shelf。' }
         ]
       }, {
-        id: 'u7-r3',
-        theme: 'minecraft',
-        title: "The Lost Book",
-        emoji: '🔦',
+        id: 'u7-r3p',
+        theme: 'pokemon',
+        title: "Pokemon Center Community",
+        emoji: '⚡',
         paragraphs: [
-          "Steve is in a smart community. There are many shops, a school, and a supermarket.",
-          "One day Steve loses his book. The supermarket is beside the school.",
-          "He looks in the supermarket. It is dark. He cannot see his book.",
-          "\"Could you tell me the way to the building's lights?\" he asks. A robot helps him.",
-          "The book is on the second floor of the school. Steve is glad. The smart community helps him!"
+          "Welcome to the Pokemon Center Community! Ash is new here.",
+          "He needs Pokeballs. The Poke Mart is in front of the Pokemon Center.",
+          "\"Could you tell me the way?\" Ash asks. Joy says, \"Walk down. The shop is between the gym and the lake.\"",
+          "The Poke Mart is smart. Pokeballs are on the third shelf with letter P.",
+          "Ash is glad. \"What a nice community! Pikachu and I love it here.\""
         ],
         paragraphsZh: [
-          "Steve 住在一个智能社区。这里有很多商店、一所学校和一家超市。",
-          "有一天 Steve 把书弄丢了。超市就在学校旁边。",
-          "他在超市里找。里面很暗，他看不见自己的书。",
-          "\"能告诉我建筑物里灯怎么开吗？\"他问。一个机器人来帮他。",
-          "书在学校的二楼。Steve 很高兴。智能社区帮了他！"
+          "欢迎来到宝可梦中心社区！小智是新来的。",
+          "他需要精灵球。精灵商店就在宝可梦中心前面。",
+          "\"能告诉我怎么走吗？\"小智问。乔伊小姐说：\"沿这条路走，商店在道馆和湖之间。\"",
+          "精灵商店很智能，精灵球在第三层货架，字母 P。",
+          "小智很高兴。\"多好的社区！皮卡丘和我都喜欢这儿。\""
         ],
         questions: [
-          { q: "Where does Steve live?",                  options: ['In a forest.', 'In a smart community.', 'In a cave.', 'On a farm.'],         answer: 1, hint: '第一段。', explanation: '"Steve is in a smart community"。考点：smart 修饰 community = 智能社区，是 Unit 7 主题词。' },
-          { q: "Where is the supermarket?",               options: ['Beside the school.', 'Beside the lake.', 'Far from school.', 'In the classroom.'], answer: 0, hint: '第二段。', explanation: '"The supermarket is beside the school"。考点：beside = 在...旁边。区分 beside (旁边) vs besides (除...之外)。' },
-          { q: "Why can't Steve see his book?",           options: ['It is too small.', 'It is dark.', 'The book is far away.', 'Steve is sleepy.'], answer: 1, hint: '第三段。', explanation: '"It is dark. He cannot see"。考点：dark 黑暗的。cannot = can not = 不能。' },
-          { q: "Where is the book?",                      options: ['On the first floor.', 'On the second floor.', 'On the third floor.', 'In the supermarket.'], answer: 1, hint: '第四段最后。', explanation: '"on the second floor of the school"。考点：on the + 序数词 + floor 是楼层方位常用句型。' }
+          { q: "What does Ash need to buy?",              options: ['Bread.', 'Pokeballs.', 'A book.', 'A flag.'],                                  answer: 1, hint: '第二段。', explanation: '"He needs Pokeballs"。考点：need + 复数名词。' },
+          { q: "Where is the Poke Mart?",                 options: ['In front of the Pokemon Center.', 'Far away.', 'In a cave.', 'On a tree.'],   answer: 0, hint: '第二段。', explanation: '"in front of the Pokemon Center"。★Unit 7 重点：in front of = 在...前面。' },
+          { q: "Where is the shop located?",              options: ['Far away.', 'Between the gym and the lake.', 'On the moon.', 'Inside Ash\'s bag.'], answer: 1, hint: '第三段。', explanation: '"between the gym and the lake"。★Unit 7 重点：between A and B = 在 A 和 B 之间。' },
+          { q: "Where are the Pokeballs?",                options: ['On the second shelf.', 'On the third shelf with letter P.', 'In the lake.', 'On the moon.'], answer: 1, hint: '第四段。', explanation: '"on the third shelf with letter P"。考点：序数词 third + 名词 shelf。' }
+        ]
+      }, {
+        id: 'u7-r4m',
+        theme: 'minecraft',
+        title: "Minecraft Village Centre",
+        emoji: '🏘️',
+        paragraphs: [
+          "The Minecraft village has a smart community centre. There is a robot in front of it.",
+          "Steve is new and needs to buy bread. \"Could you tell me the way to a shop?\" he asks.",
+          "The robot says, \"The supermarket is between the library and the toilet. It is near here.\"",
+          "Steve goes to the library too. The new books are on the third shelf, beside an iron golem.",
+          "\"I am glad I live here,\" Steve says. \"Our smart village is the best!\""
+        ],
+        paragraphsZh: [
+          "我的世界村有一个智能社区中心。中心前面有一个机器人。",
+          "Steve 是新来的，需要买面包。\"能告诉我去商店的路吗？\"他问。",
+          "机器人说：\"超市在图书馆和卫生间之间，就在附近。\"",
+          "Steve 也去了图书馆。新书在第三层书架，旁边有一个铁傀儡。",
+          "\"我很高兴住在这儿，\"Steve 说，\"我们的智能村子最棒！\""
+        ],
+        questions: [
+          { q: "Where is the robot?",                     options: ['In a cave.', 'In front of the community centre.', 'On a tree.', 'In the school.'], answer: 1, hint: '第一段。', explanation: '"There is a robot in front of it"。★Unit 7 重点：in front of。it 指 community centre。' },
+          { q: "What does Steve want to buy?",            options: ['A book.', 'Bread.', 'A flag.', 'A horse.'],                                    answer: 1, hint: '第二段。', explanation: '"needs to buy bread"。考点：need to + 动词原形。bread 是不可数名词。' },
+          { q: "Where is the supermarket?",               options: ['Far away.', 'Between the library and the toilet.', 'In a cave.', 'On the third shelf.'], answer: 1, hint: '第三段。', explanation: '"between the library and the toilet"。★Unit 7 重点：between A and B。' },
+          { q: "What is beside the new books?",           options: ['A robot.', 'An iron golem.', 'A horse.', 'A cat.'],                            answer: 1, hint: '第四段。', explanation: '"beside an iron golem"。考点：beside = 在...旁边。Iron Golem 是 Minecraft 守护生物。' }
         ]
       }]
     }
 
   ],
+
+  /* 主题徽章 */
+  themeBadge: {
+    pokemon:   { icon: '⚡', label: '宝可梦特别篇',    color: '#fbbf24' },
+    minecraft: { icon: '⛏',  label: '方块世界',        color: '#6ab04a' },
+    delta:     { icon: '🔦', label: '侦察任务',        color: '#22d3ee' }
+  },
+
+  /* 主页人物问候（随机抽，连击 3+ 触发庆祝口吻） */
+  greetings: {
+    normal: [
+      { who: '⚡ 皮卡丘', say: 'Pika pika! 训练师，今天的任务等你出击！' },
+      { who: '🧒 Steve',  say: '我新挖到了 4 个钻石！要不要一起去图书馆看看？' },
+      { who: '🦊 Alex',   say: '今日侦察任务已就位，准备好了吗？' },
+      { who: '🐉 训练员', say: '英语对战吧！今天我们打哪只词兽？' },
+      { who: '⛏ 苦力怕', say: '嘶嘶嘶...来背单词，别让我贴上来。' },
+      { who: '🪙 商人',   say: '完成今天的关卡，能换 4 颗绿宝石！' }
+    ],
+    streak3: [
+      { who: '⚡ 皮卡丘', say: '皮卡卡！连击 3 天，我送你一个十万伏特鼓掌！' },
+      { who: '🧒 Steve',  say: '三连击！你比红石电路还稳定。' },
+      { who: '🦊 Alex',   say: '三日侦察成功，你已晋升副队长！' }
+    ],
+    streak7: [
+      { who: '⚡ 皮卡丘', say: 'PIKA！一周冠军训练师就是你！' },
+      { who: '🧒 Steve',  say: '连续 7 天，我用钻石给你做了个奖杯！' },
+      { who: '🦊 Alex',   say: '一周战士勋章已发放！' },
+      { who: '👑 训练馆长', say: '七连胜！你已经超越了大多数训练师。' }
+    ]
+  },
 
   /* 鼓励语：方块世界主题 */
   encouragements: [

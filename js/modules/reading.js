@@ -25,7 +25,12 @@ window.ReadingModule = (() => {
   function renderStory() {
     const r = reading;
     const storyHtml = r.paragraphs.map(p => `<p class="book-para">${tappable(p)}</p>`).join('');
+    const themeBadge = window.CURRICULUM.themeBadge[r.theme];
+    const banner = themeBadge
+      ? `<div class="theme-banner" style="border-color:${themeBadge.color};color:${themeBadge.color};">${themeBadge.icon} ${themeBadge.label}</div>`
+      : '';
     body.innerHTML = `
+      ${banner}
       <div class="book" id="story">
         <div class="book-title">${r.emoji} ${r.title}</div>
         ${storyHtml}
