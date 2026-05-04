@@ -283,13 +283,14 @@ window.App = (() => {
       $('setRateVal').textContent = e.target.value;
     };
 
-    // Voice picker
+    // Voice picker —— 用 TTS.onVoicesChanged 注册（不会被覆盖）
     populateVoicePicker();
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = populateVoicePicker;
-    }
+    TTS.onVoicesChanged(populateVoicePicker);
     $('setVoice').onchange = (e) => {
-      TTS.setVoiceByName(e.target.value);
+      const ok = TTS.setVoiceByName(e.target.value);
+      if (ok) App.toast('✓ 已切换到 ' + e.target.value, 'success', 1100);
+      // 立即试听一句确认
+      setTimeout(() => TTS.speak('Hello!'), 200);
     };
     $('testVoiceBtn').onclick = () => TTS.speak('Hello, I am your English trainer. Let us learn together!');
     $('reportBtn').onclick = showReport;

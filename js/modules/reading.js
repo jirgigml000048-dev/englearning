@@ -161,17 +161,17 @@ window.ReadingModule = (() => {
     const status = document.getElementById('raStatus');
     const startBtn = document.getElementById('raStart');
 
-    if (ratio >= 0.5) {
-      // pass
+    if (ratio >= 0.3) {
+      // pass (低门槛：孩子开口读了就鼓励)
       if (status) status.innerHTML = `✓ 听清了 <b>${pct}%</b> 的单词，跟读通过！`;
       App.toast('🎤 ' + App.randEncourage(), 'success', 1100);
       setTimeout(nextReadAlongPara, 1300);
-    } else if (attemptIdx >= 3) {
-      // 3 次后自动放行，不卡住孩子
+    } else if (attemptIdx >= 2) {
+      // 2 次后自动放行，不卡住孩子
       if (status) status.innerHTML = `已读 ${attemptIdx} 次，自动通过 (听清 ${pct}%)。下次更准！`;
       setTimeout(nextReadAlongPara, 1500);
     } else {
-      if (status) status.innerHTML = `听清了 ${pct}%。再大声读一遍试试 (剩 ${3 - attemptIdx} 次机会)`;
+      if (status) status.innerHTML = `听清了 ${pct}%。再大声读一遍试试 (剩 ${2 - attemptIdx} 次机会)`;
       if (startBtn) {
         startBtn.textContent = '🎤 再读一遍';
         startBtn.onclick = () => startRecognition(orig);

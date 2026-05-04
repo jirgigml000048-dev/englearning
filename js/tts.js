@@ -1,33 +1,28 @@
 /* ============================================================
  * 浏览器语音合成 — 优先选高质量英语音色
  *
- * 问题：默认 voice 在国内设备上常被 Chinese-accent 引擎接管,
- *      导致 "apple" 听起来像 "阿婆"。
- * 解决：
- *   1) 严格过滤掉所有 zh-* / cmn-* 音色
- *   2) 优先级：iPad/iPhone 内置高质量音色 > en-US > en-GB > 任何 en-*
- *   3) Apple 系列质量榜：Samantha > Allison > Ava > Karen > Daniel
- *      Microsoft 系列：Aria > Guy > Jenny > Ryan > Zira
- *      Google：Google US English (Network) > 其它
- *   4) 默认语速 0.85（孩子能听清）
- *   5) 用户可在设置里手动指定
+ * 修订:
+ *  - getAvailableVoices() / setVoiceByName() 每次实时查询,
+ *    不依赖 voicesCache (修复音色选不上的 bug)
+ *  - 用 addEventListener 而不是 onvoiceschanged 赋值,
+ *    避免被 app.js 覆盖
  * ============================================================ */
 window.TTS = (() => {
   let voice = null;
-  let voicesCache = [];
   let ready = false;
+  const voiceChangeListeners = [];
 
   // 高质量音色名（按优先级）
   const PREMIUM_NAMES = [
-    'Samantha',          // iPad/iPhone 默认 en-US 女声 ★最常用
+    'Samantha',
     'Allison',
     'Ava',
     'Susan',
-    'Karen',             // Australian English
-    'Daniel',            // British English 男声
+    'Karen',
+    'Daniel',
     'Tom',
     'Aaron',
-    'Alex',              // macOS 老款高品质
+    'Alex',
     'Microsoft Aria Online',
     'Microsoft Guy Online',
     'Microsoft Jenny Online',
@@ -37,43 +32,46 @@ window.TTS = (() => {
   function listVoices() {
     if (!('speechSynthesis' in window)) return [];
     const all = window.speechSynthesis.getVoices() || [];
-    // 过滤掉中文音色
     return all.filter(v => /^en/i.test(v.lang) && !/zh|cmn|yue|wuu/i.test(v.lang));
   }
 
   function pickVoice() {
-    voicesCache = listVoices();
-    if (!voicesCache.length) return;
+    const voices = listVoices();
+    if (!voices.length) return;
 
-    // 用户偏好（设置中保存的 voice name）
     const pref = window.Progress?.get().voiceName;
     if (pref) {
-      const m = voicesCache.find(v => v.name === pref);
+      const m = voices.find(v => v.name === pref);
       if (m) { voice = m; ready = true; return; }
     }
-
-    // 按 PREMIUM_NAMES 顺序找
     for (const name of PREMIUM_NAMES) {
-      const m = voicesCache.find(v => v.name.includes(name));
+      const m = voices.find(v => v.name.includes(name));
       if (m) { voice = m; ready = true; return; }
     }
-
-    // 回落：en-US 任意，再回落 en-GB
     voice =
-      voicesCache.find(v => v.lang === 'en-US') ||
-      voicesCache.find(v => v.lang === 'en-GB') ||
-      voicesCache[0];
+      voices.find(v => v.lang === 'en-US') ||
+      voices.find(v => v.lang === 'en-GB') ||
+      voices[0];
     ready = true;
   }
 
-  pickVoice();
+  // 用 addEventListener，多个监听器共存（app.js 也会注册一个）
   if ('speechSynthesis' in window) {
-    window.speechSynthesis.onvoiceschanged = pickVoice;
+    pickVoice();
+    window.speechSynthesis.addEventListener('voiceschanged', () => {
+      pickVoice();
+      voiceChangeListeners.forEach(fn => { try { fn(); } catch (e) {} });
+    });
+  }
+
+  function onVoicesChanged(cb) {
+    voiceChangeListeners.push(cb);
   }
 
   function speak(text, opts = {}) {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
+    if (!voice) pickVoice();
     const u = new SpeechSynthesisUtterance(text);
     if (voice) u.voice = voice;
     u.rate = opts.rate || (window.Progress?.get().ttsRate || 0.85);
@@ -86,16 +84,19 @@ window.TTS = (() => {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   }
 
+  // 实时查询，不依赖缓存
   function getAvailableVoices() {
-    return voicesCache.slice();
+    return listVoices();
   }
 
   function getCurrentVoice() {
+    if (!voice) pickVoice();
     return voice;
   }
 
   function setVoiceByName(name) {
-    const m = voicesCache.find(v => v.name === name);
+    const voices = listVoices();
+    const m = voices.find(v => v.name === name);
     if (!m) return false;
     voice = m;
     if (window.Progress) {
@@ -108,6 +109,7 @@ window.TTS = (() => {
   return {
     speak, stop,
     get ready() { return ready; },
-    getAvailableVoices, getCurrentVoice, setVoiceByName
+    getAvailableVoices, getCurrentVoice, setVoiceByName,
+    onVoicesChanged
   };
 })();
