@@ -41,7 +41,7 @@ window.ReadingModule = (() => {
       <button class="block-btn ghost" id="stopBtn">⏹ 停止</button>
       <button class="block-btn primary" id="startQBtn">读完了，开始跟读 →</button>
     `;
-    document.getElementById('readAllBtn').onclick = () => TTS.speak(r.paragraphs.join(' '));
+    document.getElementById('readAllBtn').onclick = () => TTS.speakParagraphsSequential(r.id, r.paragraphs);
     document.getElementById('stopBtn').onclick = () => TTS.stop();
     document.getElementById('startQBtn').onclick = () => { TTS.stop(); renderReadAlong(); };
     bindTapWords('#story');
@@ -301,7 +301,7 @@ window.ReadingModule = (() => {
       <button class="block-btn ghost" id="readAllBtn">🔊 再朗读一遍</button>
       <button class="block-btn primary" id="finishBtn">完成关卡 →</button>
     `;
-    document.getElementById('readAllBtn').onclick = () => TTS.speak(r.paragraphs.join(' '));
+    document.getElementById('readAllBtn').onclick = () => TTS.speakParagraphsSequential(r.id, r.paragraphs);
     document.getElementById('finishBtn').onclick = () => { TTS.stop(); finish(); };
     bindTapWords('#story');
     document.getElementById('stageProgress').textContent = '翻译回看';

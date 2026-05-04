@@ -121,6 +121,35 @@ window.TTS = (() => {
     speak(text, { ...opts, audioKey: `paragraphs/${readingId}-p${paraIdx}` });
   }
 
+  // 顺序播放某 reading 的全部段落 mp3 (用于"朗读全文")
+  // 第一段失败时回落到 Web Speech 一次性朗读拼接文本
+  function speakParagraphsSequential(readingId, paragraphTexts) {
+    stop();
+    let i = 0;
+    const playNext = () => {
+      if (i >= paragraphTexts.length) return;
+      const key = `paragraphs/${readingId}-p${i}`;
+      if (missingMp3.has(key)) {
+        // 已知缺失 → 直接 Web Speech 全文兜底
+        if (i === 0) speakWebSpeech(paragraphTexts.join(' '), {});
+        else { i++; playNext(); }
+        return;
+      }
+      const audio = new Audio('audio/' + key + '.mp3');
+      audio.playbackRate = window.Progress?.get().ttsRate || 1.0;
+      currentAudio = audio;
+      audio.onended = () => { i++; playNext(); };
+      const fallback = () => {
+        missingMp3.add(key);
+        if (i === 0) speakWebSpeech(paragraphTexts.join(' '), {});
+        else { i++; playNext(); }
+      };
+      audio.addEventListener('error', fallback);
+      audio.play().catch(fallback);
+    };
+    playNext();
+  }
+
   /* ---------- voice picker (Web Speech) ---------- */
   function getAvailableVoices() { return listVoices(); }
   function getCurrentVoice() { if (!voice) pickVoice(); return voice; }
@@ -138,7 +167,7 @@ window.TTS = (() => {
 
   return {
     speak, stop,
-    speakWord, speakSentence, speakParagraph,
+    speakWord, speakSentence, speakParagraph, speakParagraphsSequential,
     get ready() { return ready; },
     getAvailableVoices, getCurrentVoice, setVoiceByName,
     onVoicesChanged
