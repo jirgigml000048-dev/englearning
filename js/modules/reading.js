@@ -1,12 +1,14 @@
 /* ============================================================
- * 阅读关：方块世界主题课文 (book/纸张) + 选择题 + 翻译回看
+ * 阅读关：方块世界主题课文 (book/纸张) + 跟读 + 选择题 + 翻译回看
  * 流程：
- *   1) story  课文阅读（每个英文词可点听发音）
- *   2) quiz   逐题答题（错→提示→再错→揭晓答案 + 讲解）
- *   3) review 翻译回看（英文+中文对照，巩固理解）
+ *   1) story     课文阅读 (每个英文词可点听发音)
+ *   2) readalong 跟读关 (一段一段, 录音 + 单词重合率检查)
+ *   3) quiz      逐题答题 (错 → 提示 → 再错 → 揭晓答案 + 讲解)
+ *   4) review    翻译回看 (英中对照, 巩固理解)
  * ============================================================ */
 window.ReadingModule = (() => {
   let reading, qIdx, body, footer, onDone, score, attempts, total;
+  let paraIdx, attemptIdx, recognition;
 
   function start({ unit, body: b, footer: f, onDone: cb }) {
     body = b; footer = f; onDone = cb;
@@ -32,11 +34,11 @@ window.ReadingModule = (() => {
     footer.innerHTML = `
       <button class="block-btn ghost" id="readAllBtn">🔊 朗读全文</button>
       <button class="block-btn ghost" id="stopBtn">⏹ 停止</button>
-      <button class="block-btn primary" id="startQBtn">读完了，开始挑战 →</button>
+      <button class="block-btn primary" id="startQBtn">读完了，开始跟读 →</button>
     `;
     document.getElementById('readAllBtn').onclick = () => TTS.speak(r.paragraphs.join(' '));
     document.getElementById('stopBtn').onclick = () => TTS.stop();
-    document.getElementById('startQBtn').onclick = () => { TTS.stop(); renderQuestion(); };
+    document.getElementById('startQBtn').onclick = () => { TTS.stop(); renderReadAlong(); };
     document.querySelectorAll('#story .tap-word').forEach(el => {
       el.onclick = () => TTS.speak(el.textContent);
     });
@@ -45,6 +47,147 @@ window.ReadingModule = (() => {
 
   function tappable(text) {
     return text.replace(/([A-Za-z']+)/g, '<span class="tap-word">$1</span>');
+  }
+
+  /* ---------------- Read-Along (跟读 + 录音检查) ---------------- */
+  function renderReadAlong() {
+    const r = reading;
+    if (!r.paragraphs.length) return renderQuestion();
+    paraIdx = 0;
+    attemptIdx = 0;
+    showReadAlongPara();
+  }
+
+  function showReadAlongPara() {
+    const r = reading;
+    const p = r.paragraphs[paraIdx];
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const supported = !!SR;
+
+    body.innerHTML = `
+      <div class="readalong-panel">
+        <div class="ra-progress">🎤 跟读 · 第 ${paraIdx + 1} / ${r.paragraphs.length} 段</div>
+        <div class="ra-paragraph">${tappable(p)}</div>
+        <div class="ra-status" id="raStatus">${supported ? '点 🎤 大声读出这段' : '⚠ 当前浏览器不支持录音识别。请大声读完后点"我读完了"。'}</div>
+        <div class="ra-recognized" id="raRecognized"></div>
+      </div>
+    `;
+    footer.innerHTML = `
+      <button class="block-btn ghost" id="raListen">🔊 听一遍</button>
+      <button class="block-btn primary" id="raStart">${supported ? '🎤 开始跟读' : '我读完了 →'}</button>
+      <button class="block-btn ghost" id="raSkip">跳过本段</button>
+    `;
+    document.getElementById('raListen').onclick = () => TTS.speak(p);
+    document.getElementById('raSkip').onclick = nextReadAlongPara;
+    document.getElementById('raStart').onclick = () => {
+      if (!supported) { nextReadAlongPara(); return; }
+      startRecognition(p);
+    };
+    document.querySelectorAll('.ra-paragraph .tap-word').forEach(el => {
+      el.onclick = () => TTS.speak(el.textContent);
+    });
+    document.getElementById('stageProgress').textContent = `跟读 ${paraIdx + 1}/${r.paragraphs.length}`;
+  }
+
+  function startRecognition(originalText) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) return;
+    if (recognition) { try { recognition.stop(); } catch (e) {} recognition = null; }
+
+    const rec = new SR();
+    rec.lang = 'en-US';
+    rec.continuous = false;
+    rec.interimResults = true;
+    rec.maxAlternatives = 1;
+    let transcript = '';
+
+    rec.onresult = (e) => {
+      transcript = '';
+      for (let i = 0; i < e.results.length; i++) {
+        transcript += e.results[i][0].transcript + ' ';
+      }
+      const el = document.getElementById('raRecognized');
+      if (el) el.textContent = '听到：' + transcript;
+    };
+    rec.onerror = (e) => {
+      const status = document.getElementById('raStatus');
+      const startBtn = document.getElementById('raStart');
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+        if (status) status.innerHTML = '⚠ 没拿到麦克风权限。可以"跳过本段"，或在浏览器里允许麦克风后再来。';
+      } else if (e.error === 'no-speech') {
+        if (status) status.innerHTML = '没听到声音。再大声试一次！';
+      } else {
+        if (status) status.textContent = '录音失败：' + e.error;
+      }
+      if (startBtn) {
+        startBtn.textContent = '🎤 再试一次';
+        startBtn.onclick = () => startRecognition(originalText);
+      }
+    };
+    rec.onend = () => {
+      recognition = null;
+      const startBtn = document.getElementById('raStart');
+      if (transcript.trim()) {
+        evaluateReadAlong(originalText, transcript);
+      } else if (startBtn && document.getElementById('raStatus')) {
+        document.getElementById('raStatus').textContent = '没听到声音，再来一次试试';
+        startBtn.textContent = '🎤 再试一次';
+        startBtn.onclick = () => startRecognition(originalText);
+      }
+    };
+
+    try {
+      rec.start();
+      recognition = rec;
+      document.getElementById('raStatus').innerHTML = '🔴 正在听...大声读这段';
+      const startBtn = document.getElementById('raStart');
+      startBtn.textContent = '⏹ 停止录音';
+      startBtn.onclick = () => { try { rec.stop(); } catch (e) {} };
+    } catch (e) {
+      document.getElementById('raStatus').textContent = '无法启动录音：' + e.message;
+    }
+  }
+
+  function evaluateReadAlong(orig, said) {
+    const normalize = s => s.toLowerCase().replace(/[.,!?'":;\-—]/g, ' ').split(/\s+/).filter(Boolean);
+    const oWords = normalize(orig);
+    const sWords = normalize(said);
+    const sSet = new Set(sWords);
+    const matched = oWords.filter(w => sSet.has(w)).length;
+    const ratio = oWords.length ? matched / oWords.length : 0;
+    const pct = Math.round(ratio * 100);
+
+    attemptIdx++;
+    const status = document.getElementById('raStatus');
+    const startBtn = document.getElementById('raStart');
+
+    if (ratio >= 0.5) {
+      // pass
+      if (status) status.innerHTML = `✓ 听清了 <b>${pct}%</b> 的单词，跟读通过！`;
+      App.toast('🎤 ' + App.randEncourage(), 'success', 1100);
+      setTimeout(nextReadAlongPara, 1300);
+    } else if (attemptIdx >= 3) {
+      // 3 次后自动放行，不卡住孩子
+      if (status) status.innerHTML = `已读 ${attemptIdx} 次，自动通过 (听清 ${pct}%)。下次更准！`;
+      setTimeout(nextReadAlongPara, 1500);
+    } else {
+      if (status) status.innerHTML = `听清了 ${pct}%。再大声读一遍试试 (剩 ${3 - attemptIdx} 次机会)`;
+      if (startBtn) {
+        startBtn.textContent = '🎤 再读一遍';
+        startBtn.onclick = () => startRecognition(orig);
+      }
+    }
+  }
+
+  function nextReadAlongPara() {
+    if (recognition) { try { recognition.stop(); } catch (e) {} recognition = null; }
+    paraIdx++;
+    attemptIdx = 0;
+    if (paraIdx >= reading.paragraphs.length) {
+      renderQuestion();
+    } else {
+      showReadAlongPara();
+    }
   }
 
   /* ---------------- Quiz ---------------- */
