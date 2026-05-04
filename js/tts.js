@@ -1,31 +1,26 @@
 /* ============================================================
- * 浏览器语音合成 — 优先选高质量英语音色
+ * TTS — 优先 ElevenLabs 预生成 mp3, 回落到浏览器自带语音
  *
- * 修订:
- *  - getAvailableVoices() / setVoiceByName() 每次实时查询,
- *    不依赖 voicesCache (修复音色选不上的 bug)
- *  - 用 addEventListener 而不是 onvoiceschanged 赋值,
- *    避免被 app.js 覆盖
+ * 用法:
+ *   TTS.speak('apple')                        // Web Speech (回落)
+ *   TTS.speak('apple', { audioKey: 'words/apple' })  // mp3 优先
+ *   TTS.speakWord('apple')                    // 等价于上面
+ *   TTS.speakSentence('apple')                // audio/sentences/apple.mp3
+ *   TTS.speakParagraph('u1-r1', 0, text)      // audio/paragraphs/u1-r1-p0.mp3
+ *
+ * mp3 文件由 scripts/generate-audio.mjs 生成 (ElevenLabs 高质量音色)。
+ * 文件不存在时自动回落到 Web Speech, 不影响功能。
  * ============================================================ */
 window.TTS = (() => {
   let voice = null;
   let ready = false;
+  let currentAudio = null;
   const voiceChangeListeners = [];
+  const missingMp3 = new Set(); // 缓存确认不存在的 key, 避免反复 404
 
-  // 高质量音色名（按优先级）
   const PREMIUM_NAMES = [
-    'Samantha',
-    'Allison',
-    'Ava',
-    'Susan',
-    'Karen',
-    'Daniel',
-    'Tom',
-    'Aaron',
-    'Alex',
-    'Microsoft Aria Online',
-    'Microsoft Guy Online',
-    'Microsoft Jenny Online',
+    'Samantha', 'Allison', 'Ava', 'Susan', 'Karen', 'Daniel', 'Tom', 'Aaron', 'Alex',
+    'Microsoft Aria Online', 'Microsoft Guy Online', 'Microsoft Jenny Online',
     'Google US English'
   ];
 
@@ -38,7 +33,6 @@ window.TTS = (() => {
   function pickVoice() {
     const voices = listVoices();
     if (!voices.length) return;
-
     const pref = window.Progress?.get().voiceName;
     if (pref) {
       const m = voices.find(v => v.name === pref);
@@ -48,14 +42,12 @@ window.TTS = (() => {
       const m = voices.find(v => v.name.includes(name));
       if (m) { voice = m; ready = true; return; }
     }
-    voice =
-      voices.find(v => v.lang === 'en-US') ||
-      voices.find(v => v.lang === 'en-GB') ||
-      voices[0];
+    voice = voices.find(v => v.lang === 'en-US') ||
+            voices.find(v => v.lang === 'en-GB') ||
+            voices[0];
     ready = true;
   }
 
-  // 用 addEventListener，多个监听器共存（app.js 也会注册一个）
   if ('speechSynthesis' in window) {
     pickVoice();
     window.speechSynthesis.addEventListener('voiceschanged', () => {
@@ -64,11 +56,40 @@ window.TTS = (() => {
     });
   }
 
-  function onVoicesChanged(cb) {
-    voiceChangeListeners.push(cb);
+  function onVoicesChanged(cb) { voiceChangeListeners.push(cb); }
+
+  function slugify(s) {
+    return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
   }
 
+  /* ---------- core speak ---------- */
   function speak(text, opts = {}) {
+    stop();
+    if (opts.audioKey) {
+      // 试播 mp3, 失败时自动回落
+      const key = opts.audioKey;
+      if (missingMp3.has(key)) {
+        speakWebSpeech(text, opts);
+        return;
+      }
+      const audio = new Audio('audio/' + key + '.mp3');
+      audio.playbackRate = opts.rate || (window.Progress?.get().ttsRate || 1.0);
+      currentAudio = audio;
+      let fellBack = false;
+      const fallback = () => {
+        if (fellBack) return;
+        fellBack = true;
+        missingMp3.add(key);
+        speakWebSpeech(text, opts);
+      };
+      audio.addEventListener('error', fallback);
+      audio.play().catch(fallback);
+      return;
+    }
+    speakWebSpeech(text, opts);
+  }
+
+  function speakWebSpeech(text, opts = {}) {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     if (!voice) pickVoice();
@@ -81,19 +102,28 @@ window.TTS = (() => {
   }
 
   function stop() {
+    if (currentAudio) {
+      try { currentAudio.pause(); } catch (e) {}
+      currentAudio = null;
+    }
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   }
 
-  // 实时查询，不依赖缓存
-  function getAvailableVoices() {
-    return listVoices();
+  /* ---------- semantic helpers ---------- */
+  function speakWord(en, opts = {}) {
+    speak(en, { ...opts, audioKey: 'words/' + slugify(en) });
+  }
+  function speakSentence(en, sentenceText, opts = {}) {
+    // sentenceText 是清理过的句子文本(供 Web Speech 回落)
+    speak(sentenceText || en, { ...opts, audioKey: 'sentences/' + slugify(en) });
+  }
+  function speakParagraph(readingId, paraIdx, text, opts = {}) {
+    speak(text, { ...opts, audioKey: `paragraphs/${readingId}-p${paraIdx}` });
   }
 
-  function getCurrentVoice() {
-    if (!voice) pickVoice();
-    return voice;
-  }
-
+  /* ---------- voice picker (Web Speech) ---------- */
+  function getAvailableVoices() { return listVoices(); }
+  function getCurrentVoice() { if (!voice) pickVoice(); return voice; }
   function setVoiceByName(name) {
     const voices = listVoices();
     const m = voices.find(v => v.name === name);
@@ -108,6 +138,7 @@ window.TTS = (() => {
 
   return {
     speak, stop,
+    speakWord, speakSentence, speakParagraph,
     get ready() { return ready; },
     getAvailableVoices, getCurrentVoice, setVoiceByName,
     onVoicesChanged

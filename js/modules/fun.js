@@ -77,7 +77,7 @@ window.FunModule = (() => {
     footer.innerHTML = `
       <button class="block-btn ghost" id="hearBtn">🔊 听发音</button>
     `;
-    document.getElementById('hearBtn').onclick = () => TTS.speak(target.en);
+    document.getElementById('hearBtn').onclick = () => TTS.speakWord(target.en);
     document.getElementById('keyBack').onclick = () => {
       if (typed.length > 0) {
         typed = typed.slice(0, -1);
@@ -94,7 +94,7 @@ window.FunModule = (() => {
           if (typed.length === target.en.length) {
             correctCount++;
             Progress.recordWord(target.en, true);
-            TTS.speak(target.en);
+            TTS.speakWord(target.en);
             App.toast('🎉 击败一只怪物！', 'success', 1100);
             setTimeout(() => { idx++; nextMob(); }, 1100);
           } else {

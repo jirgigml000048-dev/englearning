@@ -43,8 +43,8 @@ window.WarmupModule = (() => {
     footer.innerHTML = `
       <button class="block-btn ghost" id="speakBtn">🔊 再听一遍</button>
     `;
-    document.getElementById('speakBtn').onclick = () => TTS.speak(w.en);
-    TTS.speak(w.en);
+    document.getElementById('speakBtn').onclick = () => TTS.speakWord(w.en);
+    TTS.speakWord(w.en);
 
     const opBtns = document.querySelectorAll('#warmOpts .vox-option');
     opBtns.forEach(b => {

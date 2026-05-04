@@ -52,7 +52,8 @@ window.ReadingModule = (() => {
     const eggs = window.CURRICULUM.easterEggDict || {};
     document.querySelectorAll(`${scopeSel} .tap-word`).forEach(el => {
       el.onclick = () => {
-        TTS.speak(el.textContent);
+        // 优先 mp3 (音色更自然), 没有的话回落 Web Speech
+        TTS.speakWord(el.textContent);
         if (el.classList.contains('easter-egg')) {
           const desc = eggs[el.dataset.egg];
           if (desc) App.toast(desc, 'success', 4000);
@@ -100,7 +101,7 @@ window.ReadingModule = (() => {
       <button class="block-btn primary" id="raStart">${supported ? '🎤 开始跟读' : '我读完了 →'}</button>
       <button class="block-btn ghost" id="raSkip">跳过本段</button>
     `;
-    document.getElementById('raListen').onclick = () => TTS.speak(p);
+    document.getElementById('raListen').onclick = () => TTS.speakParagraph(reading.id, paraIdx, p);
     document.getElementById('raSkip').onclick = nextReadAlongPara;
     document.getElementById('raStart').onclick = () => {
       if (!supported) { nextReadAlongPara(); return; }

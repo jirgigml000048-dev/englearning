@@ -41,16 +41,16 @@ window.WordsModule = (() => {
       <button class="block-btn ghost" id="prevBtn" ${idx === 0 ? 'disabled' : ''}>← 上一个</button>
       <button class="block-btn primary" id="nextBtn">${idx === words.length - 1 ? '进入小测 →' : '记住了 →'}</button>
     `;
-    document.getElementById('speakBtn').onclick = () => TTS.speak(w.en);
+    document.getElementById('speakBtn').onclick = () => TTS.speakWord(w.en);
     document.getElementById('prevBtn').onclick = () => {
       if (idx > 0) { idx--; renderStudy(); }
     };
     document.getElementById('nextBtn').onclick = () => {
-      if (idx < words.length - 1) { idx++; renderStudy(); TTS.speak(words[idx].en); }
+      if (idx < words.length - 1) { idx++; renderStudy(); TTS.speakWord(words[idx].en); }
       else { mode = 'quiz'; idx = 0; renderQuiz(); }
     };
     updateProgress();
-    TTS.speak(w.en);
+    TTS.speakWord(w.en);
   }
 
   function renderQuiz() {

@@ -98,6 +98,43 @@ englearning/
 └── assets/                 # 图标
 ```
 
+## 高质量 TTS 语音（ElevenLabs，可选）
+
+App 默认用浏览器自带 Web Speech API（iPad Safari 上是 Apple Samantha/Karen 等）。
+如果想要更自然的童声/外教感觉，可以用 ElevenLabs 一次性生成所有单词 + 课文段落的 mp3：
+
+### 1. 注册并拿 API Key
+- 打开 https://elevenlabs.io 注册（免费层每月 10000 字符够用一轮）
+- 个人头像 → Profile → 复制 API Key
+
+### 2. 在本地跑生成脚本
+
+```bash
+git clone <repo>
+cd englearning
+ELEVENLABS_API_KEY=sk_xxx node scripts/generate-audio.mjs
+```
+
+脚本会读取 `js/data.js` 里的 127 个单词 + 24 篇课文段落 + 例句，生成约 280 个 mp3
+文件放进 `audio/words/` `audio/paragraphs/` `audio/sentences/`。
+
+可选环境变量：
+- `ELEVENLABS_VOICE_ID=EXAVITQu4vr4xnSDxMaL`（默认 Sarah，温柔清晰）
+- 也可换 `21m00Tcm4TlvDq8ikWAM` (Rachel) / `AZnzlk1XvdvUeBnXmlld` (Domi 活泼)
+- `FORCE=1` 强制重新生成已存在的文件
+
+### 3. 提交并推送
+
+```bash
+git add audio/
+git commit -m "Add ElevenLabs voice mp3s"
+git push
+```
+
+Netlify 自动部署后，App 优先播放 mp3；缺哪个就回落 Web Speech，不影响功能。
+
+---
+
 ## 后续可加内容
 
 - [ ] 北京版四上真实单元的词表/课文（需家长导入）
