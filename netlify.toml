@@ -3,10 +3,27 @@
   publish = "."
   command = ""
 
+# 复盘文章短链: /story → /englearning-story.html
+[[redirects]]
+  from = "/story"
+  to = "/englearning-story.html"
+  status = 200
+
+# 知识档案短链: /knowledge → /englearning-knowledge.md
+[[redirects]]
+  from = "/knowledge"
+  to = "/englearning-knowledge.md"
+  status = 200
+
 [[headers]]
   for = "/service-worker.js"
   [headers.values]
     Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/englearning-story.html"
+  [headers.values]
+    Cache-Control = "public, max-age=300"
 
 [[headers]]
   for = "/*"
