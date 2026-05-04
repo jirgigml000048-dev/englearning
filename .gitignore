@@ -1,0 +1,10 @@
+# Build artifacts
+node_modules/
+dist/
+android/
+package-lock.json
+
+# Editor / OS
+.DS_Store
+.vscode/
+*.log

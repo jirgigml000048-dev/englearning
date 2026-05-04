@@ -150,7 +150,43 @@ git add audio/ && git commit -m "Add audio" && git push
 
 ---
 
-## 后续可加内容
+## 📱 Android APK 版（推荐 OPPO Pad / 国内不便访问 Netlify 时）
+
+把整个 App 打包成 Android APK，**装到 Pad 上完全离线运行，不需要 VPN、不需要 Netlify、不需要任何网络**（除了第一次下载 APK）。
+
+**总流程**：GitHub 网页一键 Run → 等 5-10 分钟 → 进 Releases 页下载 APK → 装到 Pad → 用。
+
+### 一次性建议：先生成音频
+
+为了让 APK 里也有 ElevenLabs 真人发音，建议先按上面的「高质量 TTS 语音」一节跑一次 **Generate ElevenLabs Audio** workflow，让 audio/ 进 git。
+
+如果跳过这一步直接构建 APK，那 APK 里只有 Web Speech 降级（在 Android WebView 里效果有限，可能没声音），**强烈建议先生成音频再打包**。
+
+### 打包 APK
+
+1. GitHub 仓库 → **Actions** 标签
+2. 左边选 **Build Android APK** → 右上 **Run workflow** → 绿色 Run workflow
+
+5-10 分钟构建完成。
+
+### 下载 + 安装到 OPPO Pad 4
+
+1. GitHub 仓库 → **Releases**（右边栏）→ 找最新的 **android-latest**
+2. 下载 `english-trainer-v1.N.apk`
+3. 把 APK 传到 Pad（任何方式都行：微信发自己 / QQ / 邮件 / U 盘 / 浏览器在 Pad 上直接下载）
+4. Pad 上点开 APK
+5. 系统弹"未知来源应用"警告 → 进设置允许 → 返回继续安装
+6. 装好点图标"英语训练师"打开 → 全部功能离线可用
+
+### 后续更新 App
+
+每次代码 push（包括我修 bug、加内容），workflow 会自动重新构建 APK。您 Pad 上想更新时，去 Releases 下载最新版覆盖安装即可（数据/进度保留在 localStorage 不会丢）。
+
+如果不想被自动构建打扰，把 `.github/workflows/build-android.yml` 里的 `on.push` 段删掉只保留 `workflow_dispatch` 即可。
+
+---
+
+
 
 - [ ] 北京版四上真实单元的词表/课文（需家长导入）
 - [ ] 听写本（家长出题、孩子默写）

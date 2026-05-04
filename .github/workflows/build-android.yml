@@ -1,0 +1,129 @@
+name: Build Android APK
+
+# 用法:
+#  1. 上 GitHub 仓库 Actions → Build Android APK → Run workflow
+#  2. 等 5-10 分钟构建完成
+#  3. 进 Releases 页面下载最新 APK
+#  4. 把 APK 传到 OPPO Pad → 打开安装 (需要在系统设置允许"未知来源安装")
+#
+# 离线工作: APK 把所有 HTML/CSS/JS/audio 都打包进去, 装完不需要任何网络
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'claude/**'
+    paths:
+      - 'index.html'
+      - 'js/**'
+      - 'css/**'
+      - 'audio/**'
+      - 'assets/**'
+      - 'manifest.json'
+      - 'service-worker.js'
+      - 'capacitor.config.json'
+      - 'scripts/prepare-webdir.mjs'
+      - 'package.json'
+      - '.github/workflows/build-android.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install npm deps (Capacitor)
+        run: npm install --no-audit --no-fund
+
+      - name: Prepare webDir (copy html/css/js/audio → dist/)
+        run: node scripts/prepare-webdir.mjs
+
+      - name: Audio status
+        run: |
+          if [ -d audio ] && [ "$(ls audio/words 2>/dev/null | wc -l)" -gt "0" ]; then
+            echo "✓ Audio mp3s found ($(find audio -name '*.mp3' | wc -l) files)"
+          else
+            echo "::warning::audio/ 文件夹为空或缺失。APK 里不会有 ElevenLabs 真人发音, 只能用 Web Speech 降级。"
+            echo "::warning::想要真人发音先跑 'Generate ElevenLabs Audio' workflow, 再来这里 Run。"
+          fi
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            android/.gradle
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*', 'android/**/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Add Android platform
+        run: npx cap add android || echo "Android platform already exists"
+
+      - name: Sync web assets to Android
+        run: npx cap sync android
+
+      - name: Set Android version
+        run: |
+          BUILD_NUM=$(date -u +"%Y%m%d%H%M")
+          sed -i "s/versionCode 1/versionCode ${GITHUB_RUN_NUMBER}/" android/app/build.gradle || true
+          sed -i "s/versionName \"1.0\"/versionName \"1.${GITHUB_RUN_NUMBER}\"/" android/app/build.gradle || true
+
+      - name: Build APK
+        run: |
+          cd android
+          ./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx4g"
+
+      - name: Rename APK
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk english-trainer-v1.${GITHUB_RUN_NUMBER}.apk
+
+      - name: Upload APK as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: english-trainer-apk
+          path: english-trainer-v1.*.apk
+          retention-days: 30
+
+      - name: Create / update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-latest
+          name: 📱 Android APK · build ${{ github.run_number }}
+          body: |
+            **英语训练师 Android 版** (调试版本, 离线可用)
+
+            ## 安装步骤 (OPPO Pad 4)
+            1. 下载下面的 `english-trainer-v1.${{ github.run_number }}.apk`
+            2. 把 APK 传到 Pad (微信/QQ/邮件/拷贝都行)
+            3. Pad 上打开 APK, 系统会提示"安装未知应用"
+            4. 设置 → 安全 → 允许这个应用来源 → 返回继续安装
+            5. 装完点开就能用, 全程不需要网络
+
+            ## 包含
+            - 全部 6 个单元 (24 篇阅读, 127 个单词)
+            - 错题本 / 自动进阶 / 战利品 / 主题包
+            - $(find audio -name '*.mp3' 2>/dev/null | wc -l) 个 ElevenLabs 真人发音 mp3 (如已生成)
+            - 跟读录音识别
+          files: english-trainer-v1.*.apk
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

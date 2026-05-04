@@ -1,0 +1,12 @@
+{
+  "appId": "com.englearning.kid",
+  "appName": "英语训练师",
+  "webDir": "dist",
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
