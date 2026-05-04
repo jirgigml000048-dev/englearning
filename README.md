@@ -100,38 +100,53 @@ englearning/
 
 ## 高质量 TTS 语音（ElevenLabs，可选）
 
-App 默认用浏览器自带 Web Speech API（iPad Safari 上是 Apple Samantha/Karen 等）。
-如果想要更自然的童声/外教感觉，可以用 ElevenLabs 一次性生成所有单词 + 课文段落的 mp3：
+App 默认用浏览器自带 Web Speech API。如果想要更自然的童声/外教感觉，
+可以用 ElevenLabs 一次性生成所有单词 + 课文段落的 mp3。
 
-### 1. 注册并拿 API Key
-- 打开 https://elevenlabs.io 注册（免费层每月 10000 字符够用一轮）
-- 个人头像 → Profile → 复制 API Key
+**最简单的方式：通过 GitHub Actions，全程在云端，您只动 2 次**
 
-### 2. 在本地跑生成脚本
+### 第 1 次（设置，只需做一次）
+
+1. 注册 ElevenLabs（https://elevenlabs.io）→ 复制 API Key
+   （免费层每月 10000 字符，刚好够一轮）
+
+2. 打开 GitHub 仓库 → **Settings** → **Secrets and variables** → **Actions**
+   → **New repository secret**
+   - Name: `ELEVENLABS_API_KEY`
+   - Value: 您的 sk_xxx key
+   - 点 Add secret
+
+### 第 2 次（生成音频，每次想换音色再做）
+
+3. GitHub 仓库 → **Actions** 标签 → 左边选 **Generate ElevenLabs Audio**
+   → 右上 **Run workflow** 按钮
+   - voice_id: 留默认（Sarah 温柔女声）或填别的（推荐见下）
+   - force: 第一次留 false。换音色时改 true 强制重新生成
+   - 点绿色 **Run workflow**
+
+4. 等 5-10 分钟。Action 跑完会自动 commit 280 个 mp3 到当前分支并 push。
+   Netlify 检测到 push 自动部署，iPad 上立刻能听到新音色。
+
+### 想换音色
+
+到 https://elevenlabs.io/voice-library 试听，复制 voice id 填进 Run workflow 的 voice_id 框，force 设为 true。重新跑一次即可。
+
+推荐候选：
+- `EXAVITQu4vr4xnSDxMaL` Sarah（温柔清晰美国女声，默认）
+- `21m00Tcm4TlvDq8ikWAM` Rachel（标准美国女声）
+- `AZnzlk1XvdvUeBnXmlld` Domi（活泼）
+- `pFZP5JQG7iQjIQuC4Bku` Lily（英国女声）
+
+### 不想用 ElevenLabs？
+
+不做任何事即可，App 自动回落到浏览器自带 Web Speech，跟之前一样能用。
+
+### 本地手动跑（备用）
 
 ```bash
-git clone <repo>
-cd englearning
 ELEVENLABS_API_KEY=sk_xxx node scripts/generate-audio.mjs
+git add audio/ && git commit -m "Add audio" && git push
 ```
-
-脚本会读取 `js/data.js` 里的 127 个单词 + 24 篇课文段落 + 例句，生成约 280 个 mp3
-文件放进 `audio/words/` `audio/paragraphs/` `audio/sentences/`。
-
-可选环境变量：
-- `ELEVENLABS_VOICE_ID=EXAVITQu4vr4xnSDxMaL`（默认 Sarah，温柔清晰）
-- 也可换 `21m00Tcm4TlvDq8ikWAM` (Rachel) / `AZnzlk1XvdvUeBnXmlld` (Domi 活泼)
-- `FORCE=1` 强制重新生成已存在的文件
-
-### 3. 提交并推送
-
-```bash
-git add audio/
-git commit -m "Add ElevenLabs voice mp3s"
-git push
-```
-
-Netlify 自动部署后，App 优先播放 mp3；缺哪个就回落 Web Speech，不影响功能。
 
 ---
 

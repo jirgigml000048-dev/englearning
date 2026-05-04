@@ -1,0 +1,67 @@
+name: Generate ElevenLabs Audio
+
+# 如何使用:
+#  1. 在 GitHub 仓库 Settings → Secrets and variables → Actions
+#     新增一个 secret 名为 ELEVENLABS_API_KEY, 值是您的 ElevenLabs key
+#  2. 上 GitHub 仓库 Actions 页面, 点 "Generate ElevenLabs Audio" → "Run workflow"
+#  3. 可选填 voice_id (默认 Sarah) 和 force (true 时强制重新生成)
+#  4. 等 5-10 分钟, Action 完成后会自动 commit 生成好的 mp3 到当前分支
+#  5. Netlify 检测到 push 自动部署, iPad 上即可听到新音色
+
+on:
+  workflow_dispatch:
+    inputs:
+      voice_id:
+        description: 'ElevenLabs voice id (默认 Sarah=EXAVITQu4vr4xnSDxMaL)'
+        required: false
+        default: 'EXAVITQu4vr4xnSDxMaL'
+        type: string
+      force:
+        description: '强制重新生成 (覆盖已存在的 mp3)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run audio generation
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ inputs.voice_id }}
+          FORCE: ${{ inputs.force == true && '1' || '' }}
+        run: node scripts/generate-audio.mjs
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push if changed
+        run: |
+          git add audio/
+          if git diff --staged --quiet; then
+            echo "::notice::没有新音频文件 — 全部已存在 (用 force=true 重新生成)"
+          else
+            COUNT=$(git diff --staged --name-only | wc -l)
+            git commit -m "🔊 Generate ElevenLabs audio (voice=${{ inputs.voice_id }}, +$COUNT files)"
+            git push
+            echo "::notice::成功生成并推送 $COUNT 个新音频文件"
+          fi
