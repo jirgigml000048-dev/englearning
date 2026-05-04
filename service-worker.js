@@ -1,5 +1,5 @@
-/* 极简 service worker：缓存核心资源以便离线使用 */
-const CACHE = 'etrainer-v1';
+/* 极简 service worker：联网时优先取新内容，断网回落到缓存 */
+const CACHE = 'etrainer-voxel-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -26,9 +26,17 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
+// network-first: 先网络后缓存，保证发版后立刻拿到新内容
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => cached))
+    fetch(e.request)
+      .then(res => {
+        // 同时把最新的写回缓存，供下次离线用
+        const clone = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone)).catch(() => {});
+        return res;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
