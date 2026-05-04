@@ -18,7 +18,16 @@ window.FunModule = (() => {
 
   function start({ unit, body: b, footer: f, onDone: cb }) {
     body = b; footer = f; onDone = cb;
-    pool = unit.words.slice().sort(() => Math.random() - 0.5).slice(0, 5);
+
+    // 优先抽错题本里属于当前 unit 的词，最多 2 道；剩余从本 unit 随机
+    const errors = Progress.errorBookCandidates(10);
+    const fromUnit = unit.words.filter(w => errors.includes(w.en)).slice(0, 2);
+    const remaining = unit.words
+      .filter(w => !fromUnit.some(e => e.en === w.en))
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 5 - fromUnit.length);
+    pool = [...fromUnit, ...remaining].sort(() => Math.random() - 0.5);
+
     idx = 0;
     correctCount = 0;
     total = pool.length;

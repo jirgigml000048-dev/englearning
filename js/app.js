@@ -7,12 +7,17 @@ window.App = (() => {
 
   let currentUnit;
 
-  const QUESTS = [
-    { id: 'warmup',  icon: '🔁', label: '热身复习', desc: '5 min · 复习昨日词',     block: 'dirt'  },
-    { id: 'words',   icon: '📚', label: '新词学习', desc: '10 min · 解锁新单词',    block: 'wood'  },
-    { id: 'reading', icon: '📖', label: '阅读冒险', desc: '20 min · 故事 + 选择题', block: 'paper' },
-    { id: 'fun',     icon: '⚔',  label: '拼写打怪', desc: '10 min · 拼字击败怪物',  block: 'stone' },
-  ];
+  function questsForToday() {
+    const errCount = Progress.errorBookCount();
+    return [
+      { id: 'warmup',  icon: '🔁', label: '热身复习',
+        desc: errCount > 0 ? `${errCount} 道错题等你 →` : '5 min · 复习昨日词', block: 'dirt'  },
+      { id: 'words',   icon: '📚', label: '新词学习', desc: '10 min · 解锁新单词',    block: 'wood'  },
+      { id: 'reading', icon: '📖', label: '阅读冒险', desc: '20 min · 故事 + 选择题', block: 'paper' },
+      { id: 'fun',     icon: '⚔',  label: '拼写打怪',
+        desc: errCount > 0 ? `打怪同时复习 ${Math.min(errCount, 2)} 个错题` : '10 min · 拼字击败怪物',  block: 'stone' },
+    ];
+  }
 
   const STAGE_BLOCK = { warmup: 'dirt', words: 'wood', reading: 'paper', fun: 'stone' };
   const STAGE_TITLE = {
@@ -85,9 +90,11 @@ window.App = (() => {
     const today = new Date();
     $('metaDate').textContent = `⛏ ${currentUnit.name}`;
     $('metaStreak').textContent = `⏱ 累计 ${s.streak} 天 · ${today.getMonth()+1} 月 ${today.getDate()} 日`;
+    const errCount = Progress.errorBookCount();
+    $('metaErrorBook').textContent = errCount > 0 ? `📋 错题本 ${errCount}` : '✨ 没有待复习错题';
 
     // Quests grid
-    $('questsGrid').innerHTML = QUESTS.map((q, i) => {
+    $('questsGrid').innerHTML = questsForToday().map((q, i) => {
       const completed = Progress.isStageCompleteToday(q.id);
       const status = completed
         ? `<div class="quest-status"><span class="check">✓ 完成</span></div>`

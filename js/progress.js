@@ -106,9 +106,17 @@ window.Progress = (() => {
   }
 
   function recordWord(word, correct) {
-    const w = state.words[word] || { firstSeen: Date.now(), correctCount: 0, wrongCount: 0 };
-    if (correct) w.correctCount += 1;
-    else w.wrongCount += 1;
+    const w = state.words[word] || { firstSeen: Date.now(), correctCount: 0, wrongCount: 0, correctStreakSinceWrong: 0 };
+    // 兼容老数据：补默认字段
+    if (w.correctStreakSinceWrong == null) w.correctStreakSinceWrong = 0;
+    if (correct) {
+      w.correctCount += 1;
+      w.correctStreakSinceWrong += 1;
+    } else {
+      w.wrongCount += 1;
+      w.correctStreakSinceWrong = 0;
+      w.lastWrongAt = Date.now();
+    }
     w.lastReviewed = Date.now();
     state.words[word] = w;
   }
@@ -119,13 +127,48 @@ window.Progress = (() => {
     return Object.values(state.words).filter(w => w.correctCount >= 3).length;
   }
 
+  /* ---------------- Error Book (错题本) ----------------
+   * 一个词进入错题本的条件：曾经答错过 (wrongCount > 0)
+   * 退出错题本（"掌握"）的条件：从最近一次错之后，连续答对 >= 3 次
+   */
+  const MASTERY_STREAK = 3;
+
+  function isInErrorBook(w) {
+    return (w.wrongCount || 0) > 0 && (w.correctStreakSinceWrong || 0) < MASTERY_STREAK;
+  }
+
+  function errorBookCount() {
+    return Object.values(state.words).filter(isInErrorBook).length;
+  }
+
+  function errorBookCandidates(limit = 6) {
+    // 优先级：错的次数多 + 连胜少 = 优先排前
+    return Object.entries(state.words)
+      .filter(([_, w]) => isInErrorBook(w))
+      .sort((a, b) => {
+        const aw = a[1], bw = b[1];
+        const aScore = (aw.wrongCount || 0) * 2 - (aw.correctStreakSinceWrong || 0);
+        const bScore = (bw.wrongCount || 0) * 2 - (bw.correctStreakSinceWrong || 0);
+        if (bScore !== aScore) return bScore - aScore;
+        // 同分时按最近错时间排前
+        return (bw.lastWrongAt || 0) - (aw.lastWrongAt || 0);
+      })
+      .slice(0, limit)
+      .map(([word]) => word);
+  }
+
   // 取昨天学过、今天可以复习的单词（用于 warmup 阶段）
   function reviewCandidates(limit = 6) {
+    // 优先返回错题本，不够再补最近学过的
+    const errors = errorBookCandidates(limit);
+    if (errors.length >= limit) return errors;
     const cutoff = Date.now() - 86400000 * 3;
-    const all = Object.entries(state.words)
-      .filter(([_, w]) => w.lastReviewed >= cutoff)
-      .sort((a, b) => (a[1].correctCount - a[1].wrongCount) - (b[1].correctCount - b[1].wrongCount));
-    return all.slice(0, limit).map(([word]) => word);
+    const recent = Object.entries(state.words)
+      .filter(([w, x]) => x.lastReviewed >= cutoff && !errors.includes(w))
+      .sort((a, b) => (a[1].correctCount - a[1].wrongCount) - (b[1].correctCount - b[1].wrongCount))
+      .slice(0, limit - errors.length)
+      .map(([w]) => w);
+    return [...errors, ...recent];
   }
 
   function checkBadges() {
@@ -176,6 +219,7 @@ window.Progress = (() => {
     get, save, reset, tick,
     completeStage, isStageCompleteToday, todayCompletedCount,
     recordWord, totalWords, masteredWords, reviewCandidates,
+    errorBookCount, errorBookCandidates,
     checkBadges, weekReport, addXp
   };
 })();
