@@ -107,6 +107,9 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x android/gradlew
 
+      - name: Patch AndroidManifest.xml (add mic permission)
+        run: node scripts/patch-android-manifest.mjs
+
       - name: Sync web assets to Android
         run: |
           set -e
