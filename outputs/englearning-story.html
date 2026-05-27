@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我用 4 天给儿子做了一个英语学习 App</title>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="我用 4 天给儿子做了一个英语学习 App" />
+  <meta property="og:description" content="28 commits、10 个真实踩坑、从浏览器到 Android APK 的 Vibe Coding 全记录。给一个 9 岁孩子做的方块世界主题英语 App。" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%236ab04a'/%3E%3Crect x='8' y='8' width='8' height='8' fill='%238ed670'/%3E%3Crect x='24' y='8' width='8' height='8' fill='%238ed670'/%3E%3Crect x='40' y='8' width='8' height='8' fill='%234a8a2e'/%3E%3Ctext x='32' y='44' font-family='monospace' font-size='28' font-weight='700' text-anchor='middle' fill='white'%3EE%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #fdf8f0;
+      --bg-2: #f4ebda;
+      --ink: #2b1d10;
+      --ink-soft: #5e4a30;
+      --ink-mute: #8a7252;
+      --accent: #d4453d;
+      --accent-soft: #e88a83;
+      --grass: #4a8a2e;
+      --gold: #c89a16;
+      --rule: #e8d8b0;
+      --code-bg: #f0e3c5;
+      --quote-bg: #f7eed7;
+
+      --serif: 'Source Serif 4', 'Noto Serif SC', Georgia, serif;
+      --sans: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --mono: 'JetBrains Mono', Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 19px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* === Hero === */
+    .hero {
+      padding: 80px 0 60px;
+      border-bottom: 2px solid var(--rule);
+    }
+    .hero-eyebrow {
+      font-family: var(--sans);
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.18;
+      margin: 0 0 18px;
+      letter-spacing: -0.5px;
+    }
+    .hero-sub {
+      font-size: 20px;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      margin: 0 0 24px;
+    }
+    .hero-meta {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--ink-mute);
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .hero-meta b {
+      color: var(--ink-soft);
+      font-weight: 600;
+    }
+
+    /* === Section === */
+    section { padding: 56px 0; }
+    section + section { border-top: 1px solid var(--rule); }
+    h2 {
+      font-family: var(--serif);
+      font-size: 30px;
+      font-weight: 700;
+      margin: 0 0 28px;
+      line-height: 1.25;
+      letter-spacing: -0.3px;
+    }
+    h2::before {
+      content: '§';
+      color: var(--accent);
+      margin-right: 12px;
+      font-weight: 400;
+    }
+    h3 {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 600;
+      margin: 36px 0 14px;
+      line-height: 1.35;
+    }
+    p { margin: 0 0 18px; }
+    p + p { text-indent: 0; }
+
+    /* === Inline === */
+    em { color: var(--ink-soft); font-style: italic; }
+    strong { color: var(--ink); font-weight: 600; }
+    code {
+      font-family: var(--mono);
+      font-size: 0.85em;
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: var(--ink);
+    }
+    a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+    }
+    a:hover { background: var(--quote-bg); }
+
+    /* === Quote === */
+    blockquote {
+      margin: 24px 0;
+      padding: 18px 24px;
+      background: var(--quote-bg);
+      border-left: 4px solid var(--accent);
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 20px;
+      line-height: 1.6;
+      color: var(--ink-soft);
+    }
+    blockquote.user::before {
+      content: '— Gigi';
+      display: block;
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--accent);
+      font-style: normal;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    /* === List === */
+    ol, ul {
+      padding-left: 24px;
+      margin: 0 0 18px;
+    }
+    li { margin-bottom: 8px; }
+    .num-list {
+      list-style: none;
+      counter-reset: itm;
+      padding-left: 0;
+    }
+    .num-list > li {
+      counter-increment: itm;
+      padding-left: 48px;
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .num-list > li::before {
+      content: counter(itm);
+      position: absolute;
+      left: 0; top: 4px;
+      width: 32px; height: 32px;
+      background: var(--accent);
+      color: white;
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+    }
+
+    /* === Cards === */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin: 28px 0;
+    }
+    .stat {
+      background: var(--bg-2);
+      padding: 16px;
+      border-radius: 6px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--ink-mute);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* === Timeline === */
+    .day {
+      position: relative;
+      padding: 20px 22px;
+      background: var(--bg-2);
+      border-radius: 8px;
+      margin-bottom: 16px;
+      border-left: 4px solid var(--accent);
+    }
+    .day-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px;
+      background: var(--ink);
+      color: var(--bg);
+      padding: 2px 8px;
+      border-radius: 3px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .day h4 {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 10px;
+    }
+    .day p { margin: 0; font-size: 17px; line-height: 1.6; }
+    .day code { font-size: 0.8em; }
+
+    /* === Pitfall === */
+    .pitfall {
+      background: var(--bg-2);
+      padding: 22px 26px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-top: 3px solid var(--accent);
+    }
+    .pitfall h4 {
+      font-family: var(--serif);
+      font-size: 19px;
+      font-weight: 700;
+      margin: 0 0 12px;
+      color: var(--accent);
+    }
+    .pitfall .pf-row {
+      font-size: 16px;
+      line-height: 1.55;
+      margin-bottom: 6px;
+    }
+    .pitfall .pf-row b {
+      font-family: var(--sans);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+      font-weight: 700;
+      display: inline-block;
+      min-width: 60px;
+    }
+
+    /* === Outro === */
+    .outro {
+      background: var(--ink);
+      color: var(--bg);
+      padding: 48px 0;
+      margin-top: 60px;
+      text-align: center;
+    }
+    .outro p {
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.65;
+      max-width: 540px;
+      margin: 0 auto 12px;
+      color: rgba(253, 248, 240, 0.85);
+    }
+    .outro .credit {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(253, 248, 240, 0.55);
+      letter-spacing: 1px;
+      margin-top: 24px;
+    }
+    .outro a { color: var(--accent-soft); }
+
+    /* === Pixel mascot in hero === */
+    .mascot {
+      width: 88px; height: 88px;
+      margin-bottom: 24px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--grass);
+      border-radius: 4px;
+      box-shadow:
+        inset 6px 6px 0 #8ed670,
+        inset -6px -6px 0 #4a8a2e,
+        4px 4px 0 var(--ink);
+      position: relative;
+    }
+    .mascot::before, .mascot::after {
+      content: '';
+      position: absolute;
+      width: 12px; height: 12px;
+      background: var(--ink);
+      top: 28px;
+    }
+    .mascot::before { left: 18px; }
+    .mascot::after { right: 18px; }
+
+    /* === Mobile === */
+    @media (max-width: 600px) {
+      body { font-size: 17px; }
+      .hero { padding: 56px 0 40px; }
+      .hero h1 { font-size: 32px; }
+      .hero-sub { font-size: 18px; }
+      h2 { font-size: 24px; }
+      h3 { font-size: 19px; }
+      blockquote { font-size: 18px; padding: 14px 18px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ================== HERO ================== -->
+<header class="hero">
+  <div class="container">
+    <div class="mascot" aria-hidden="true"></div>
+    <div class="hero-eyebrow">Vibe Retrospect</div>
+    <h1>我用 4 天给儿子做了一个英语学习 App</h1>
+    <p class="hero-sub">
+      22 个 commit，2 次方向重写，7 个真实踩坑。一个家长 + Claude，
+      为一个 9 岁四年级男孩做的方块世界主题英语 App。
+    </p>
+    <div class="hero-meta">
+      <span><b>2026/05/01 — 05/05</b> · 5 days</span>
+      <span><b>28 commits</b></span>
+      <span><b>~3600 LOC</b></span>
+      <span><b>$0</b> 成本</span>
+    </div>
+  </div>
+</header>
+
+<!-- ================== ORIGIN ================== -->
+<section id="origin">
+  <div class="container">
+    <h2>起源</h2>
+    <p>
+      他 9 岁，四年级，北京版英语课本。重度玩家——
+      <strong>Minecraft、宝可梦、三角洲行动</strong>。
+      每天打游戏几小时不在话下，但一翻开英语课本就抗拒。
+      最差的是阅读理解：单词认识，句子读不通，越读越烦。
+    </p>
+    <p>
+      家长 Gigi 一开始的诊断是：<em>缺自信，没养成习惯。</em>
+      跟我聊了几轮，我们换了一个说法——
+    </p>
+    <blockquote>
+      不是学不动，是英语学习的反馈密度比游戏低两个数量级。
+      所以"无聊"被身体翻译成了"抗拒"。
+    </blockquote>
+    <p>
+      这一句决定了产品的所有设计。每 5–10 秒必有正向反馈、永远不显示"错"、
+      跟读门槛一调再调到能让 80% 用户一次过、错题本悄悄塞进"今日热身"——
+      所有这些都是在试图缩短这个反馈延迟。
+    </p>
+
+    <h3>家长的兴趣 IP 清单</h3>
+    <ul>
+      <li><strong>Minecraft</strong> — 像素方块、史莱姆、苦力怕、铁傀儡、红石</li>
+      <li><strong>宝可梦</strong> — 皮卡丘、训练师、道馆、十万伏特、对战</li>
+      <li><strong>三角洲行动</strong> — 小队任务、侦察、手电筒、暗夜（这条要小心：9 岁 + 学习 App 不能放枪和血）</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================== DECISIONS ================== -->
+<section id="decisions">
+  <div class="container">
+    <h2>关键决策</h2>
+    <p>
+      4 天里有 7 个值得记下来的决策。每一个都是某句话触发的。
+    </p>
+
+    <h3>1. Vanilla HTML 还是 React？</h3>
+    <p>
+      第一天上来我做了纯 HTML/CSS/JS 的 V1，4 个关卡 + localStorage 持久化，
+      40 分钟跑通。然后用户给我一份"游戏元宇宙"风格的 wordmon brief：
+    </p>
+    <blockquote class="user">有点太简单了 你看看这个呢...</blockquote>
+    <p>
+      brief 描述得诱人——捕捉、进化、合成台、宝可梦图鉴。
+      我兴奋地切到 <code>React + Vite + TypeScript + Zustand</code>，
+      4 小时写了一个 R1 捕捉关。然后用户回头说：
+    </p>
+    <blockquote class="user">想要的是这个版本：efa4cd6（前一天的 V1 蓝紫主题）</blockquote>
+    <p>
+      <code>git read-tree -u --reset efa4cd6</code> 把工作树拉回去，
+      wordmon 的代码留在 git 历史里，没强推。
+      <strong>4 小时浪费，但学到了一件事：</strong>用户描述方向 ≠ 同意架构变更。
+      新方向必须先 ExitPlanMode 让用户审视一份 plan，再动手。
+    </p>
+
+    <h3>2. 视觉风格</h3>
+    <p>
+      回到 V1 之后，用户给了一个奇怪的 URL：
+      <code>api.anthropic.com/v1/design/h/oBgu...</code>。
+      WebFetch 返回 binary，看起来不是网页。
+      <code>curl + gunzip + tar</code> 解压出来是一份完整的 React + CSS 项目——
+      Minecraft 像素方块世界主题，
+      <strong>class 命名跟我的 V1 完美对齐</strong>（明显是基于这个仓库做的设计）。
+    </p>
+    <p>
+      直接复用 styles.css，只重写 index.html 顶层结构 + 各模块 DOM 模板。
+      30 分钟从蓝紫主题切到 Voxel 主题。
+    </p>
+
+    <h3>3. 主题真的够"主题"吗？</h3>
+    <p>
+      我写完 12 篇阅读后用户问了一句：
+    </p>
+    <blockquote class="user">这些故事和他的爱好相关吗？他的爱好是 minecraft、宝可梦、三角洲行动</blockquote>
+    <p>
+      我审视了一下自己的 12 篇阅读：<strong>22/24 是教材通用场景</strong>
+      （国庆节去动物园、京剧四大行当、找图书馆），只有"村庄"和 Steve/Alex 名字蹭了 Minecraft。
+      没有 Pokemon。没有任何 Delta Force。
+    </p>
+    <p>
+      我可以狡辩说"Steve 是 Minecraft 主角啊"，但那是骗人。
+      <strong>诚实回答能让协作继续下去，狡辩会失去所有信任。</strong>
+      我列出了真实比例，给了三个改造方案。用户选了：
+    </p>
+    <blockquote class="user">我选择每个 unit 2 篇强主题，2 篇教材风。因为他真的很需要兴趣驱动。</blockquote>
+    <p>
+      多写了 12 篇强主题阅读：6 篇宝可梦（皮卡丘对战、宝可梦中心节日、训练师爱好），
+      5 篇深度 Minecraft（钻石矿洞俱乐部、跑酷比赛、铁傀儡守卫），
+      1 篇 Delta（侦察队任务，<strong>无武器无血腥</strong>）。
+    </p>
+
+    <h3>4. 跟读门槛</h3>
+    <p>
+      第一版录音识别用 <code>Web SpeechRecognition</code>，
+      单词重合率 50% 通过 + 3 次重试。家长跑了一次后说：
+    </p>
+    <blockquote class="user">跟读门槛先低一点</blockquote>
+    <p>
+      改 30% / 2 次。<strong>9 岁中国孩子英语发音本身不准，加上识别引擎对儿童口音不友好——</strong>
+      50% 让孩子在第三段就放弃整关。30% 让"开口尝试"就过。
+      目的是让他读，不是让他读对。
+    </p>
+
+    <h3>5. TTS 路线</h3>
+    <p>
+      用户反馈："声音还是不是很好。"
+      iPad Safari 的 Web Speech 在国内被中文引擎接管，
+      "apple" 听成"阿婆"。我先试着优化 voice 选择（强制选 Apple Samantha 之类高质量音色），
+      用户：
+    </p>
+    <blockquote class="user">还是不是很好，可以换 elevenlabs 的 key 生成吗</blockquote>
+    <p>
+      ElevenLabs 有 3 种集成方式：
+    </p>
+    <ol>
+      <li>实时 API 调用——<em>API key 暴露在浏览器，不安全</em></li>
+      <li>预生成 mp3——<em>免费层 10000 字符够一轮，零延迟，安全</em></li>
+      <li>自建 proxy server——<em>用户要维护后端，重</em></li>
+    </ol>
+    <p>选 2。写了一个 Node 脚本读 data.js 批量调 ElevenLabs，生成 275 个 mp3。</p>
+
+    <h3>6. "好麻烦"</h3>
+    <p>
+      让用户本地装 Node 跑脚本，用户：
+    </p>
+    <blockquote class="user">好麻烦 还有什么你可以帮我操作的方式吗</blockquote>
+    <p>
+      问题是我自己也帮不上——Claude Code on Web 的 sandbox 防火墙拦了
+      api.elevenlabs.io（"Host not in allowlist"）。
+      我做不了直接帮跑。但我们之间还有一个共同能到达的地方：
+      <strong>GitHub Actions</strong>。
+    </p>
+    <p>
+      写了一个 workflow，<code>workflow_dispatch</code> 触发，
+      用户在 GitHub 网页点 Run workflow → CI 跑 ElevenLabs 脚本 → 自动 commit mp3 → push。
+      <strong>用户唯一要做的是去 Settings 加一次 ELEVENLABS_API_KEY secret，
+      之后所有事在 GitHub 网页上完成。</strong>
+    </p>
+
+    <h3>7. Android APK 还是 PWA？</h3>
+    <p>
+      最后一个问题，触发了整个项目最大的架构调整：
+    </p>
+    <blockquote class="user">netlify 需要 vpn 才能打开 ... 最好做成 android 版的 app，他的 pad 是 oppo pad4</blockquote>
+    <p>
+      在国内用户家里访问 Netlify 偶尔被墙。PWA 也不行——还得先打开网页才能 install。
+      要彻底解决：<strong>Capacitor 把整个网页打包进 APK</strong>，
+      包括所有 mp3。装到 Pad 后零网络依赖。
+    </p>
+    <p>
+      又是一个 GitHub Actions workflow：用户点 Run，
+      CI 跑 npm install + cap sync + gradle assembleDebug，
+      约 10 分钟出一个 35 MB 的 APK，自动发到 Releases 页。
+      用户从 GitHub Releases 下载到 Pad，安装即用。
+    </p>
+  </div>
+</section>
+
+<!-- ================== ARCHITECTURE ================== -->
+<section id="architecture">
+  <div class="container">
+    <h2>最终架构</h2>
+
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">单元</div></div>
+      <div class="stat"><div class="stat-num">127</div><div class="stat-label">单词</div></div>
+      <div class="stat"><div class="stat-num">24</div><div class="stat-label">阅读</div></div>
+      <div class="stat"><div class="stat-num">96</div><div class="stat-label">题+讲解</div></div>
+      <div class="stat"><div class="stat-num">275</div><div class="stat-label">mp3</div></div>
+      <div class="stat"><div class="stat-num">30</div><div class="stat-label">彩蛋词</div></div>
+    </div>
+
+    <h3>4 个关卡</h3>
+    <ul>
+      <li><strong>🔁 热身复习</strong>——优先抽错题本里的词，每天看到的都是真不会的。</li>
+      <li><strong>📚 新词学习</strong>——每天 6 个：4 个未见过 + 2 个错题。15 词的 Unit 大约 3 天轮一遍。</li>
+      <li><strong>📖 阅读冒险</strong>——课文 → 跟读（录音识别）→ 答题（错给提示+讲解）→ 翻译回看。</li>
+      <li><strong>⚔ 拼写打怪</strong>——5 只像素史莱姆/苦力怕，前 2 只优先错题词。</li>
+    </ul>
+
+    <h3>"看不到的算法"</h3>
+    <p>
+      <strong>错题本：</strong>每个词记 <code>correctStreakSinceWrong</code>。
+      错一次重置为 0，答对 +1。<code>≥ 3</code> 时退出错题本（"掌握"）。
+      Anki 默认 4 次，多邻国 3 次，我也用 3。
+    </p>
+    <p>
+      <strong>Unit 自动进阶：</strong>当前 Unit ≥ 80% 词不在错题本 + 至少完成 1 篇阅读
+      → 弹 toast "🎉 Unit 1 已掌握！进入 Unit 2" → 自动跳。
+      家长不用手动切，孩子按自己节奏推进。
+    </p>
+    <p>
+      <strong>每日轮换：</strong><code>state.dailyLessonPlan</code> 当天选 6 个词后存死，
+      同一天反复进新词关复用同一份。第二天换新一批。
+    </p>
+
+    <h3>技术栈（最终）</h3>
+    <p>
+      Vanilla HTML/CSS/JS（无构建步骤）、localStorage 单 namespace、
+      <code>HTMLAudioElement</code> + Web Speech 智能回落、
+      <code>webkitSpeechRecognition</code> 跟读识别、PWA service worker、
+      Capacitor 6 打 Android APK、Netlify auto-deploy、GitHub Actions 跑 ElevenLabs 和 Gradle。
+      <strong>没有 React，没有 TypeScript，没有 build pipeline。</strong>
+      2534 行 JS，1080 行 CSS，4 天跑完。
+    </p>
+  </div>
+</section>
+
+<!-- ================== TIMELINE ================== -->
+<section id="timeline">
+  <div class="container">
+    <h2>时间线</h2>
+
+    <div class="day">
+      <div class="day-tag">5/1 · 8 commits</div>
+      <h4>试错 + 回退 + 应用设计稿</h4>
+      <p>
+        早上 5:11 V1 上线（蓝紫训练师主题）。8:00 切到 Wordmon（React）。
+        8:43 用户回头："想要 efa4cd6"，git 回退。9:28 应用 Voxel 设计稿。
+        <em>4 小时方向错位。</em>
+      </p>
+    </div>
+
+    <div class="day">
+      <div class="day-tag">5/2 · 5/3 · 静默</div>
+      <h4>真人测试，攒一堆反馈</h4>
+      <p>
+        家长在 Pad 上让孩子真的玩了 2 天。
+        反馈攒齐：<em>声音机械、阅读不够主题、跟读太严、需要错题本、要离线。</em>
+      </p>
+    </div>
+
+    <div class="day">
+      <div class="day-tag">5/4 · 14 commits</div>
+      <h4>大爆发</h4>
+      <p>
+        11:18 真课本导入。12:09 错题本。12:18 跟读录音识别。13:05 门槛调松。
+        13:16 自动进阶。13:30 强主题阅读。13:38 战利品+彩蛋+主题包。
+        13:44 ElevenLabs。13:47 Actions 自动化。14:01 第一次 275 个 mp3。
+        14:11 Android APK 打包。
+      </p>
+    </div>
+
+    <div class="day">
+      <div class="day-tag">5/5 · 上线后战场</div>
+      <h4>真机才暴露的坑</h4>
+      <p>
+        APK 装到 Pad 上，三个浏览器里永远测不出的问题接连冒出来：
+        <strong>朗读全文哑火</strong>（WebView 不支持 Web Speech）、
+        <strong>APK 构建 exit 127</strong>（gradlew 丢了执行位）、
+        <strong>给不了麦克风权限</strong>（manifest 缺 RECORD_AUDIO）。
+        <em>内容功能 4 天，移动端打包又花一整天。</em>
+      </p>
+    </div>
+
+    <p style="margin-top: 28px; color: var(--ink-mute); font-style: italic;">
+      节奏特征：每个 commit 单一职责。28 commits / 5 天，Web 端 <strong>0 deploy 失败</strong>，
+      但 APK 真机阶段补了一整天坑——<strong>移动端打包是第二个项目</strong>。
+    </p>
+  </div>
+</section>
+
+<!-- ================== PITFALLS ================== -->
+<section id="pitfalls">
+  <div class="container">
+    <h2>10 个真实踩坑</h2>
+
+    <div class="pitfall">
+      <h4>① 沙箱出口防火墙</h4>
+      <p class="pf-row"><b>症状</b>调外部 API 全 403 "Host not in allowlist"</p>
+      <p class="pf-row"><b>影响</b>Netlify deploy / Cloudflare tunnel / ElevenLabs / Quark 网盘</p>
+      <p class="pf-row"><b>修复</b>所有 user-side 工作挪到 GitHub Actions（受限用户的"远程 shell"）</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>② Service Worker 缓存住老版本</h4>
+      <p class="pf-row"><b>症状</b>用户清缓存前看不到新代码效果</p>
+      <p class="pf-row"><b>根因</b>cache name <code>etrainer-v1</code> 没变 + cache-first 策略</p>
+      <p class="pf-row"><b>修复</b>bump 名字到 <code>etrainer-voxel-v3</code> + 改 network-first</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>③ Wordmon 过度设计</h4>
+      <p class="pf-row"><b>症状</b>用户回头要 "efa4cd6 那个版本"</p>
+      <p class="pf-row"><b>根因</b>把"游戏元宇宙"想得太重，浪费 4 小时</p>
+      <p class="pf-row"><b>修复</b><code>git read-tree --reset</code> 回退，保留历史不强推</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>④ 主题感虚假</h4>
+      <p class="pf-row"><b>症状</b>24 篇阅读只有 Steve/Alex 蹭 Minecraft，没 Pokemon 没 Delta</p>
+      <p class="pf-row"><b>根因</b>优先教材考点 → 主题被牺牲</p>
+      <p class="pf-row"><b>修复</b>2 教材 + 2 强主题比例，每篇先列"必含 IP 元素"再写</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>⑤ TTS Voice Picker bug</h4>
+      <p class="pf-row"><b>症状</b>设置里下拉选不动，选了没效果</p>
+      <p class="pf-row"><b>根因</b>两处用 <code>onvoiceschanged = ...</code> 互相覆盖</p>
+      <p class="pf-row"><b>修复</b>改成 <code>addEventListener</code>（多 listener 共存）+ 实时查询不依赖缓存</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>⑥ 跟读门槛太严</h4>
+      <p class="pf-row"><b>症状</b>孩子读完 30% 还过不去 → 挫败 → 拒绝阅读关</p>
+      <p class="pf-row"><b>根因</b>50% / 3 次 是成年人发音的基线</p>
+      <p class="pf-row"><b>修复</b>30% / 2 次。"开口尝试就过"</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>⑦ Netlify 在国内访问慢</h4>
+      <p class="pf-row"><b>症状</b>"netlify 需要 vpn 才能打开"</p>
+      <p class="pf-row"><b>根因</b>Netlify edge servers 不在国内</p>
+      <p class="pf-row"><b>修复</b>Capacitor 打 Android APK，所有资源内嵌，零网络依赖</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>⑧ 朗读全文在 WebView 没声音</h4>
+      <p class="pf-row"><b>症状</b>单词/跟读有 ElevenLabs 声音，"朗读全文"哑火</p>
+      <p class="pf-row"><b>根因</b>朗读全文走 Web Speech，Android WebView 的 <code>speechSynthesis</code> 常缺音色</p>
+      <p class="pf-row"><b>修复</b>改成顺序播放每段 mp3，首段失败才回落 Web Speech</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>⑨ APK 构建 exit code 127</h4>
+      <p class="pf-row"><b>症状</b>Build APK workflow 跑 22 秒就挂，exit 127 (command not found)</p>
+      <p class="pf-row"><b>根因</b>cap add 生成的 <code>gradlew</code> 丢了 +x 权限，而 <code>|| echo</code> 吞了真错误</p>
+      <p class="pf-row"><b>修复</b><code>set -e</code> + <code>chmod +x gradlew</code> + 每步 <code>test -f</code> 显式校验</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>⑩ 侧载 APK 给不了麦克风权限</h4>
+      <p class="pf-row"><b>症状</b>ColorOS 设置 → 应用 → 权限里根本没"麦克风"这项</p>
+      <p class="pf-row"><b>根因</b>Capacitor 默认 manifest 没声明 <code>RECORD_AUDIO</code></p>
+      <p class="pf-row"><b>修复</b>构建时往 manifest 注入 RECORD_AUDIO，系统才会弹权限请求</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================== METHODOLOGY ================== -->
+<section id="methodology">
+  <div class="container">
+    <h2>协作方法</h2>
+
+    <h3>用户输入特征</h3>
+    <ul>
+      <li><strong>直接简短。</strong>用 Markdown 列要求："1、2、3 都想做"。</li>
+      <li><strong>质疑前先问。</strong>"这些故事真的和他爱好相关吗？"</li>
+      <li><strong>不满意敢回退。</strong>"想要的是这个版本：efa4cd6"</li>
+      <li><strong>真实使用反馈。</strong>"跟读门槛先低一点。""声音还是不是很好。"</li>
+    </ul>
+
+    <h3>AI 输出特征</h3>
+    <ul>
+      <li><strong>GitHub UI 步骤化。</strong>所有用户操作翻译成"打开 X 页面 → 点 Y 按钮"。</li>
+      <li><strong>每次提交后给 3 段说明。</strong>「这次改了什么」「您要做什么」「下一个想做哪个」。</li>
+      <li><strong>主动审计自己。</strong>"诚实回答：只有微弱关联。"</li>
+      <li><strong>提议时排优先级 + 给工作量。</strong>所有 backlog 按"分数提升杠杆 + 工时"排队。</li>
+      <li><strong>plan 模式先于代码。</strong>复杂改动用 ExitPlanMode 让用户先审 plan。</li>
+    </ul>
+
+    <h3>反馈循环</h3>
+    <p>每个循环 ≤ 30 分钟：</p>
+    <ol>
+      <li>用户在 Pad 上让孩子玩 10–30 分钟</li>
+      <li>孩子卡在某个点 / 抗拒某个交互</li>
+      <li>用户告诉 AI 「跟读门槛太严」</li>
+      <li>AI 1 个 commit + push + 3 行解释</li>
+      <li>用户清缓存看 / 让孩子再试</li>
+      <li>反馈下一个痛点 → 回 1</li>
+    </ol>
+    <p>22 commits × 30 min ≈ 4 天工作量基本对得上。</p>
+  </div>
+</section>
+
+<!-- ================== LESSONS ================== -->
+<section id="lessons">
+  <div class="container">
+    <h2>教训</h2>
+
+    <h3>关于产品（给孩子用的学习 App）</h3>
+    <ol class="num-list">
+      <li><strong>反馈密度 = 留存。</strong>儿童学习 App 跟游戏抢的不是知识，是注意力时间。每 5–10 秒必有正反馈是底线。</li>
+      <li><strong>绝不显示"错"。</strong>所有失败要包装成"再试一次"。9 岁孩子在红叉面前的条件反射就是关闭 App。</li>
+      <li><strong>兴趣驱动 &gt; 教学严谨。</strong>偏离教材一点没关系，让孩子愿意打开下一次更重要。完美教材覆盖但孩子不开 = 0 学习。</li>
+      <li><strong>掌握判定要松。</strong>50% 阈值劝退；30% 阈值还能让孩子读出第二段。让"开口尝试"就过。</li>
+      <li><strong>每天有变化 &gt; 完整覆盖。</strong>同一 Unit 反复做但内容变 = "我每天都在前进"。</li>
+      <li><strong>错题本 + 间隔重复 = 隐形进度。</strong>孩子不主动复习，但你可以用"今日热身"自动塞他错过的题。</li>
+    </ol>
+
+    <h3>关于 Vibe Coding 协作</h3>
+    <ol class="num-list">
+      <li><strong>微提交是金矿。</strong>22 commits 让回退、审计、解释、auto-deploy 都简单。</li>
+      <li><strong>诚实审计自己的工作。</strong>用户问"X 是 Y 吗"立刻承认局限。撒一次谎失去全部信任。</li>
+      <li><strong>小心"过度设计"诱惑。</strong>React + 状态机 + 类型系统的方案听着对，但用户实际只需要 4 关 + localStorage。</li>
+      <li><strong>写 plan 先于写代码。</strong>ExitPlanMode 强制慢一拍，避免 wordmon 那 4 小时。</li>
+      <li><strong>把外部依赖当成可能失败的。</strong>Netlify / ElevenLabs / Cloudflare 都可能不可达。</li>
+      <li><strong>用户每说"好麻烦"，反思自动化。</strong>GitHub Actions 是受限用户的"远程 shell"。</li>
+    </ol>
+
+    <h3>关于技术选择</h3>
+    <ol class="num-list">
+      <li><strong>Vanilla &gt; Framework</strong>，前提是单页 + 内容驱动 + 跨设备 + 没团队。</li>
+      <li><strong>localStorage &gt; 后端</strong>，前提是单用户 + 不需要同步 + 隐私敏感。</li>
+      <li><strong>预生成 mp3 &gt; 实时 TTS API</strong>，前提是内容固定 + 零延迟需求 + key 不能进浏览器。</li>
+      <li><strong>Capacitor &gt; React Native / Flutter</strong>，前提是已有网页 + 要快速打包 + 不需要原生 UI。</li>
+      <li><strong>"国内 + 离线" → APK 默认。</strong>评估用户网络环境是产品决策，不是部署决策。</li>
+      <li><strong>移动端打包是"第二个项目"。</strong>WebView ≠ 浏览器：Web Speech 可能缺、权限要在 manifest 先声明、CI 要 chmod gradlew。浏览器测得再好，真机会暴露全新一批问题。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================== OUTRO ================== -->
+<section class="outro">
+  <div class="container">
+    <p>
+      5 天，28 commits，3600 行代码，零美元成本。
+      4 天做内容，1 天填移动端打包的坑。
+      没有美术外包，没有用户测试方法论，没有 PRD。
+      就是一个家长 + 一个 AI，
+      为一个具体的孩子做的具体东西。
+    </p>
+    <p>
+      <strong>"他真的很需要兴趣驱动。"</strong>
+    </p>
+    <p>
+      这一句反复出现在我脑子里，每次想抄捷径就回想一下。
+      所有"高效但孩子不会喜欢"的方案都在这一句话面前失效。
+      最后我们做的不是"最完美的英语 App"，
+      是"那个 9 岁男孩明天还愿意打开的英语 App"。
+      区别巨大。
+    </p>
+    <div class="credit">
+      Generated 2026-05-04, updated 2026-05-05 · Claude Sonnet 4.6 · 模仿
+      <a href="https://github.com/kennyzheng-builds/vibe-retrospect">vibe-retrospect</a> 格式
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

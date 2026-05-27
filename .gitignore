@@ -8,3 +8,9 @@ package-lock.json
 .DS_Store
 .vscode/
 *.log
+
+# vibe-retrospect working files
+outputs/node_modules/
+outputs/package.json
+outputs/package-lock.json
+tmp/

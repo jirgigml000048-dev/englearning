@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700;8..60,900&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #fdf8f0;
+    --bg-2: #f4ebda;
+    --ink: #2b1d10;
+    --ink-soft: #5e4a30;
+    --ink-mute: #8a7252;
+    --accent: #d4453d;
+    --grass: #4a8a2e;
+    --gold: #c89a16;
+    --rule: #e8d8b0;
+    --serif: 'Source Serif 4', 'Noto Serif SC', Georgia, serif;
+    --sans: 'Noto Sans SC', -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #cfc3a8; font-family: var(--serif); }
+
+  .card {
+    width: 1080px;
+    height: 1350px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    margin: 0 auto 40px;
+  }
+  .card-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 90px 50px;
+  }
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 90px 56px;
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--ink-mute);
+  }
+  .card-footer .brand { font-weight: 700; color: var(--accent); letter-spacing: 1px; }
+
+  /* pixel block accent */
+  .pixblock {
+    display: inline-block; width: 18px; height: 18px;
+    background: var(--grass);
+    box-shadow: inset 3px 3px 0 #8ed670, inset -3px -3px 0 #2f5c1e;
+    vertical-align: middle;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 24px; font-weight: 700;
+    color: var(--accent); letter-spacing: 4px; text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+
+  /* Cover */
+  .cover-mascot {
+    width: 150px; height: 150px; margin-bottom: 50px;
+    background: var(--grass); position: relative;
+    box-shadow: inset 12px 12px 0 #8ed670, inset -12px -12px 0 #2f5c1e, 10px 10px 0 var(--ink);
+  }
+  .cover-mascot::before, .cover-mascot::after {
+    content:''; position:absolute; width:22px; height:22px; background:var(--ink); top:54px;
+  }
+  .cover-mascot::before { left:34px; } .cover-mascot::after { right:34px; }
+  h1.cover-title {
+    font-family: var(--serif); font-weight: 900; font-size: 76px;
+    line-height: 1.15; color: var(--ink); letter-spacing: -1px; margin-bottom: 28px;
+  }
+  .cover-sub {
+    font-size: 32px; line-height: 1.5; color: var(--ink-soft); margin-bottom: 60px;
+  }
+  .stats-row { display: flex; gap: 56px; flex-wrap: wrap; }
+  .stat .num { font-family: var(--mono); font-weight: 700; font-size: 60px; color: var(--accent); line-height: 1; }
+  .stat .lbl { font-family: var(--sans); font-size: 22px; color: var(--ink-mute); margin-top: 8px; }
+
+  h2.card-h {
+    font-family: var(--serif); font-weight: 900; font-size: 56px;
+    line-height: 1.2; color: var(--ink); margin-bottom: 40px; letter-spacing: -0.5px;
+  }
+  h2.card-h .pixblock { margin-right: 16px; }
+  p.lead { font-size: 30px; line-height: 1.65; color: var(--ink-soft); margin-bottom: 30px; }
+
+  blockquote {
+    font-family: var(--serif); font-style: italic; font-size: 38px; line-height: 1.5;
+    color: var(--ink); padding: 28px 36px; background: var(--bg-2);
+    border-left: 8px solid var(--accent); margin: 30px 0;
+  }
+  blockquote .who {
+    display: block; font-family: var(--mono); font-style: normal; font-size: 20px;
+    color: var(--accent); letter-spacing: 2px; margin-bottom: 14px; font-weight: 700;
+  }
+  .insight {
+    background: var(--ink); color: var(--bg); padding: 32px 40px;
+    font-size: 30px; line-height: 1.55; font-weight: 600; margin-top: 20px;
+  }
+  .insight b { color: var(--gold); }
+
+  /* decision grid */
+  .drow { display: flex; gap: 0; margin-bottom: 26px; align-items: stretch; }
+  .drow .x { flex: 0 0 130px; background: var(--bg-2); color: var(--ink-mute); font-family: var(--mono); font-size: 26px; display: grid; place-items: center; border-right: 4px solid var(--rule); }
+  .drow .y { flex: 1; background: var(--bg-2); padding: 24px 30px; }
+  .drow .y .t { font-size: 30px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .drow .y .d { font-size: 24px; color: var(--ink-soft); line-height: 1.4; }
+  .drow .x.chosen { background: var(--grass); color: #fff; }
+
+  /* timeline */
+  .tl { position: relative; padding-left: 50px; }
+  .tl::before { content:''; position:absolute; left: 14px; top: 10px; bottom: 10px; width: 4px; background: var(--rule); }
+  .tl-item { position: relative; margin-bottom: 40px; }
+  .tl-item::before { content:''; position:absolute; left:-44px; top:6px; width:24px; height:24px; background:var(--accent); border:4px solid var(--bg); border-radius: 50%; }
+  .tl-date { font-family: var(--mono); font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+  .tl-text { font-size: 28px; line-height: 1.5; color: var(--ink-soft); }
+  .tl-text b { color: var(--ink); }
+
+  /* numbered lessons */
+  .lesson { display: flex; gap: 30px; margin-bottom: 36px; align-items: flex-start; }
+  .lesson .n { font-family: var(--mono); font-weight: 700; font-size: 52px; color: var(--accent); line-height: 1; flex: 0 0 auto; opacity: 0.9; }
+  .lesson .b .t { font-size: 32px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  .lesson .b .d { font-size: 26px; line-height: 1.5; color: var(--ink-soft); }
+
+  /* pitfall list */
+  .pf { background: var(--bg-2); padding: 24px 30px; margin-bottom: 22px; border-top: 5px solid var(--accent); }
+  .pf .t { font-size: 30px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+  .pf .d { font-size: 25px; line-height: 1.45; color: var(--ink-soft); }
+
+  /* closing */
+  .closing { text-align: center; }
+  .closing .big-quote { font-family: var(--serif); font-weight: 900; font-size: 60px; line-height: 1.35; color: var(--ink); margin-bottom: 40px; }
+  .closing .divider { width: 100px; height: 6px; background: var(--accent); margin: 0 auto 40px; }
+  .closing .epilogue { font-size: 30px; line-height: 1.7; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<!-- Card 1: Cover -->
+<div class="card" id="card-1">
+  <div class="card-inner">
+    <div class="cover-mascot"></div>
+    <div class="eyebrow">VIBE RETROSPECT</div>
+    <h1 class="cover-title">我用 5 天给儿子<br>做了一个英语 App</h1>
+    <p class="cover-sub">一个家长 + 一个 AI，为一个 9 岁<br>重度游戏玩家做的方块世界英语训练器。</p>
+    <div class="stats-row">
+      <div class="stat"><div class="num">5</div><div class="lbl">天</div></div>
+      <div class="stat"><div class="num">28</div><div class="lbl">commits</div></div>
+      <div class="stat"><div class="num">10</div><div class="lbl">踩坑</div></div>
+      <div class="stat"><div class="num">$0</div><div class="lbl">成本</div></div>
+    </div>
+  </div>
+  <div class="card-footer"><span class="brand">英语训练师</span><span>1 / 7</span></div>
+</div>
+
+<!-- Card 2: Origin -->
+<div class="card" id="card-2">
+  <div class="card-inner">
+    <h2 class="card-h"><span class="pixblock"></span>起源</h2>
+    <p class="lead">9 岁四年级男孩，北京版英语，阅读最差，缺自信。
+      重度玩家：我的世界、宝可梦、三角洲行动。一翻开课本就抗拒。</p>
+    <blockquote>
+      <span class="who">— GIGI · 05-01</span>
+      他喜欢玩我的世界和三角洲行动和宝可梦，希望有一个每天学习 45 分钟的机制。
+    </blockquote>
+    <div class="insight">不是学不动，是<b>英语学习的反馈密度比游戏低两个数量级</b>，所以"无聊"被身体翻译成了"抗拒"。</div>
+  </div>
+  <div class="card-footer"><span class="brand">英语训练师</span><span>2 / 7</span></div>
+</div>
+
+<!-- Card 3: Decisions -->
+<div class="card" id="card-3">
+  <div class="card-inner">
+    <h2 class="card-h"><span class="pixblock"></span>关键决策</h2>
+    <div class="drow"><div class="x">放弃</div><div class="y"><div class="t">React 游戏框架 (Wordmon)</div><div class="d">花 4 小时，用户："想要 efa4cd6 那个版本"</div></div></div>
+    <div class="drow"><div class="x chosen">选定</div><div class="y"><div class="t">纯 HTML/CSS/JS + localStorage</div><div class="d">无构建步骤，改完即见，可离线打包</div></div></div>
+    <div class="drow"><div class="x chosen">选定</div><div class="y"><div class="t">ElevenLabs 预生成 mp3</div><div class="d">真人发音 &gt; 机械 TTS；key 不进浏览器</div></div></div>
+    <div class="drow"><div class="x chosen">选定</div><div class="y"><div class="t">Capacitor 打 Android APK</div><div class="d">国内访问 Netlify 慢 → 离线 APK 兜底</div></div></div>
+  </div>
+  <div class="card-footer"><span class="brand">英语训练师</span><span>3 / 7</span></div>
+</div>
+
+<!-- Card 4: Timeline -->
+<div class="card" id="card-4">
+  <div class="card-inner">
+    <h2 class="card-h"><span class="pixblock"></span>5 天时间线</h2>
+    <div class="tl">
+      <div class="tl-item"><div class="tl-date">5/1</div><div class="tl-text"><b>试错 + 回退。</b>V1 上线 → 切 React Wordmon → 4 小时后回退 → 应用方块世界设计稿</div></div>
+      <div class="tl-item"><div class="tl-date">5/2–5/3</div><div class="tl-text"><b>真人测试。</b>孩子玩了 2 天，攒一堆反馈</div></div>
+      <div class="tl-item"><div class="tl-date">5/4</div><div class="tl-text"><b>大爆发 (14 commits)。</b>真课本 / 错题本 / 跟读 / ElevenLabs / APK 一天打透</div></div>
+      <div class="tl-item"><div class="tl-date">5/5</div><div class="tl-text"><b>上线后战场。</b>WebView 没声音 / 构建 exit 127 / 麦克风权限</div></div>
+    </div>
+  </div>
+  <div class="card-footer"><span class="brand">英语训练师</span><span>4 / 7</span></div>
+</div>
+
+<!-- Card 5: Pitfalls / Method -->
+<div class="card" id="card-5">
+  <div class="card-inner">
+    <h2 class="card-h"><span class="pixblock"></span>移动端是第二个项目</h2>
+    <p class="lead">内容功能在浏览器里完美，APK 装到真机后另一批坑接连冒出：</p>
+    <div class="pf"><div class="t">⑧ 朗读全文没声音</div><div class="d">Android WebView 不支持 Web Speech → 改顺序播 mp3</div></div>
+    <div class="pf"><div class="t">⑨ 构建 exit 127</div><div class="d">gradlew 丢了执行位 → chmod +x + set -e</div></div>
+    <div class="pf"><div class="t">⑩ 给不了麦克风权限</div><div class="d">manifest 缺 RECORD_AUDIO → 系统里没该项可选</div></div>
+  </div>
+  <div class="card-footer"><span class="brand">英语训练师</span><span>5 / 7</span></div>
+</div>
+
+<!-- Card 6: Lessons -->
+<div class="card" id="card-6">
+  <div class="card-inner">
+    <h2 class="card-h"><span class="pixblock"></span>给孩子做 App 的教训</h2>
+    <div class="lesson"><div class="n">01</div><div class="b"><div class="t">反馈密度 = 留存</div><div class="d">每 5–10 秒必有正反馈，跟游戏抢的是注意力</div></div></div>
+    <div class="lesson"><div class="n">02</div><div class="b"><div class="t">绝不显示"错"</div><div class="d">所有失败包装成"再试一次"，红叉 = 关 App</div></div></div>
+    <div class="lesson"><div class="n">03</div><div class="b"><div class="t">兴趣驱动 &gt; 教学严谨</div><div class="d">完美教材但孩子不开 = 0 学习</div></div></div>
+    <div class="lesson"><div class="n">04</div><div class="b"><div class="t">门槛要松</div><div class="d">跟读 30% 就过，目的是让他开口，不是读对</div></div></div>
+    <div class="lesson"><div class="n">05</div><div class="b"><div class="t">诚实审计自己</div><div class="d">用户问"X 是 Y 吗"立刻承认局限，别狡辩</div></div></div>
+  </div>
+  <div class="card-footer"><span class="brand">英语训练师</span><span>6 / 7</span></div>
+</div>
+
+<!-- Card 7: Closing -->
+<div class="card" id="card-7">
+  <div class="card-inner closing">
+    <div class="big-quote">"他真的<br>很需要兴趣驱动。"</div>
+    <div class="divider"></div>
+    <p class="epilogue">最后我们做的不是"最完美的英语 App"，<br>
+      是"那个 9 岁男孩明天还愿意打开的英语 App"。<br><br>
+      区别巨大。</p>
+  </div>
+  <div class="card-footer"><span class="brand">英语训练师 · 5 天 / 28 commits / $0</span><span>7 / 7</span></div>
+</div>
+
+</body>
+</html>
