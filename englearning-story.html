@@ -8,7 +8,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="article" />
   <meta property="og:title" content="我用 4 天给儿子做了一个英语学习 App" />
-  <meta property="og:description" content="22 commits、0 deploy 失败、7 个踩坑、Vibe Coding 协作的真实记录。给一个 9 岁孩子用的方块世界主题英语 App。" />
+  <meta property="og:description" content="28 commits、10 个真实踩坑、从浏览器到 Android APK 的 Vibe Coding 全记录。给一个 9 岁孩子做的方块世界主题英语 App。" />
   <meta property="og:locale" content="zh_CN" />
   <meta name="twitter:card" content="summary_large_image" />
 
@@ -364,8 +364,8 @@
       为一个 9 岁四年级男孩做的方块世界主题英语 App。
     </p>
     <div class="hero-meta">
-      <span><b>2026/05/01 — 05/04</b> · 4 days</span>
-      <span><b>22 commits</b></span>
+      <span><b>2026/05/01 — 05/05</b> · 5 days</span>
+      <span><b>28 commits</b></span>
       <span><b>~3600 LOC</b></span>
       <span><b>$0</b> 成本</span>
     </div>
@@ -620,9 +620,21 @@
       </p>
     </div>
 
+    <div class="day">
+      <div class="day-tag">5/5 · 上线后战场</div>
+      <h4>真机才暴露的坑</h4>
+      <p>
+        APK 装到 Pad 上，三个浏览器里永远测不出的问题接连冒出来：
+        <strong>朗读全文哑火</strong>（WebView 不支持 Web Speech）、
+        <strong>APK 构建 exit 127</strong>（gradlew 丢了执行位）、
+        <strong>给不了麦克风权限</strong>（manifest 缺 RECORD_AUDIO）。
+        <em>内容功能 4 天，移动端打包又花一整天。</em>
+      </p>
+    </div>
+
     <p style="margin-top: 28px; color: var(--ink-mute); font-style: italic;">
-      节奏特征：每个 commit 单一职责。22 commits / 4 天，<strong>0 deploy 失败重试到成功</strong>。
-      多亏小步快跑，每 30 分钟一个反馈循环。
+      节奏特征：每个 commit 单一职责。28 commits / 5 天，Web 端 <strong>0 deploy 失败</strong>，
+      但 APK 真机阶段补了一整天坑——<strong>移动端打包是第二个项目</strong>。
     </p>
   </div>
 </section>
@@ -630,7 +642,7 @@
 <!-- ================== PITFALLS ================== -->
 <section id="pitfalls">
   <div class="container">
-    <h2>7 个真实踩坑</h2>
+    <h2>10 个真实踩坑</h2>
 
     <div class="pitfall">
       <h4>① 沙箱出口防火墙</h4>
@@ -679,6 +691,27 @@
       <p class="pf-row"><b>症状</b>"netlify 需要 vpn 才能打开"</p>
       <p class="pf-row"><b>根因</b>Netlify edge servers 不在国内</p>
       <p class="pf-row"><b>修复</b>Capacitor 打 Android APK，所有资源内嵌，零网络依赖</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>⑧ 朗读全文在 WebView 没声音</h4>
+      <p class="pf-row"><b>症状</b>单词/跟读有 ElevenLabs 声音，"朗读全文"哑火</p>
+      <p class="pf-row"><b>根因</b>朗读全文走 Web Speech，Android WebView 的 <code>speechSynthesis</code> 常缺音色</p>
+      <p class="pf-row"><b>修复</b>改成顺序播放每段 mp3，首段失败才回落 Web Speech</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>⑨ APK 构建 exit code 127</h4>
+      <p class="pf-row"><b>症状</b>Build APK workflow 跑 22 秒就挂，exit 127 (command not found)</p>
+      <p class="pf-row"><b>根因</b>cap add 生成的 <code>gradlew</code> 丢了 +x 权限，而 <code>|| echo</code> 吞了真错误</p>
+      <p class="pf-row"><b>修复</b><code>set -e</code> + <code>chmod +x gradlew</code> + 每步 <code>test -f</code> 显式校验</p>
+    </div>
+
+    <div class="pitfall">
+      <h4>⑩ 侧载 APK 给不了麦克风权限</h4>
+      <p class="pf-row"><b>症状</b>ColorOS 设置 → 应用 → 权限里根本没"麦克风"这项</p>
+      <p class="pf-row"><b>根因</b>Capacitor 默认 manifest 没声明 <code>RECORD_AUDIO</code></p>
+      <p class="pf-row"><b>修复</b>构建时往 manifest 注入 RECORD_AUDIO，系统才会弹权限请求</p>
     </div>
   </div>
 </section>
@@ -751,6 +784,7 @@
       <li><strong>预生成 mp3 &gt; 实时 TTS API</strong>，前提是内容固定 + 零延迟需求 + key 不能进浏览器。</li>
       <li><strong>Capacitor &gt; React Native / Flutter</strong>，前提是已有网页 + 要快速打包 + 不需要原生 UI。</li>
       <li><strong>"国内 + 离线" → APK 默认。</strong>评估用户网络环境是产品决策，不是部署决策。</li>
+      <li><strong>移动端打包是"第二个项目"。</strong>WebView ≠ 浏览器：Web Speech 可能缺、权限要在 manifest 先声明、CI 要 chmod gradlew。浏览器测得再好，真机会暴露全新一批问题。</li>
     </ol>
   </div>
 </section>
@@ -759,7 +793,8 @@
 <section class="outro">
   <div class="container">
     <p>
-      4 天，22 commits，3600 行代码，零美元成本。
+      5 天，28 commits，3600 行代码，零美元成本。
+      4 天做内容，1 天填移动端打包的坑。
       没有美术外包，没有用户测试方法论，没有 PRD。
       就是一个家长 + 一个 AI，
       为一个具体的孩子做的具体东西。
@@ -775,7 +810,7 @@
       区别巨大。
     </p>
     <div class="credit">
-      Generated 2026-05-04 · Claude Sonnet 4.6 · 模仿
+      Generated 2026-05-04, updated 2026-05-05 · Claude Sonnet 4.6 · 模仿
       <a href="https://github.com/kennyzheng-builds/vibe-retrospect">vibe-retrospect</a> 格式
     </div>
   </div>

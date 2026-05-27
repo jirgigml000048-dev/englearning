@@ -11,7 +11,7 @@
 |---|---|
 | **项目** | 英语训练师 / English Trainer (Voxel skin) |
 | **目标用户** | 9 岁四年级男孩，北京版英语，弱项=阅读，兴趣=Minecraft / 宝可梦 / 三角洲 |
-| **时间线** | 2026-05-01 → 2026-05-04（4 天，22 commits） |
+| **时间线** | 2026-05-01 → 2026-05-05（5 天，28 commits） |
 | **代码量** | 2534 LOC JS · 1080 LOC CSS · 数据 ~600 LOC |
 | **内容量** | 6 单元 · 127 单词 · 24 篇阅读 · 96 道选择题（每题带讲解）· 30 个彩蛋词 · 275 个 ElevenLabs mp3 |
 | **技术栈** | Vanilla HTML/CSS/JS PWA + Capacitor → Android APK |
@@ -381,12 +381,26 @@ onStageDone() → if isUnitMastered(currentUnit):
 | 14:01 | `faeed10` | 第一次跑出 275 个 mp3（约 5 分钟跑完） |
 | 14:11 | `74c28ce` | Android APK 自动打包（Capacitor + Actions） |
 
+### 5/4 晚 - 5/5 — 上线后的真实战场（5 commits）
+
+内容做完不等于能用。APK 装到真机后，一连串"只有真实设备才暴露"的问题：
+
+| 时间 | Commit | 内容 |
+|---|---|---|
+| 14:11 | `acc1054` | Netlify redirects /story 短链（复盘文章分享） |
+| 5/5 | `802a18e` | 修朗读全文在 Android WebView 没声音（Web Speech 不支持 → 改顺序播 mp3） |
+| 5/5 | `281a95f` | 修 APK build exit 127（gradlew 丢 +x 权限 → chmod + verify 步骤） |
+| 5/5 | `6278e15` | APK 加麦克风权限（manifest 缺 RECORD_AUDIO → ColorOS 设置里没该项） |
+
+这一段全是"在 iPad / Pad 真机上才会暴露、在浏览器里永远测不出来"的坑。**移动端打包 = 第二个项目。**
+
 ### 节奏特征
 
-- 22 commits / 4 天 / 每个 commit 单一职责
+- 28 commits / 5 天 / 每个 commit 单一职责
 - 5/1 一天试错 + 回退
-- 5/4 一天打透：每个反馈 → 立刻一个 commit → push → 用户验证 → 下一个
-- 0 deploy 失败重试（多亏小步快跑）
+- 5/4 一天打透内容功能
+- 5/5 一天填移动端打包的坑（WebView 限制 / 构建权限 / 系统权限）
+- 0 deploy 失败重试（多亏小步快跑）；但 APK build 失败过 2 次（移动端工具链更脆）
 
 ---
 
@@ -537,6 +551,47 @@ onStageDone() → if isUnitMastered(currentUnit):
 
 ---
 
+### Pitfall 8: 朗读全文在 Android WebView 没声音
+
+**Symptom**：APK 装到 Pad 后，单词/跟读的 ElevenLabs 发音正常，但"🔊 朗读全文"按钮按了没声。
+
+**Root Cause**：单词/跟读走 mp3 文件（`audio/words/*.mp3`、`audio/paragraphs/*.mp3`），而"朗读全文"调的是 `TTS.speak(段落.join(' '))` → 走 Web Speech API。**Android WebView 的 `speechSynthesis` 经常没有英语音色或根本不工作**，于是哑火。
+
+**Fix**：新增 `TTS.speakParagraphsSequential()`，把"朗读全文"改成顺序播放每段的 mp3（一段 `ended` 自动接下一段），首段失败才回落 Web Speech。
+
+**Prevention**：移动端不要依赖 Web Speech。所有要发声的地方都准备好预生成 mp3。**桌面浏览器能用的 API，WebView 里不一定有。**
+
+---
+
+### Pitfall 9: APK 构建 exit code 127（command not found）
+
+**Symptom**：GitHub Actions 的 Build APK workflow 跑 22 秒就挂，报 "Process completed with exit code 127"。
+
+**Root Cause**：exit 127 = 命令找不到。`npx cap add android` 生成的 `android/gradlew` 在 Linux runner 上**丢了可执行权限位（+x）**，`cd android && ./gradlew` 调不起来。而旧 workflow 的 `npx cap add android || echo "..."` 把 cap add 的真实错误吞了，看不到根因。
+
+**Fix**：
+- 每个 `run:` 加 `set -e`（任意命令非零立即停）
+- `chmod +x android/gradlew`
+- 加 `test -f android/gradlew && echo yes || (echo MISSING && exit 1)` 显式校验
+- gradle build 加 `--stacktrace`
+- 加 "Show env" 第一步打印 Node/npm/Java 版本
+
+**Prevention**：CI 里所有 shell step 默认 `set -e`。永远不要用 `|| echo "..."` 吞错误——要么 fail loudly，要么明确处理。从 npm 包解压出来的可执行文件先 `chmod +x`。
+
+---
+
+### Pitfall 10: 侧载 APK 给不了麦克风权限
+
+**Symptom**：跟读关要录音，但 OPPO ColorOS 的 设置 → 应用 → 权限管理 里**根本没有"麦克风"这一项**可以开。
+
+**Root Cause**：Capacitor 默认生成的 `AndroidManifest.xml` 没声明 `RECORD_AUDIO`。Manifest 没声明 → 系统不认为 app 需要麦克风 → 权限页不显示该项 → WebView 调 `getUserMedia` 静默失败。侧载（非应用商店）让问题更隐蔽，因为没有商店审核提示缺权限。
+
+**Fix**：写 `scripts/patch-android-manifest.mjs`，在 `cap add android` 之后、`cap sync` 之前往 manifest 注入 `RECORD_AUDIO` + `MODIFY_AUDIO_SETTINGS`。Capacitor 6 的 BridgeWebChromeClient 会自动把 WebView 的录音请求转成系统权限弹窗。
+
+**Prevention**：任何用到设备能力（麦克风/相机/定位/通知）的 WebView app，打包前先检查 manifest 声明了对应权限。**权限是"先声明（manifest）后请求（runtime）"两步，少一步都不弹窗。**
+
+---
+
 ## Build Guide
 
 ### 你想给另一个孩子做类似的 App，怎么做？
@@ -668,6 +723,19 @@ Question: { q, options[4], answer, hint, explanation }
 
 17. **GitHub Actions = 受限用户的"远程 shell"。** 用户没装环境时，CI 是最近的替代。我做的两个 workflow 把"装 Node + 跑 npm + 跑 build"全部挪到 GitHub 网页一键。
 
+18. **移动端打包是"第二个项目"。** 内容功能 4 天做完，但 APK 真机上线又花了一整天填坑：WebView 不支持 Web Speech、CI 丢 gradlew 执行位、manifest 缺麦克风权限。**浏览器里测得再好，WebView + 真机会暴露全新一批问题。** 预算上要把"打包上线"当独立阶段，不是"最后 5 分钟的事"。
+
+19. **WebView ≠ 浏览器。** 桌面 Chrome 能用的 API（SpeechSynthesis、某些 getUserMedia 行为）在 Android WebView 里可能缺失或要额外权限。能离线预生成的（mp3）就别依赖运行时 API。
+
+### 关于移动端打包（Capacitor → APK 专项）
+
+- **gradlew 要 `chmod +x`** — npm 解压常丢执行位，CI 必加。
+- **manifest 要手动注入设备权限** — Capacitor 默认只给 INTERNET，麦克风/相机/定位都要自己加 `<uses-permission>`。
+- **权限两步：先声明（manifest）后请求（runtime）** — 少一步都不弹窗。
+- **CI step 全程 `set -e`** — 别用 `|| echo` 吞错，否则 exit 127 这种根因被藏起来。
+- **每步加 `test -f` / `ls -la` 校验** — 移动端工具链脆，显式验证关键产物存在。
+- **APK 调试版可直接侧载** — debug 签名能装，但要在系统设置允许"未知来源"。
+
 ### 给下一个 AI 协作者的留言
 
 1. **用户给 URL 时，先用 curl + 不同方法（gunzip / tar / file）探一下**，不要假定 WebFetch 是唯一办法。这次我从 binary gzip 里捞出了完整设计稿。
@@ -680,9 +748,11 @@ Question: { q, options[4], answer, hint, explanation }
 
 5. **永远把"卡住孩子"当成产品事故。** 跟读 50% / 错题红色 / API 失败时的"无声"——这些都是事故，要兜底。
 
+6. **"做完"和"能用"之间隔着真机。** 内容功能在浏览器里完美 ≠ APK 在 Pad 上能用。每次声称"修好了"前，想一想这个修复要不要重新打包 + 真机验证。给用户明确"下载新 APK 覆盖安装"的步骤，不要让他以为 push 完就生效。
+
 ---
 
-## Appendix: 真实使用数据（4 天后）
+## Appendix: 真实使用数据（5 天后）
 
 未收集（孩子才刚开始用）。下一次复盘建议追踪：
 
@@ -695,4 +765,4 @@ Question: { q, options[4], answer, hint, explanation }
 
 ---
 
-*Generated 2026-05-04 · Claude Sonnet 4.6 · 模仿 [vibe-retrospect](https://github.com/kennyzheng-builds/vibe-retrospect) 格式*
+*Generated 2026-05-04, updated 2026-05-05 (+上线后真实战场章节) · Claude Sonnet 4.6 · 模仿 [vibe-retrospect](https://github.com/kennyzheng-builds/vibe-retrospect) 格式*
